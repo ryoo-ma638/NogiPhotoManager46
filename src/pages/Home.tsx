@@ -1,5 +1,5 @@
 import { useAppData } from '../lib/appData'
-import { ChevronRight, SealCheck } from '../components/icons'
+import { ChevronRight, SealCheck, SearchIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
 
@@ -35,7 +35,19 @@ export default function Home() {
 
   return (
     <>
-      <Header title={`${catalog.member.name} 生写真`} subtitle="コレクション" />
+      <Header
+        title={`${catalog.member.name} 生写真`}
+        subtitle="コレクション"
+        right={
+          <button
+            onClick={() => navigate('/search')}
+            aria-label="検索"
+            className="p-2 -mr-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
+          >
+            <SearchIcon />
+          </button>
+        }
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">
         {/* ヒーロー：総コンプ率 */}
         <section className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-600 to-fuchsia-500 text-white p-5 shadow-lg shadow-violet-200">

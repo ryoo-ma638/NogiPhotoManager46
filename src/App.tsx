@@ -6,6 +6,7 @@ import BinderPage from './pages/Binder'
 import SetDetailPage from './pages/SetDetail'
 import StatsPage from './pages/Stats'
 import SettingsPage from './pages/Settings'
+import SearchPage from './pages/Search'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ function Shell() {
   let tab: 'collection' | 'stats' | 'settings' = 'collection'
   if (seg[0] === 'b') page = <BinderPage binderId={seg[1] ?? ''} />
   else if (seg[0] === 's') page = <SetDetailPage setId={seg[1] ?? ''} />
+  else if (seg[0] === 'search') page = <SearchPage />
   else if (seg[0] === 'stats') {
     page = <StatsPage />
     tab = 'stats'
