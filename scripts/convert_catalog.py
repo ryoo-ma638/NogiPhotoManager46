@@ -107,10 +107,12 @@ def main():
         all_slot_ids = [s[0] for s in slots]
         pid = lambda slot: f"{MEMBER_ID}:{set_id}:{slot}"
         if mark == "✓":
-            for s in all_slot_ids:
+            # ✓ = 通常ポーズを所有。8種のR/SRは✓でも所有としない（別管理→オーバーライドで付与）
+            normal_ids = [s[0] for s in slots if s[2] == "normal"]
+            for s in normal_ids:
                 owned_ids.append(pid(s))
             if notes:
-                review.append(f"[✓なのに注記あり→全所有で仮置き] {name}（注記: {notes}）")
+                review.append(f"[✓なのに注記あり→通常ポーズのみ所有で仮置き] {name}（注記: {notes}）")
         else:  # ◦
             if not notes:
                 pass  # 全て未所有
@@ -128,6 +130,40 @@ def main():
                     for s in owned:
                         owned_ids.append(pid(s))
                     partial_notes.append((name, notes, list(missing) + rare_ids, owned))
+
+    # ---- 所有オーバーライド（R/SR等の個別指定。非公開ファイル、ルール判定より優先） ----
+    LABEL2SLOT = {"ヨリ": "yori", "チュウ": "chu", "ヒキ": "hiki", "座りヨリ": "suwari-yori",
+                  "座りヒキ": "suwari-hiki", "R": "r1", "SR": "sr1", "SR①": "sr1", "SR②": "sr2",
+                  "SR③": "sr3", "SR④": "sr4"}
+    ov_path = ROOT / "ownership-overrides.txt"
+    owned_set = set(owned_ids)
+    ov_applied = ov_skipped = 0
+    if ov_path.exists():
+        for line in ov_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, _, rhs = line.partition("=")
+            key = key.strip()
+            labels = [x.strip() for x in rhs.split(",") if x.strip()]
+            matches = [s for s in sets if s["name"] == key] or [s for s in sets if key in s["name"]]
+            if len(matches) == 0:
+                ov_skipped += 1  # まだ生成していないバインダーのセット→後で適用
+                continue
+            if len(matches) > 1:
+                review.append(f"[override照合が複数] {key} → {len(matches)}件。名前を具体化してください")
+                continue
+            s = matches[0]
+            prefix = f"{MEMBER_ID}:{s['id']}:"
+            owned_set = {o for o in owned_set if not o.startswith(prefix)}
+            for lb in labels:
+                slot = LABEL2SLOT.get(lb)
+                if slot:
+                    owned_set.add(prefix + slot)
+                else:
+                    review.append(f"[override未知ラベル] {key}: {lb}")
+            ov_applied += 1
+    owned_ids = sorted(owned_set)
 
     catalog = {
         "schemaVersion": 1, "catalogVersion": 1,
@@ -164,6 +200,7 @@ def main():
 
     print(f"=== 変換結果 ===")
     print(f"バインダー: {len(binders)} / セット: {len(sets)} / 写真枠: {total_slots} / 所有: {len(owned_ids)}")
+    print(f"オーバーライド: 適用{ov_applied} / 未生成セットのためスキップ{ov_skipped}")
     for y in sorted(by_year):
         d = by_year[y]
         print(f"  {y}: セット{d['sets']}  完所有{d['full']}  一部所有{d['partial']}  未所有{d['none']}")

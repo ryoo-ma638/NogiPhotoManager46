@@ -24,6 +24,7 @@ dist-ssr/
 # 個人の所有データ（Publicリポジトリには公開しない）
 *.ownership.json
 catalog-source*.txt
+ownership-overrides.txt
 
 # Xcode (legacy-ios)
 legacy-ios/**/xcuserdata/
