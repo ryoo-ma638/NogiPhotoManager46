@@ -58,7 +58,8 @@ def main():
         if line.startswith("BINDER"):
             _, bid, bname = line.split(" ", 2)
             cur_binder = bid
-            binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": False})
+            cur_year = None  # バインダーが変わったら年をリセット（封入は年なし）
+            binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": "封入" in bname})
             continue
         if line.startswith("YEAR"):
             cur_year = int(line.split(" ", 1)[1])
@@ -179,8 +180,8 @@ def main():
         "member": {"id": MEMBER_ID, "name": MEMBER_NAME},
         "binders": binders, "sets": sets,
     }
-    (ROOT / "catalog").mkdir(exist_ok=True)
-    (ROOT / "catalog" / f"{MEMBER_ID}.json").write_text(
+    (ROOT / "public" / "catalog").mkdir(parents=True, exist_ok=True)
+    (ROOT / "public" / "catalog" / f"{MEMBER_ID}.json").write_text(
         json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     ownership = {"member": MEMBER_ID, "generatedFrom": "catalog-source.txt", "ownedDate": None, "owned": owned_ids}
     (ROOT / f"{MEMBER_ID}.ownership.json").write_text(
@@ -210,9 +211,10 @@ def main():
     print(f"=== 変換結果 ===")
     print(f"バインダー: {len(binders)} / セット: {len(sets)} / 写真枠: {total_slots} / 所有: {len(owned_ids)}")
     print(f"オーバーライド: 適用{ov_applied} / 未生成セットのためスキップ{ov_skipped}")
-    for y in sorted(by_year):
+    for y in sorted(by_year, key=lambda k: (k is None, k or 0)):
         d = by_year[y]
-        print(f"  {y}: セット{d['sets']}  完所有{d['full']}  一部所有{d['partial']}  未所有{d['none']}")
+        label = "封入" if y is None else f"{y}"
+        print(f"  {label}: セット{d['sets']}  完所有{d['full']}  一部所有{d['partial']}  未所有{d['none']}")
     print(f"\n=== ◦+注記（欠け）の解釈 {len(partial_notes)}件（要確認） ===")
     for name, notes, missing, owned in partial_notes:
         print(f"  ・{name}（注記:{notes}）→ 欠け={missing} / 所有={owned}")

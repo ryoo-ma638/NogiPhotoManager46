@@ -5,7 +5,7 @@
 ## ファイルの役割
 | ファイル | 公開 | 内容 |
 |---|---|---|
-| `catalog/<member>.json` | ✅公開 | 衣装カタログ（存在する衣装の一覧）。**所有情報を含めない** |
+| `public/catalog/<member>.json` | ✅公開 | 衣装カタログ（存在する衣装の一覧）。**所有情報を含めない**。Webアプリが `/catalog/<member>.json` で取得 |
 | `<member>.ownership.json` | ❌非公開(gitignore) | 所有している写真IDの一覧（個人データ） |
 | `catalog-source.txt` | ❌非公開(gitignore) | 変換元の原文（✓/◦付き） |
 

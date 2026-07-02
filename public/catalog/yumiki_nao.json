@@ -29,6 +29,12 @@
       "name": "弓木2026＆2027",
       "sortIndex": 3,
       "sealed": false
+    },
+    {
+      "id": "b-sealed",
+      "name": "弓木封入",
+      "sortIndex": 4,
+      "sealed": true
     }
   ],
   "sets": [
@@ -3849,6 +3855,166 @@
       "name": "2026.April-Ⅱ-チェック",
       "template": "standard3",
       "sortIndex": 3820,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0383",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "僕は僕を好きになる",
+      "template": "four4",
+      "sortIndex": 3830,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0384",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "ごめんねfingers crossed",
+      "template": "four4",
+      "sortIndex": 3840,
+      "note": "AB D",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0385",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "君に叱られた",
+      "template": "four4",
+      "sortIndex": 3850,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0386",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "Time flies",
+      "template": "standard3",
+      "sortIndex": 3860,
+      "note": "（完全生産限定+初回仕様+メンバーカスタムジャケット）ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0387",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "Actually…",
+      "template": "four4",
+      "sortIndex": 3870,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0388",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "好きというのはロックだぜ！",
+      "template": "four4",
+      "sortIndex": 3880,
+      "note": "A CD",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0389",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "ここにはないもの",
+      "template": "four4",
+      "sortIndex": 3890,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0390",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "人は夢を二度見る",
+      "template": "four4",
+      "sortIndex": 3900,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0391",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "おひとりさま天国",
+      "template": "four4",
+      "sortIndex": 3910,
+      "note": "A D",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0392",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "Monopoly",
+      "template": "four4",
+      "sortIndex": 3920,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0393",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "チャンスは平等",
+      "template": "four4",
+      "sortIndex": 3930,
+      "note": "BCD",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0394",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "チートデイ",
+      "template": "four4",
+      "sortIndex": 3940,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0395",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "歩道橋",
+      "template": "four4",
+      "sortIndex": 3950,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0396",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "ネーブルオレンジ",
+      "template": "standard3",
+      "sortIndex": 3960,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0397",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "セームナンバーズ",
+      "template": "standard3",
+      "sortIndex": 3970,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0398",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "ビリヤニ",
+      "template": "standard3",
+      "sortIndex": 3980,
       "note": null,
       "pageBreakAfter": false
     }
