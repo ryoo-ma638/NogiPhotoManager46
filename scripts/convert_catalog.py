@@ -21,10 +21,11 @@ TEMPLATES = {
     "five5": STD3 + [("suwari-yori", "座りヨリ", "normal"), ("suwari-hiki", "座りヒキ", "normal")],
     "rareSet8": STD3 + [("r1", "R", "R"), ("sr1", "SR①", "SR"), ("sr2", "SR②", "SR"), ("sr3", "SR③", "SR"), ("sr4", "SR④", "SR")],
     "event6": [(f"p{i}", "①②③④⑤⑥"[i - 1], "normal") for i in range(1, 7)],
+    "four4": [("a", "A", "normal"), ("b", "B", "normal"), ("c", "C", "normal"), ("d", "D", "normal")],
     "single1": [("p1", "封入", "normal")],
 }
-# 種類数 → テンプレ（8はrareフラグで判定）
-COUNT_TO_TEMPLATE = {3: "standard3", 5: "five5", 6: "event6", 1: "single1"}
+# 種類数 → テンプレ（8はrareフラグで判定）。4種は封入(A/B/C/D)
+COUNT_TO_TEMPLATE = {3: "standard3", 4: "four4", 5: "five5", 6: "event6", 1: "single1"}
 # 末尾注記の語 → slot（長い語を先に）
 NOTE_TOKENS = [("座りヨリ", "suwari-yori"), ("座りヒキ", "suwari-hiki"), ("ヨリ", "yori"), ("チュウ", "chu"), ("ヒキ", "hiki")]
 
@@ -72,27 +73,35 @@ def main():
             continue
         content = line[1:].strip()
 
+        is_rare = "通常3種" in content  # （通常3種+R1種+SR4種）系＝8種
         m = KIND_RE.search(content)
-        if not m:
-            review.append(f"[種類数なし] {content}")
-            continue
-        count = int(m.group(1))
-        name = content[:m.start()].strip()
-        rest = content[m.end():].strip()
-
-        # rareSet8: 直後の（通常…）を消費
-        is_rare = rest.startswith("（通常") or "通常3種" in rest
-        if is_rare:
+        if m:
+            count = int(m.group(1))
+            name = content[:m.start()].strip()
+            rest = content[m.end():].strip()
+        elif is_rare:
+            # （8種類）表記が無く（通常3種+R1種+SR4種）だけのケース（例: 落とし物）
+            rm = re.search(r"（通常[^）]*）", content)
+            count = 8
+            name = content[:rm.start()].strip()
+            rest = content[rm.end():].strip()
+        else:
+            # 種類数が抜けている行（例: バルーンスカート）→ standard3で仮置き
+            review.append(f"[種類数なし→standard3で仮置き] {content}")
+            count = 3
+            name = content
+            rest = ""
+        if rest.startswith("（通常"):
             rest = re.sub(r"^（[^）]*）", "", rest).strip()
         notes = rest or None
 
-        if is_rare and count == 8:
+        if is_rare:
             template = "rareSet8"
         else:
             template = COUNT_TO_TEMPLATE.get(count)
-        if template is None:
-            template = "standard3"
-            review.append(f"[種類数{count}=未対応テンプレ→standard3で仮置き] {name}")
+            if template is None:
+                template = "standard3"
+                review.append(f"[種類数{count}=未対応テンプレ→standard3で仮置き] {name}")
 
         seq += 1
         set_id = f"s{seq:04d}"
