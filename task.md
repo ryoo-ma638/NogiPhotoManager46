@@ -4,7 +4,7 @@
 （設計の理由は `開発メモ.md` を参照）
 
 ## Phase 0: 準備（データが全ての土台）
-- [ ] **P0-1** Git初期化・GitHubリポジトリ作成（S）
+- [x] **P0-1** Git初期化・GitHubリポジトリ作成（S）✓完了 https://github.com/ryoo-ma638/NogiPhotoManager46
       旧Xcode一式も「iOS版アーカイブ」としてコミットしてから `legacy-ios/` へ。`.gitignore` 整備。
       ✅ git logに初回コミット、GitHubで閲覧可
 - [ ] **P0-2** カタログJSONスキーマ確定＋変換・検証スクリプト（M）
@@ -13,7 +13,7 @@
 - [ ] **P0-3** 全カタログのJSON化 `yumiki_nao.json`（L・バインダー単位で分割実施）
       2020&2021 → 2022&2023 → 2024&2025 → 2026&2027 → 封入 の5チャンク。各チャンクごとに検証+コミット（**公開するのはカタログのみ。所有ファイルはコミットしない**）。
       ✅ 約390セット・約1300枠、✓集計が原文と一致、要確認レポートを本人が裁定済み
-- [ ] **P0-4** Vite+React+TS+Tailwind+PWA の雛形作成、Vercelデプロイ（S）
+- [x] **P0-4** Vite+React+TS+Tailwind+PWA の雛形作成、Vercelデプロイ（S）✓完了 https://nogi-photo-manager46.vercel.app
       ✅ iPhoneでURLを開き、ホーム画面に追加して起動できる
 
 ## Phase 1: 所有トラッカーMVP 🎯「使える道具」の完成
