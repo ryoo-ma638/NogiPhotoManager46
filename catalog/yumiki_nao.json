@@ -11,6 +11,12 @@
       "name": "弓木2020＆2021",
       "sortIndex": 0,
       "sealed": false
+    },
+    {
+      "id": "b2022-2023",
+      "name": "弓木2022＆2023",
+      "sortIndex": 1,
+      "sealed": false
     }
   ],
   "sets": [
@@ -951,6 +957,1376 @@
       "name": "最後のTight Hug",
       "template": "standard3",
       "sortIndex": 940,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0095",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.Lucky Bag",
+      "template": "standard3",
+      "sortIndex": 950,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0096",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.Lucky Bag（ホワイトコーデ）（字の色がピンク）",
+      "template": "standard3",
+      "sortIndex": 960,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0097",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "Happy New Year! 2022（寅）",
+      "template": "standard3",
+      "sortIndex": 970,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0098",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.January-レトロデザイン",
+      "template": "standard3",
+      "sortIndex": 980,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0099",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.January-Ⅱ-ステッチデザイン",
+      "template": "standard3",
+      "sortIndex": 990,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0100",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "マシンガンレイン",
+      "template": "standard3",
+      "sortIndex": 1000,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0101",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "Hard to say MVver",
+      "template": "five5",
+      "sortIndex": 1010,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0102",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.Valentine",
+      "template": "five5",
+      "sortIndex": 1020,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0103",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "新内眞衣卒業セレモニーTシャツ",
+      "template": "standard3",
+      "sortIndex": 1030,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0104",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "星野みなみ卒業セレモニーTシャツ",
+      "template": "standard3",
+      "sortIndex": 1040,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0105",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "10周年記念A",
+      "template": "five5",
+      "sortIndex": 1050,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0106",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "10周年記念B",
+      "template": "five5",
+      "sortIndex": 1060,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0107",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "乃木坂46時間TV Tシャツ",
+      "template": "standard3",
+      "sortIndex": 1070,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0108",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.February-ニットセットアップワンピ",
+      "template": "standard3",
+      "sortIndex": 1080,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0109",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.February-Ⅱ-カラーコート",
+      "template": "standard3",
+      "sortIndex": 1090,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0110",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.February-Ⅲ-カーディガン",
+      "template": "standard3",
+      "sortIndex": 1100,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0111",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.March-紅白2021衣装1",
+      "template": "standard3",
+      "sortIndex": 1110,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0112",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.March-Ⅱ-紅白2021衣装2",
+      "template": "rareSet8",
+      "sortIndex": 1120,
+      "note": "チュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0113",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "北野日奈子卒業コンサートTシャツ",
+      "template": "standard3",
+      "sortIndex": 1130,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0114",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "29thSGアンダーライブTシャツ",
+      "template": "standard3",
+      "sortIndex": 1140,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0115",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.April-スペシャル衣装34",
+      "template": "standard3",
+      "sortIndex": 1150,
+      "note": "ヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0116",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.April-Ⅱ-ツイード",
+      "template": "standard3",
+      "sortIndex": 1160,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0117",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.April-Ⅲ-異素材ドッキング",
+      "template": "standard3",
+      "sortIndex": 1170,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0118",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "届かなくたって…アンダーver.",
+      "template": "five5",
+      "sortIndex": 1180,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0119",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "届かなくたって…",
+      "template": "standard3",
+      "sortIndex": 1190,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0120",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "10thBDライブTシャツ白ver.",
+      "template": "standard3",
+      "sortIndex": 1200,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0121",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.May-ビタミンカラー",
+      "template": "standard3",
+      "sortIndex": 1210,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0122",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "10thBDライブTシャツ紫ver.",
+      "template": "standard3",
+      "sortIndex": 1220,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0123",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "Actually…",
+      "template": "standard3",
+      "sortIndex": 1230,
+      "note": null,
+      "pageBreakAfter": true
+    },
+    {
+      "id": "s0124",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.May-Ⅱ-フェイクファー",
+      "template": "standard3",
+      "sortIndex": 1240,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0125",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.May-Ⅲ-フロントボタントップス",
+      "template": "standard3",
+      "sortIndex": 1250,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0126",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.May-Ⅳ-チョーカーデザイン",
+      "template": "standard3",
+      "sortIndex": 1260,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0127",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.June-夏パジャマ",
+      "template": "standard3",
+      "sortIndex": 1270,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0128",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.June-Ⅱ-ノースリーブニット",
+      "template": "standard3",
+      "sortIndex": 1280,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0129",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.June-Ⅲ-麦わら帽子",
+      "template": "standard3",
+      "sortIndex": 1290,
+      "note": "ヨリチュウ？どこ？多分ない",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0130",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.June-Ⅳ-10thBDライブ衣装",
+      "template": "rareSet8",
+      "sortIndex": 1300,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0131",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.July-真夏の全国ツアー2022 Tシャツ 共通ver",
+      "template": "standard3",
+      "sortIndex": 1310,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0132",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 大阪ver",
+      "template": "standard3",
+      "sortIndex": 1320,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0133",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.July-Ⅱ-浴衣",
+      "template": "five5",
+      "sortIndex": 1330,
+      "note": "座りヨリ座りヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0134",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.July-Ⅲ-刺繍",
+      "template": "standard3",
+      "sortIndex": 1340,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0135",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 広島ver",
+      "template": "standard3",
+      "sortIndex": 1350,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0136",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.July-Ⅳ-アウトドア",
+      "template": "standard3",
+      "sortIndex": 1360,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0137",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 福岡ver",
+      "template": "standard3",
+      "sortIndex": 1370,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0138",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.July-Ⅴ-メッシュニット",
+      "template": "standard3",
+      "sortIndex": 1380,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0139",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 北海道ver",
+      "template": "standard3",
+      "sortIndex": 1390,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0140",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 宮城ver",
+      "template": "standard3",
+      "sortIndex": 1400,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0141",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.August-サマーベスト",
+      "template": "standard3",
+      "sortIndex": 1410,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0142",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 愛知ver",
+      "template": "standard3",
+      "sortIndex": 1420,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0143",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.August-Ⅱ-ビビットトップス",
+      "template": "standard3",
+      "sortIndex": 1430,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0144",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.August-Ⅲ-アシメフリル",
+      "template": "standard3",
+      "sortIndex": 1440,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0145",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Tシャツ 東京ver",
+      "template": "standard3",
+      "sortIndex": 1450,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0146",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "真夏の全国ツアー2022 Special",
+      "template": "standard3",
+      "sortIndex": 1460,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0147",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.August-Ⅳ-ストライプ",
+      "template": "standard3",
+      "sortIndex": 1470,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0148",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.September-マリンルック",
+      "template": "standard3",
+      "sortIndex": 1480,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0149",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.September-Ⅱ-オフィスカジュアル",
+      "template": "standard3",
+      "sortIndex": 1490,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0150",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "好きというのはロックだぜ！選抜ver.",
+      "template": "five5",
+      "sortIndex": 1500,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0151",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "ジャンピングジョーカーフラッシュ MV",
+      "template": "five5",
+      "sortIndex": 1510,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0152",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "好きというのはロックだぜ！",
+      "template": "standard3",
+      "sortIndex": 1520,
+      "note": "ヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0153",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "ハロウィン2022",
+      "template": "five5",
+      "sortIndex": 1530,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0154",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.October-ウィンドウペンチェック",
+      "template": "standard3",
+      "sortIndex": 1540,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0155",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.October-Ⅱ-ポップ",
+      "template": "standard3",
+      "sortIndex": 1550,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0156",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "樋口日奈卒業セレモニー",
+      "template": "standard3",
+      "sortIndex": 1560,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0157",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "Under's Love",
+      "template": "standard3",
+      "sortIndex": 1570,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0158",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.November-真夏の全国ツアー2022衣装",
+      "template": "rareSet8",
+      "sortIndex": 1580,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0159",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.December-スペシャル衣装35",
+      "template": "standard3",
+      "sortIndex": 1590,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0160",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.December-Ⅱ-ゴルフウェア",
+      "template": "standard3",
+      "sortIndex": 1600,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0161",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.December-Ⅲ-ハーフジップ",
+      "template": "standard3",
+      "sortIndex": 1610,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0162",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "クリスマス2022",
+      "template": "five5",
+      "sortIndex": 1620,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0163",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.December-Ⅳ-ジャガード",
+      "template": "standard3",
+      "sortIndex": 1630,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0164",
+      "binderId": "b2022-2023",
+      "year": 2022,
+      "name": "2022.December-Ⅴ-ケーブルニット",
+      "template": "standard3",
+      "sortIndex": 1640,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0165",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.Lucky Bag（パステル）",
+      "template": "standard3",
+      "sortIndex": 1650,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0166",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.Lucky Bag（カレンダー衣装）",
+      "template": "standard3",
+      "sortIndex": 1660,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0167",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "Happy New Year! 2023（兎）",
+      "template": "standard3",
+      "sortIndex": 1670,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0168",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.January-リブチェンジワンピース",
+      "template": "standard3",
+      "sortIndex": 1680,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0169",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.January-Ⅱ-マルチカラーニット",
+      "template": "standard3",
+      "sortIndex": 1690,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0170",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "ここにはないもの 選抜ver.",
+      "template": "five5",
+      "sortIndex": 1700,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0171",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "ここにはないもの",
+      "template": "standard3",
+      "sortIndex": 1710,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0172",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.February-31st制服",
+      "template": "standard3",
+      "sortIndex": 1720,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0173",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.Valentine",
+      "template": "five5",
+      "sortIndex": 1730,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0174",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "11周年記念",
+      "template": "five5",
+      "sortIndex": 1740,
+      "note": "チュウ、座りヨリ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0175",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "11thBDライブTシャツ",
+      "template": "standard3",
+      "sortIndex": 1750,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0176",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.February-Ⅱ-スタジャン",
+      "template": "standard3",
+      "sortIndex": 1760,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0177",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.February-Ⅲ-ワンカラーニット",
+      "template": "standard3",
+      "sortIndex": 1770,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0178",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "11thBDライブ 4期Tシャツ",
+      "template": "standard3",
+      "sortIndex": 1780,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0179",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.February-Ⅳ-ファーベスト",
+      "template": "standard3",
+      "sortIndex": 1790,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0180",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.February-Ⅴ-カラーロングカーディガン",
+      "template": "standard3",
+      "sortIndex": 1800,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0181",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "秋元真夏卒業コンサートTシャツ",
+      "template": "standard3",
+      "sortIndex": 1810,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0182",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "悪い成分",
+      "template": "standard3",
+      "sortIndex": 1820,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0183",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.March-ビッグボーダー",
+      "template": "standard3",
+      "sortIndex": 1830,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0184",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.March-Ⅱ-ファーニット",
+      "template": "standard3",
+      "sortIndex": 1840,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0185",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.March-Ⅲ-ツートーントップス",
+      "template": "standard3",
+      "sortIndex": 1850,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0186",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.April-スペシャル衣装36",
+      "template": "standard3",
+      "sortIndex": 1860,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0187",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "人は夢を二度見るMV",
+      "template": "five5",
+      "sortIndex": 1870,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0188",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.April-Ⅱ-トラディショナル",
+      "template": "standard3",
+      "sortIndex": 1880,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0189",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.April-Ⅲ-紅白2022衣装",
+      "template": "rareSet8",
+      "sortIndex": 1890,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0190",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "齋藤飛鳥卒業コンサートTシャツ",
+      "template": "standard3",
+      "sortIndex": 1900,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0191",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.May-スペシャル衣装37",
+      "template": "standard3",
+      "sortIndex": 1910,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0192",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.May-Ⅱ-フロントレースアップ",
+      "template": "standard3",
+      "sortIndex": 1920,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0193",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.May-Ⅲ-ビビッドパーカー",
+      "template": "standard3",
+      "sortIndex": 1930,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0194",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.May-Ⅳ-チュニック",
+      "template": "standard3",
+      "sortIndex": 1940,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0195",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.May-Ⅴ-ダメージ",
+      "template": "standard3",
+      "sortIndex": 1950,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0196",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.June-11thBDライブ衣装",
+      "template": "standard3",
+      "sortIndex": 1960,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0197",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.June-Ⅱ-11thBDライブ期別衣装",
+      "template": "standard3",
+      "sortIndex": 1970,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0198",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.June-Ⅲ-チュール",
+      "template": "standard3",
+      "sortIndex": 1980,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0199",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-真夏の全国ツアー2023 Tシャツ Aver",
+      "template": "standard3",
+      "sortIndex": 1990,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0200",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-Ⅱ-浴衣",
+      "template": "five5",
+      "sortIndex": 2000,
+      "note": "チュウ座りヨリ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0201",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-Ⅲ-リボンモチーフ",
+      "template": "standard3",
+      "sortIndex": 2010,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0202",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "緑×白コーデ",
+      "template": "standard3",
+      "sortIndex": 2020,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0203",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "人は夢を二度見る",
+      "template": "standard3",
+      "sortIndex": 2030,
+      "note": "チュウヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0204",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "さざ波は戻らない",
+      "template": "standard3",
+      "sortIndex": 2040,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0205",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-Ⅳ-ビスチェ",
+      "template": "standard3",
+      "sortIndex": 2050,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0206",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "赤×白コーデ",
+      "template": "standard3",
+      "sortIndex": 2060,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0207",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-Ⅴ-制服風コーデ",
+      "template": "standard3",
+      "sortIndex": 2070,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0208",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "黄色×黒コーデ",
+      "template": "standard3",
+      "sortIndex": 2080,
+      "note": "チュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0209",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.July-Ⅵ-ハワイアン",
+      "template": "standard3",
+      "sortIndex": 2090,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0210",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "エメラルドグリーン×ブラウンコーデ",
+      "template": "standard3",
+      "sortIndex": 2100,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0211",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.August-真夏の全国ツアー2023 Tシャツ B＆Cver",
+      "template": "standard3",
+      "sortIndex": 2110,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0212",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.August-Ⅱ-アメリカンポップ",
+      "template": "standard3",
+      "sortIndex": 2120,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0213",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "白×白コーデ",
+      "template": "standard3",
+      "sortIndex": 2130,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0214",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.August-Ⅲ-エスニック",
+      "template": "standard3",
+      "sortIndex": 2140,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0215",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "青×白コーデ",
+      "template": "standard3",
+      "sortIndex": 2150,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0216",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "真夏の全国ツアー2023 Tシャツ 東京ver",
+      "template": "standard3",
+      "sortIndex": 2160,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0217",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "真夏の全国ツアー2023 Special",
+      "template": "standard3",
+      "sortIndex": 2170,
+      "note": "ヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0218",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "紫コーデ",
+      "template": "standard3",
+      "sortIndex": 2180,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0219",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.August-Ⅳ-キャミワンピ",
+      "template": "standard3",
+      "sortIndex": 2190,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0220",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.August-V-スペシャル衣装38",
+      "template": "rareSet8",
+      "sortIndex": 2200,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0221",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.September-ベースボールシャツ2023",
+      "template": "standard3",
+      "sortIndex": 2210,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0222",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "ハロウィン2023",
+      "template": "five5",
+      "sortIndex": 2220,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0223",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "おひとりさま天国MV",
+      "template": "five5",
+      "sortIndex": 2230,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0224",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.October-真夏の全国ツアー2023衣装1",
+      "template": "standard3",
+      "sortIndex": 2240,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0225",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.October-Ⅱ-ポイント花柄ワンピース",
+      "template": "standard3",
+      "sortIndex": 2250,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0226",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.November-バスケコーデ",
+      "template": "standard3",
+      "sortIndex": 2260,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0227",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "おひとりさま天国",
+      "template": "standard3",
+      "sortIndex": 2270,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0228",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "踏んでしまった",
+      "template": "rareSet8",
+      "sortIndex": 2280,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0229",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "2023.December-真夏の全国ツアー2023衣装2",
+      "template": "standard3",
+      "sortIndex": 2290,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0230",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "monopoly MV",
+      "template": "five5",
+      "sortIndex": 2300,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0231",
+      "binderId": "b2022-2023",
+      "year": 2023,
+      "name": "クリスマス2023",
+      "template": "five5",
+      "sortIndex": 2310,
       "note": null,
       "pageBreakAfter": false
     }
