@@ -1,0 +1,958 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "member": {
+    "id": "yumiki_nao",
+    "name": "弓木奈於"
+  },
+  "binders": [
+    {
+      "id": "b2020-2021",
+      "name": "弓木2020＆2021",
+      "sortIndex": 0,
+      "sealed": false
+    }
+  ],
+  "sets": [
+    {
+      "id": "s0001",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "4期生スペシャル衣装",
+      "template": "standard3",
+      "sortIndex": 10,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0002",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.May-Ⅱ-エクリュ",
+      "template": "standard3",
+      "sortIndex": 20,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0003",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.May-Ⅲ-マウンテンパーカー",
+      "template": "standard3",
+      "sortIndex": 30,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0004",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.June-シアーブラウス",
+      "template": "standard3",
+      "sortIndex": 40,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0005",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.June-Ⅱ-マーメイドスカート",
+      "template": "standard3",
+      "sortIndex": 50,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0006",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.June-Ⅲ-ジャケットセットアップ",
+      "template": "standard3",
+      "sortIndex": 60,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0007",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.June-Ⅳ-シフォンワンピ",
+      "template": "standard3",
+      "sortIndex": 70,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0008",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.July-Ⅱ-浴衣",
+      "template": "five5",
+      "sortIndex": 80,
+      "note": "座りヨリ、ヨリ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0009",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.July-Ⅲ-デニムミニ",
+      "template": "standard3",
+      "sortIndex": 90,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0010",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.August-スペシャル衣装26",
+      "template": "standard3",
+      "sortIndex": 100,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0011",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.August-Ⅱ-かぎ針編み",
+      "template": "standard3",
+      "sortIndex": 110,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0012",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.August-Ⅲ-フラワープリント",
+      "template": "standard3",
+      "sortIndex": 120,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0013",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.August-Ⅳ-キュロット",
+      "template": "standard3",
+      "sortIndex": 130,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0014",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.August-Ⅴ-リゾートワンピ",
+      "template": "standard3",
+      "sortIndex": 140,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0015",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "Route 246",
+      "template": "standard3",
+      "sortIndex": 150,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0016",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.September-Ⅱ-ジャンパースカート",
+      "template": "standard3",
+      "sortIndex": 160,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0017",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.September-Ⅲ-カラーオンカラー",
+      "template": "standard3",
+      "sortIndex": 170,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0018",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.September-Ⅳ-ジャンプスーツ",
+      "template": "standard3",
+      "sortIndex": 180,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0019",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.October-CA風",
+      "template": "standard3",
+      "sortIndex": 190,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0020",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.October-Ⅱ-モノトーン",
+      "template": "standard3",
+      "sortIndex": 200,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0021",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.October-Ⅲ-ウエストベルト",
+      "template": "standard3",
+      "sortIndex": 210,
+      "note": null,
+      "pageBreakAfter": true
+    },
+    {
+      "id": "s0022",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "白石麻衣卒コンTシャツ",
+      "template": "standard3",
+      "sortIndex": 220,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0023",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "ハロウィン2020",
+      "template": "five5",
+      "sortIndex": 230,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0024",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.November-プレッピー",
+      "template": "standard3",
+      "sortIndex": 240,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0025",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.November-Ⅱ-スカーフ",
+      "template": "standard3",
+      "sortIndex": 250,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0026",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.November-Ⅲ-メロートップス",
+      "template": "standard3",
+      "sortIndex": 260,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0027",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.November-Ⅳ-ニットポロ",
+      "template": "standard3",
+      "sortIndex": 270,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0028",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.November-Ⅴ-スポーツ",
+      "template": "standard3",
+      "sortIndex": 280,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0029",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "4期生ライブ2020",
+      "template": "event6",
+      "sortIndex": 290,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0030",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.December-スペシャル衣装27",
+      "template": "standard3",
+      "sortIndex": 300,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0031",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.December-Ⅱ-タイブラウス",
+      "template": "standard3",
+      "sortIndex": 310,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0032",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "クリスマス2020",
+      "template": "five5",
+      "sortIndex": 320,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0033",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.December-Ⅲ-フリンジ",
+      "template": "standard3",
+      "sortIndex": 330,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0034",
+      "binderId": "b2020-2021",
+      "year": 2020,
+      "name": "2020.December-Ⅳ-ブリーツ",
+      "template": "standard3",
+      "sortIndex": 340,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0035",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.Lucky Bag",
+      "template": "standard3",
+      "sortIndex": 350,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0036",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "Happy New Year! 2020（丑）",
+      "template": "standard3",
+      "sortIndex": 360,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0037",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.January-スペシャル衣装28",
+      "template": "standard3",
+      "sortIndex": 370,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0038",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.January-Ⅱ-ロングニットワンピ",
+      "template": "standard3",
+      "sortIndex": 380,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0039",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.January-Ⅲ-アメリカンダイナー",
+      "template": "standard3",
+      "sortIndex": 390,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0040",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "僕は僕を好きになる",
+      "template": "standard3",
+      "sortIndex": 400,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0041",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.Valentine",
+      "template": "five5",
+      "sortIndex": 410,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0042",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "9thBDライブTシャツ",
+      "template": "standard3",
+      "sortIndex": 420,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0043",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "9周年記念",
+      "template": "five5",
+      "sortIndex": 430,
+      "note": "ヨリヒキ座りヨリ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0044",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.February-レトロコート",
+      "template": "standard3",
+      "sortIndex": 440,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0045",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.February-Ⅱ-スペシャル衣装29",
+      "template": "standard3",
+      "sortIndex": 450,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0046",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.March-スペシャル衣装30",
+      "template": "standard3",
+      "sortIndex": 460,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0047",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.March-Ⅱ-26th制服",
+      "template": "standard3",
+      "sortIndex": 470,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0048",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "9thBD期別Tシャツ&歌衣装",
+      "template": "event6",
+      "sortIndex": 480,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0049",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.April-スペシャル衣装31",
+      "template": "standard3",
+      "sortIndex": 490,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0050",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.April-Ⅱ-キルティング",
+      "template": "standard3",
+      "sortIndex": 500,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0051",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.April-Ⅲ-レイヤードニット",
+      "template": "standard3",
+      "sortIndex": 510,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0052",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "Out of the blue MVver",
+      "template": "five5",
+      "sortIndex": 520,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0053",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.May-紅白2020衣装1",
+      "template": "standard3",
+      "sortIndex": 530,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0054",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.May-Ⅱ-レトロドレス",
+      "template": "standard3",
+      "sortIndex": 540,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0055",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.May-Ⅲ-変形ブラウス",
+      "template": "standard3",
+      "sortIndex": 550,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0056",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "9th YEAR BIRTHDAY LIVE 3期生・4期生ライブ",
+      "template": "standard3",
+      "sortIndex": 560,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0057",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.May-Ⅳ-紅白2020衣装2",
+      "template": "standard3",
+      "sortIndex": 570,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0058",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.May-Ⅴ-マカロンカラー",
+      "template": "standard3",
+      "sortIndex": 580,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0059",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "Wilderness world",
+      "template": "standard3",
+      "sortIndex": 590,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0060",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.June-スペシャル衣装32",
+      "template": "standard3",
+      "sortIndex": 600,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0061",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.June-Ⅱ-部分空き",
+      "template": "standard3",
+      "sortIndex": 610,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0062",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "ごめんねFingers crossed",
+      "template": "standard3",
+      "sortIndex": 620,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0063",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.July-浴衣2021",
+      "template": "five5",
+      "sortIndex": 630,
+      "note": "座りヨリ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0064",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.July-Ⅱ-9thBDライブ衣装1",
+      "template": "standard3",
+      "sortIndex": 640,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0065",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "真夏の全国ツアー2021 Tシャツ 大阪ver",
+      "template": "standard3",
+      "sortIndex": 650,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0066",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.July-Ⅲ-ボタニカル",
+      "template": "standard3",
+      "sortIndex": 660,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0067",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "口ほどにもないKISS",
+      "template": "standard3",
+      "sortIndex": 670,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0068",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "真夏の全国ツアー2021 Tシャツ 宮城ver",
+      "template": "standard3",
+      "sortIndex": 680,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0069",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.July-Ⅳ-セーラー",
+      "template": "standard3",
+      "sortIndex": 690,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0070",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.August-27th制服",
+      "template": "standard3",
+      "sortIndex": 700,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0071",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.August-Ⅱ-9thBDライブ期別衣装",
+      "template": "standard3",
+      "sortIndex": 710,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0072",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "真夏の全国ツアー2021 Tシャツ 愛知ver",
+      "template": "standard3",
+      "sortIndex": 720,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0073",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.August-Ⅲ-白Tシャツコーデ",
+      "template": "standard3",
+      "sortIndex": 730,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0074",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "10周年記念",
+      "template": "five5",
+      "sortIndex": 740,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0075",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "真夏の全国ツアー2021 Tシャツ 福岡ver",
+      "template": "standard3",
+      "sortIndex": 750,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0076",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.August-Ⅳ-リラックスウェア",
+      "template": "standard3",
+      "sortIndex": 760,
+      "note": "ヨリチュウ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0077",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.September-真夏の全国ツアー2021 Tシャツ 共通ver",
+      "template": "standard3",
+      "sortIndex": 770,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0078",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "全部 夢のまま",
+      "template": "standard3",
+      "sortIndex": 780,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0079",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.September-Ⅱ-シアー",
+      "template": "standard3",
+      "sortIndex": 790,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0080",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.September-Ⅲ-小花柄",
+      "template": "standard3",
+      "sortIndex": 800,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0081",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.October-スペシャル衣装33",
+      "template": "standard3",
+      "sortIndex": 810,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0082",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.October-Ⅱ-カットレース",
+      "template": "standard3",
+      "sortIndex": 820,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0083",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.October-Ⅲ-スポーティ",
+      "template": "standard3",
+      "sortIndex": 830,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0084",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "28thSG アンダーライブ Tシャツ",
+      "template": "standard3",
+      "sortIndex": 840,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0085",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "ハロウィン2021",
+      "template": "five5",
+      "sortIndex": 850,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0086",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "錆びたコンパス",
+      "template": "standard3",
+      "sortIndex": 860,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0087",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.November-スキッパーシャツ",
+      "template": "standard3",
+      "sortIndex": 870,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0088",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "真夏の全国ツアー2021 Tシャツ 東京ver.",
+      "template": "standard3",
+      "sortIndex": 880,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0089",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "マシンガンレインアンダーver.",
+      "template": "five5",
+      "sortIndex": 890,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0090",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.December-パーティドレス",
+      "template": "standard3",
+      "sortIndex": 900,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0091",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "2021.December-Ⅱ-ノーカラージャケット",
+      "template": "standard3",
+      "sortIndex": 910,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0092",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "クリスマス2021",
+      "template": "five5",
+      "sortIndex": 920,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0093",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "君に叱られた",
+      "template": "rareSet8",
+      "sortIndex": 930,
+      "note": "ヨリヒキ",
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0094",
+      "binderId": "b2020-2021",
+      "year": 2021,
+      "name": "最後のTight Hug",
+      "template": "standard3",
+      "sortIndex": 940,
+      "note": null,
+      "pageBreakAfter": false
+    }
+  ]
+}
