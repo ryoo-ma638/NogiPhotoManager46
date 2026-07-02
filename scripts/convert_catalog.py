@@ -120,10 +120,14 @@ def main():
                 if leftover or unknown_slot:
                     review.append(f"[◦注記を解釈できず→全未所有で仮置き] {name}（注記: {notes} / 未解釈: {leftover or unknown_slot}）")
                 else:
-                    owned = [s for s in all_slot_ids if s not in missing]
+                    # 注記=通常ポーズの「欠け」。所有=通常ポーズのうち注記に無いもの。
+                    # R/SR等のレア枠は✓(コンプ)以外は所有としない（別途手動管理）。
+                    normal_ids = [s[0] for s in slots if s[2] == "normal"]
+                    rare_ids = [s[0] for s in slots if s[2] != "normal"]
+                    owned = [s for s in normal_ids if s not in missing]
                     for s in owned:
                         owned_ids.append(pid(s))
-                    partial_notes.append((name, notes, list(missing), owned))
+                    partial_notes.append((name, notes, list(missing) + rare_ids, owned))
 
     catalog = {
         "schemaVersion": 1, "catalogVersion": 1,
