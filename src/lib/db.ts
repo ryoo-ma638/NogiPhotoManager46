@@ -40,3 +40,16 @@ export async function ownedIdSet(): Promise<Set<string>> {
 export async function ownedCount(): Promise<number> {
   return db.owned.count()
 }
+
+/** バックアップ用に全所有行を取得 */
+export async function allOwnedRows(): Promise<OwnedRow[]> {
+  return db.owned.toArray()
+}
+
+/** 所有記録を丸ごと置き換える（復元・初回インポート用） */
+export async function replaceAllOwned(rows: OwnedRow[]): Promise<void> {
+  await db.transaction('rw', db.owned, async () => {
+    await db.owned.clear()
+    if (rows.length > 0) await db.owned.bulkPut(rows)
+  })
+}

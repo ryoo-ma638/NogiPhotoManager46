@@ -13,6 +13,7 @@ interface AppData {
   owned: Set<string>
   toggle: (photoId: string) => void
   setMany: (photoIds: string[], value: boolean) => void
+  reloadOwned: () => Promise<void>
   photosOf: (set: CatalogSet) => Photo[]
   statOf: (setId: string) => SetStat
   setById: Map<string, CatalogSet>
@@ -112,6 +113,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     photosOf: (set) => photosMap.get(set.id) ?? [],
     statOf: (id) => statMap.get(id) ?? { owned: 0, total: 0 },
     setById,
+    reloadOwned: async () => setOwnedState(await ownedIdSet()),
   }
 
   return <Ctx.Provider value={data}>{children}</Ctx.Provider>
