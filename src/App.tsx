@@ -1,45 +1,65 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { loadCatalog, photosForSet } from './lib/catalog'
-import { ownedCount } from './lib/db'
-import type { CatalogFile } from './types'
+import { AppDataProvider } from './lib/appData'
+import { useHashRoute } from './lib/router'
+import { BooksIcon, ChartIcon, GearIcon } from './components/icons'
+import Home from './pages/Home'
+import BinderPage from './pages/Binder'
+import SetDetailPage from './pages/SetDetail'
+import StatsPage from './pages/Stats'
+import SettingsPage from './pages/Settings'
 
 export default function App() {
-  const [catalog, setCatalog] = useState<CatalogFile | null>(null)
-  const [owned, setOwned] = useState(0)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    void (async () => {
-      try {
-        setCatalog(await loadCatalog())
-        setOwned(await ownedCount())
-      } catch (e) {
-        setError(e instanceof Error ? e.message : String(e))
-      }
-    })()
-  }, [])
-
-  if (error) return <Center><p className="text-red-600">読み込みエラー: {error}</p></Center>
-  if (!catalog) return <Center><p className="text-slate-500">読み込み中…</p></Center>
-
-  const totalSlots = catalog.sets.reduce((n, s) => n + photosForSet(catalog.member.id, s).length, 0)
-
   return (
-    <Center>
-      <h1 className="text-2xl font-bold">{catalog.member.name} 生写真</h1>
-      <div className="text-slate-600 text-center leading-relaxed">
-        <p>バインダー {catalog.binders.length} ／ セット {catalog.sets.length}</p>
-        <p>写真枠 {totalSlots} ／ 所有 {owned} 枚</p>
-      </div>
-      <p className="text-xs text-slate-400">データ層 稼働中（P1-1）</p>
-    </Center>
+    <AppDataProvider>
+      <Shell />
+    </AppDataProvider>
   )
 }
 
-function Center({ children }: { children: ReactNode }) {
+function Shell() {
+  const route = useHashRoute()
+  const seg = route.split('/').filter(Boolean)
+
+  let page: React.ReactNode
+  let tab: 'collection' | 'stats' | 'settings' = 'collection'
+  if (seg[0] === 'b') page = <BinderPage binderId={seg[1] ?? ''} />
+  else if (seg[0] === 's') page = <SetDetailPage setId={seg[1] ?? ''} />
+  else if (seg[0] === 'stats') {
+    page = <StatsPage />
+    tab = 'stats'
+  } else if (seg[0] === 'settings') {
+    page = <SettingsPage />
+    tab = 'settings'
+  } else page = <Home />
+
   return (
-    <main className="min-h-dvh bg-slate-50 text-slate-900 flex flex-col items-center justify-center gap-3 p-6">
-      {children}
-    </main>
+    <div className="min-h-dvh bg-slate-50 text-slate-900 pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+      {page}
+      <TabBar active={tab} />
+    </div>
+  )
+}
+
+function TabBar({ active }: { active: 'collection' | 'stats' | 'settings' }) {
+  const tabs = [
+    { key: 'collection', href: '#/', label: 'コレクション', icon: BooksIcon },
+    { key: 'stats', href: '#/stats', label: '統計', icon: ChartIcon },
+    { key: 'settings', href: '#/settings', label: '設定', icon: GearIcon },
+  ] as const
+
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-30 bg-white/92 backdrop-blur border-t border-slate-200">
+      <div className="mx-auto max-w-lg grid grid-cols-3">
+        {tabs.map(({ key, href, label, icon: Icon }) => {
+          const isActive = active === key
+          return (
+            <a key={key} href={href} className="flex flex-col items-center gap-0.5 pt-2 pb-1.5" aria-current={isActive ? 'page' : undefined}>
+              <Icon className={`w-6 h-6 ${isActive ? 'text-violet-600' : 'text-slate-400'}`} />
+              <span className={`text-[10px] font-medium ${isActive ? 'text-violet-600' : 'text-slate-400'}`}>{label}</span>
+            </a>
+          )
+        })}
+      </div>
+      <div className="h-[env(safe-area-inset-bottom)]" />
+    </nav>
   )
 }

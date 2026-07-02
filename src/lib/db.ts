@@ -21,6 +21,16 @@ export async function setOwned(photoId: string, owned: boolean): Promise<void> {
   else await db.owned.delete(photoId)
 }
 
+/** 複数枚を一括で所有/未所有にする（「すべて所有」用） */
+export async function setManyOwned(photoIds: string[], owned: boolean): Promise<void> {
+  if (owned) {
+    const now = new Date().toISOString()
+    await db.owned.bulkPut(photoIds.map((photoId) => ({ photoId, ownedDate: now })))
+  } else {
+    await db.owned.bulkDelete(photoIds)
+  }
+}
+
 /** 所有している写真IDの集合を取得（進捗計算・一覧表示用） */
 export async function ownedIdSet(): Promise<Set<string>> {
   const rows = await db.owned.toArray()
