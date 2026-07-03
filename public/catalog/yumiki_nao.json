@@ -3875,7 +3875,7 @@
       "name": "ごめんねfingers crossed",
       "template": "four4",
       "sortIndex": 3840,
-      "note": "AB D",
+      "note": null,
       "pageBreakAfter": false
     },
     {
@@ -3895,7 +3895,7 @@
       "name": "Time flies",
       "template": "standard3",
       "sortIndex": 3860,
-      "note": "（完全生産限定+初回仕様+メンバーカスタムジャケット）ヨリチュウ",
+      "note": null,
       "pageBreakAfter": false
     },
     {
@@ -3915,7 +3915,7 @@
       "name": "好きというのはロックだぜ！",
       "template": "four4",
       "sortIndex": 3880,
-      "note": "A CD",
+      "note": null,
       "pageBreakAfter": false
     },
     {
@@ -3945,7 +3945,7 @@
       "name": "おひとりさま天国",
       "template": "four4",
       "sortIndex": 3910,
-      "note": "A D",
+      "note": null,
       "pageBreakAfter": false
     },
     {
@@ -3965,7 +3965,7 @@
       "name": "チャンスは平等",
       "template": "four4",
       "sortIndex": 3930,
-      "note": "BCD",
+      "note": null,
       "pageBreakAfter": false
     },
     {
@@ -3993,7 +3993,7 @@
       "binderId": "b-sealed",
       "year": null,
       "name": "ネーブルオレンジ",
-      "template": "standard3",
+      "template": "four4",
       "sortIndex": 3960,
       "note": null,
       "pageBreakAfter": false
@@ -4003,7 +4003,7 @@
       "binderId": "b-sealed",
       "year": null,
       "name": "セームナンバーズ",
-      "template": "standard3",
+      "template": "four4",
       "sortIndex": 3970,
       "note": null,
       "pageBreakAfter": false
@@ -4013,8 +4013,18 @@
       "binderId": "b-sealed",
       "year": null,
       "name": "ビリヤニ",
-      "template": "standard3",
+      "template": "four4",
       "sortIndex": 3980,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0399",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "マイリスペクトアルバム特別版",
+      "template": "four4",
+      "sortIndex": 3990,
       "note": null,
       "pageBreakAfter": false
     }

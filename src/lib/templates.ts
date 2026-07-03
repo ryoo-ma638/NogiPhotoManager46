@@ -15,7 +15,7 @@ const STD3: SlotDef[] = [
 // 変換スクリプト(scripts/convert_catalog.py)のテンプレ定義とslotコードを一致させること
 export const TEMPLATES: Record<Template, SlotDef[]> = {
   standard3: STD3,
-  four4: ['A', 'B', 'C', 'D'].map((l) => ({ slot: l.toLowerCase(), label: l, rarity: 'normal' as Rarity })),
+  four4: ['A', 'B', 'C', 'D'].map((l) => ({ slot: l, label: l, rarity: 'normal' as Rarity })),
   five5: [
     ...STD3,
     { slot: 'suwari-yori', label: '座りヨリ', rarity: 'normal' },

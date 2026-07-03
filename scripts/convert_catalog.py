@@ -21,7 +21,7 @@ TEMPLATES = {
     "five5": STD3 + [("suwari-yori", "座りヨリ", "normal"), ("suwari-hiki", "座りヒキ", "normal")],
     "rareSet8": STD3 + [("r1", "R", "R"), ("sr1", "SR①", "SR"), ("sr2", "SR②", "SR"), ("sr3", "SR③", "SR"), ("sr4", "SR④", "SR")],
     "event6": [(f"p{i}", "①②③④⑤⑥"[i - 1], "normal") for i in range(1, 7)],
-    "four4": [("a", "A", "normal"), ("b", "B", "normal"), ("c", "C", "normal"), ("d", "D", "normal")],
+    "four4": [("A", "A", "normal"), ("B", "B", "normal"), ("C", "C", "normal"), ("D", "D", "normal")],
     "single1": [("p1", "封入", "normal")],
 }
 # 種類数 → テンプレ（8はrareフラグで判定）。4種は封入(A/B/C/D)
@@ -144,19 +144,22 @@ def main():
     # ---- 所有オーバーライド（R/SR等の個別指定。非公開ファイル、ルール判定より優先） ----
     LABEL2SLOT = {"ヨリ": "yori", "チュウ": "chu", "ヒキ": "hiki", "座りヨリ": "suwari-yori",
                   "座りヒキ": "suwari-hiki", "R": "r1", "SR": "sr1", "SR①": "sr1", "SR②": "sr2",
-                  "SR③": "sr3", "SR④": "sr4"}
+                  "SR③": "sr3", "SR④": "sr4", "A": "A", "B": "B", "C": "C", "D": "D"}
     ov_path = ROOT / "ownership-overrides.txt"
     owned_set = set(owned_ids)
     ov_applied = ov_skipped = 0
     if ov_path.exists():
         for line in ov_path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
+            line = line.split("#", 1)[0].strip()  # 行内コメントも除去
+            if not line:
                 continue
             key, _, rhs = line.partition("=")
             key = key.strip()
             labels = [x.strip() for x in rhs.split(",") if x.strip()]
-            matches = [s for s in sets if s["name"] == key] or [s for s in sets if key in s["name"]]
+            if re.fullmatch(r"s\d+", key):  # setID直接指定（同名セットの区別用）
+                matches = [s for s in sets if s["id"] == key]
+            else:
+                matches = [s for s in sets if s["name"] == key] or [s for s in sets if key in s["name"]]
             if len(matches) == 0:
                 ov_skipped += 1  # まだ生成していないバインダーのセット→後で適用
                 continue
