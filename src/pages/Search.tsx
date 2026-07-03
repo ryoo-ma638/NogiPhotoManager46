@@ -3,6 +3,7 @@ import { useAppData } from '../lib/appData'
 import { ChevronRight, SealCheck, SearchIcon } from '../components/icons'
 import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate } from '../lib/router'
+import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
 
 // カナ/かな・全角半角・大文字小文字をある程度吸収して比較
 function norm(s: string): string {
@@ -13,6 +14,7 @@ export default function SearchPage() {
   const { catalog, allSets, statOf } = useAppData()
   const [q, setQ] = useState('')
   const [unownedOnly, setUnownedOnly] = useState(false)
+  const [kindFilter, setKindFilter] = useState<Kind | null>(null)
 
   const binderName = useMemo(() => {
     const m = new Map<string, string>()
@@ -20,14 +22,17 @@ export default function SearchPage() {
     return m
   }, [catalog])
 
+  const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
+
   const query = norm(q.trim())
-  const active = query.length > 0 || unownedOnly
+  const active = query.length > 0 || unownedOnly || kindFilter !== null
 
   const results = useMemo(() => {
     if (!active) return []
     return allSets
       .filter((s) => {
         if (query && !norm(`${s.name} ${s.note ?? ''}`).includes(query)) return false
+        if (kindFilter && kindOf(s, sealedBinders.has(s.binderId)) !== kindFilter) return false
         if (unownedOnly) {
           const st = statOf(s.id)
           if (st.total > 0 && st.owned === st.total) return false
@@ -35,7 +40,7 @@ export default function SearchPage() {
         return true
       })
       .sort((a, b) => a.sortIndex - b.sortIndex)
-  }, [active, query, unownedOnly, allSets, statOf])
+  }, [active, query, unownedOnly, kindFilter, allSets, statOf, sealedBinders])
 
   return (
     <>
@@ -64,6 +69,21 @@ export default function SearchPage() {
           <span className={`w-2 h-2 rounded-full ${unownedOnly ? 'bg-white' : 'bg-slate-300'}`} />
           未所有だけ
         </button>
+
+        {/* 種類で絞り込み */}
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 -mx-4 px-4 [-webkit-overflow-scrolling:touch]">
+          {KIND_LABELS.map((k) => (
+            <button
+              key={k.id}
+              onClick={() => setKindFilter(kindFilter === k.id ? null : k.id)}
+              className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors ${
+                kindFilter === k.id ? 'bg-violet-600 text-white' : 'bg-white border border-slate-200 text-slate-500'
+              }`}
+            >
+              {k.label}
+            </button>
+          ))}
+        </div>
 
         {/* 結果 */}
         <div className="mt-4">

@@ -31,6 +31,31 @@ NOTE_TOKENS = [("座りヨリ", "suwari-yori"), ("座りヒキ", "suwari-hiki"),
 
 KIND_RE = re.compile(r"（(\d+)種類?）")
 
+def detect_kind(name, template, sealed):
+    """セットの種類タグ。アプリの絞り込みに使う（src/lib/kinds.ts と同じ規則にすること）"""
+    if sealed:
+        return "sealed"       # 封入
+    if "ミニ生写真" in name:
+        return "mini"         # ミニ生写真
+    if "Tシャツ" in name:
+        return "tshirt"       # ライブT等
+    if ("MV" in name) or ("選抜ver" in name) or ("アンダーver" in name):
+        return "mv"           # MV・楽曲ver.系
+    if template == "rareSet8":
+        return "rare8"        # 8種（R/SR入り）
+    if template == "five5":
+        # 座りヨリ/座りヒキがあるのは浴衣とバスラ（周年記念）だけ。
+        # それ以外の5種（クリスマス/ハロウィン/バレンタイン等）は①〜⑤の5枚セット
+        if ("浴衣" in name) or ("周年記念" in name):
+            return "suwari"   # 座りあり5種
+        return "five"         # 5種セット（①〜⑤）
+    if template == "event6":
+        return "event"        # 6種イベント
+    return "normal"           # 通常（3種コーデ等）
+
+# MV系5種のポーズ表示名（slotは変えない＝所有IDを壊さない）
+MV5_LABELS = ["①", "②", "③", "④", "⑤"]
+
 def parse_note_to_slots(note):
     """注記 → (欠けslot集合, 未解釈の残り文字列)。残りが空なら綺麗に解釈できた。"""
     slots, rest = [], note
@@ -107,11 +132,20 @@ def main():
         seq += 1
         set_id = f"s{seq:04d}"
         slots = TEMPLATES[template]
-        sets.append({
+        is_sealed = any(b["id"] == cur_binder and b.get("sealed") for b in binders)
+        kind = detect_kind(name, template, is_sealed)
+        entry = {
             "id": set_id, "binderId": cur_binder, "year": cur_year,
-            "name": name, "template": template,
+            "name": name, "template": template, "kind": kind,
             "sortIndex": seq * 10, "note": notes, "pageBreakAfter": False,
-        })
+        }
+        # 座りあり以外の5種は表示名を①〜⑤に（slot/所有IDは不変）
+        if template == "five5" and kind != "suwari":
+            entry["photos"] = [
+                {"slot": s[0], "label": MV5_LABELS[i], "rarity": s[2]}
+                for i, s in enumerate(slots)
+            ]
+        sets.append(entry)
 
         # ---- 所有判定 ----
         all_slot_ids = [s[0] for s in slots]

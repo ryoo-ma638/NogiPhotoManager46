@@ -28,13 +28,21 @@
       "year": 2020,            // 封入(sealed)セットは null
       "name": "4期生スペシャル衣装",
       "template": "standard3", // 下記テンプレのいずれか
+      "kind": "normal",        // 種類タグ（絞り込み用）: normal/five/suwari/mv/rare8/event/tshirt/mini/sealed
       "sortIndex": 10,
       "note": null,            // 「〜〜〜」由来メモや末尾注記
-      "pageBreakAfter": false  // 物理ページ区切り
+      "pageBreakAfter": false, // 物理ページ区切り
+      "photos": [              // 任意: 明示的なポーズ枠（テンプレ展開より優先。slotは変えないこと）
+        { "slot": "yori", "label": "①", "rarity": "normal" }
+      ]
     }
   ]
 }
 ```
+
+### 5種の種類の見分け（本人確定ルール）
+- **座りヨリ/座りヒキがあるのは「浴衣」と「バスラ（周年記念）」だけ** → kind=`suwari`、枠は ヨリ/チュウ/ヒキ/座りヨリ/座りヒキ
+- それ以外の5種（クリスマス/ハロウィン/バレンタイン/MV系）は5枚セット → kind=`five` or `mv`、表示は ①〜⑤（slotコードは互換のため不変）
 アプリ内の完全ID: 写真 = `<member>:<setId>:<slot>`（例 `yumiki_nao:s0001:yori`）。
 
 ## テンプレート（写真枠の初期生成）

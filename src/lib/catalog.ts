@@ -1,9 +1,10 @@
 import type { CatalogFile, CatalogSet, Photo } from '../types'
 import { TEMPLATES } from './templates'
 
-/** セットのテンプレから写真枠を展開する */
+/** セットの写真枠を展開する（明示photosがあればそれを優先、なければテンプレから） */
 export function photosForSet(memberId: string, set: CatalogSet): Photo[] {
-  return TEMPLATES[set.template].map((s) => ({
+  const slots = set.photos ?? TEMPLATES[set.template]
+  return slots.map((s) => ({
     id: `${memberId}:${set.id}:${s.slot}`,
     slot: s.slot,
     label: s.label,

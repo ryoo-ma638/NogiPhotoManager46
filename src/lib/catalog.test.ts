@@ -46,3 +46,15 @@ describe('photosForSet', () => {
     }
   })
 })
+
+describe('明示photos（MV系5種など）', () => {
+  it('photosがあればテンプレより優先され、slotは維持される', () => {
+    const set = { ...makeSet('five5'), photos: [
+      { slot: 'yori', label: '①', rarity: 'normal' as const },
+      { slot: 'chu', label: '②', rarity: 'normal' as const },
+    ] }
+    const photos = photosForSet('yumiki_nao', set)
+    expect(photos.map((p) => p.label)).toEqual(['①', '②'])
+    expect(photos[0]!.id).toBe('yumiki_nao:s0001:yori')
+  })
+})

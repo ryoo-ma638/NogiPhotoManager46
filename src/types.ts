@@ -16,9 +16,11 @@ export interface CatalogSet {
   year: number | null // 封入は null
   name: string
   template: Template
+  kind?: string // 種類タグ（normal/five/mv/rare8/event/tshirt/mini/sealed）。絞り込み用
   sortIndex: number
   note: string | null
   pageBreakAfter?: boolean
+  photos?: UserSetPhoto[] // 明示的なポーズ枠（テンプレ展開より優先。MV系5種の①〜⑤等）
   user?: boolean // アプリ内で手動追加したセット（カタログJSONには存在しない）
 }
 

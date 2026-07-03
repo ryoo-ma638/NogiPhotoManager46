@@ -29,6 +29,16 @@ def main():
             errs.append(f"binderId不明: {sid} → {s.get('binderId')}")
         if s.get("template") not in TEMPLATES:
             errs.append(f"template不明: {sid} → {s.get('template')}")
+        elif isinstance(s.get("photos"), list):
+            # 明示的なポーズ枠: slot重複・枚数がテンプレと一致するか・所有情報の混入をチェック
+            slots = [p.get("slot") for p in s["photos"]]
+            if len(set(slots)) != len(slots):
+                errs.append(f"photos内slot重複: {sid}")
+            if len(slots) != TEMPLATES[s["template"]]:
+                errs.append(f"photos枚数がテンプレと不一致: {sid}")
+            if any("owned" in p for p in s["photos"]):
+                errs.append(f"★所有情報が公開JSONに混入: {sid}.photos[].owned")
+            photo_slots += len(slots)
         else:
             photo_slots += TEMPLATES[s["template"]]
         if s.get("binderId") not in sealed and s.get("year") is None:

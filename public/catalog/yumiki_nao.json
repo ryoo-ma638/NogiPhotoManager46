@@ -44,6 +44,7 @@
       "year": 2020,
       "name": "4期生スペシャル衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 10,
       "note": null,
       "pageBreakAfter": false
@@ -54,6 +55,7 @@
       "year": 2020,
       "name": "2020.May-Ⅱ-エクリュ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 20,
       "note": null,
       "pageBreakAfter": false
@@ -64,6 +66,7 @@
       "year": 2020,
       "name": "2020.May-Ⅲ-マウンテンパーカー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 30,
       "note": null,
       "pageBreakAfter": false
@@ -74,6 +77,7 @@
       "year": 2020,
       "name": "2020.June-シアーブラウス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 40,
       "note": null,
       "pageBreakAfter": false
@@ -84,6 +88,7 @@
       "year": 2020,
       "name": "2020.June-Ⅱ-マーメイドスカート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 50,
       "note": null,
       "pageBreakAfter": false
@@ -94,6 +99,7 @@
       "year": 2020,
       "name": "2020.June-Ⅲ-ジャケットセットアップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 60,
       "note": null,
       "pageBreakAfter": false
@@ -104,6 +110,7 @@
       "year": 2020,
       "name": "2020.June-Ⅳ-シフォンワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 70,
       "note": null,
       "pageBreakAfter": false
@@ -114,6 +121,7 @@
       "year": 2020,
       "name": "2020.July-Ⅱ-浴衣",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 80,
       "note": "座りヨリ、ヨリ",
       "pageBreakAfter": false
@@ -124,6 +132,7 @@
       "year": 2020,
       "name": "2020.July-Ⅲ-デニムミニ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 90,
       "note": null,
       "pageBreakAfter": false
@@ -134,6 +143,7 @@
       "year": 2020,
       "name": "2020.August-スペシャル衣装26",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 100,
       "note": null,
       "pageBreakAfter": false
@@ -144,6 +154,7 @@
       "year": 2020,
       "name": "2020.August-Ⅱ-かぎ針編み",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 110,
       "note": null,
       "pageBreakAfter": false
@@ -154,6 +165,7 @@
       "year": 2020,
       "name": "2020.August-Ⅲ-フラワープリント",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 120,
       "note": null,
       "pageBreakAfter": false
@@ -164,6 +176,7 @@
       "year": 2020,
       "name": "2020.August-Ⅳ-キュロット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 130,
       "note": null,
       "pageBreakAfter": false
@@ -174,6 +187,7 @@
       "year": 2020,
       "name": "2020.August-Ⅴ-リゾートワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 140,
       "note": null,
       "pageBreakAfter": false
@@ -184,6 +198,7 @@
       "year": 2020,
       "name": "Route 246",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 150,
       "note": null,
       "pageBreakAfter": false
@@ -194,6 +209,7 @@
       "year": 2020,
       "name": "2020.September-Ⅱ-ジャンパースカート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 160,
       "note": null,
       "pageBreakAfter": false
@@ -204,6 +220,7 @@
       "year": 2020,
       "name": "2020.September-Ⅲ-カラーオンカラー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 170,
       "note": null,
       "pageBreakAfter": false
@@ -214,6 +231,7 @@
       "year": 2020,
       "name": "2020.September-Ⅳ-ジャンプスーツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 180,
       "note": null,
       "pageBreakAfter": false
@@ -224,6 +242,7 @@
       "year": 2020,
       "name": "2020.October-CA風",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 190,
       "note": null,
       "pageBreakAfter": false
@@ -234,6 +253,7 @@
       "year": 2020,
       "name": "2020.October-Ⅱ-モノトーン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 200,
       "note": null,
       "pageBreakAfter": false
@@ -244,6 +264,7 @@
       "year": 2020,
       "name": "2020.October-Ⅲ-ウエストベルト",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 210,
       "note": null,
       "pageBreakAfter": true
@@ -254,6 +275,7 @@
       "year": 2020,
       "name": "白石麻衣卒コンTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 220,
       "note": null,
       "pageBreakAfter": false
@@ -264,9 +286,37 @@
       "year": 2020,
       "name": "ハロウィン2020",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 230,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0024",
@@ -274,6 +324,7 @@
       "year": 2020,
       "name": "2020.November-プレッピー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 240,
       "note": null,
       "pageBreakAfter": false
@@ -284,6 +335,7 @@
       "year": 2020,
       "name": "2020.November-Ⅱ-スカーフ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 250,
       "note": null,
       "pageBreakAfter": false
@@ -294,6 +346,7 @@
       "year": 2020,
       "name": "2020.November-Ⅲ-メロートップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 260,
       "note": null,
       "pageBreakAfter": false
@@ -304,6 +357,7 @@
       "year": 2020,
       "name": "2020.November-Ⅳ-ニットポロ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 270,
       "note": null,
       "pageBreakAfter": false
@@ -314,6 +368,7 @@
       "year": 2020,
       "name": "2020.November-Ⅴ-スポーツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 280,
       "note": null,
       "pageBreakAfter": false
@@ -324,6 +379,7 @@
       "year": 2020,
       "name": "4期生ライブ2020",
       "template": "event6",
+      "kind": "event",
       "sortIndex": 290,
       "note": null,
       "pageBreakAfter": false
@@ -334,6 +390,7 @@
       "year": 2020,
       "name": "2020.December-スペシャル衣装27",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 300,
       "note": null,
       "pageBreakAfter": false
@@ -344,6 +401,7 @@
       "year": 2020,
       "name": "2020.December-Ⅱ-タイブラウス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 310,
       "note": null,
       "pageBreakAfter": false
@@ -354,9 +412,37 @@
       "year": 2020,
       "name": "クリスマス2020",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 320,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0033",
@@ -364,6 +450,7 @@
       "year": 2020,
       "name": "2020.December-Ⅲ-フリンジ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 330,
       "note": null,
       "pageBreakAfter": false
@@ -374,6 +461,7 @@
       "year": 2020,
       "name": "2020.December-Ⅳ-ブリーツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 340,
       "note": null,
       "pageBreakAfter": false
@@ -384,6 +472,7 @@
       "year": 2021,
       "name": "2021.Lucky Bag",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 350,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -394,6 +483,7 @@
       "year": 2021,
       "name": "Happy New Year! 2020（丑）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 360,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -404,6 +494,7 @@
       "year": 2021,
       "name": "2021.January-スペシャル衣装28",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 370,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -414,6 +505,7 @@
       "year": 2021,
       "name": "2021.January-Ⅱ-ロングニットワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 380,
       "note": null,
       "pageBreakAfter": false
@@ -424,6 +516,7 @@
       "year": 2021,
       "name": "2021.January-Ⅲ-アメリカンダイナー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 390,
       "note": null,
       "pageBreakAfter": false
@@ -434,6 +527,7 @@
       "year": 2021,
       "name": "僕は僕を好きになる",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 400,
       "note": null,
       "pageBreakAfter": false
@@ -444,9 +538,37 @@
       "year": 2021,
       "name": "2021.Valentine",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 410,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0042",
@@ -454,6 +576,7 @@
       "year": 2021,
       "name": "9thBDライブTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 420,
       "note": null,
       "pageBreakAfter": false
@@ -464,6 +587,7 @@
       "year": 2021,
       "name": "9周年記念",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 430,
       "note": "ヨリヒキ座りヨリ",
       "pageBreakAfter": false
@@ -474,6 +598,7 @@
       "year": 2021,
       "name": "2021.February-レトロコート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 440,
       "note": null,
       "pageBreakAfter": false
@@ -484,6 +609,7 @@
       "year": 2021,
       "name": "2021.February-Ⅱ-スペシャル衣装29",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 450,
       "note": null,
       "pageBreakAfter": false
@@ -494,6 +620,7 @@
       "year": 2021,
       "name": "2021.March-スペシャル衣装30",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 460,
       "note": null,
       "pageBreakAfter": false
@@ -504,6 +631,7 @@
       "year": 2021,
       "name": "2021.March-Ⅱ-26th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 470,
       "note": null,
       "pageBreakAfter": false
@@ -514,6 +642,7 @@
       "year": 2021,
       "name": "9thBD期別Tシャツ&歌衣装",
       "template": "event6",
+      "kind": "tshirt",
       "sortIndex": 480,
       "note": null,
       "pageBreakAfter": false
@@ -524,6 +653,7 @@
       "year": 2021,
       "name": "2021.April-スペシャル衣装31",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 490,
       "note": null,
       "pageBreakAfter": false
@@ -534,6 +664,7 @@
       "year": 2021,
       "name": "2021.April-Ⅱ-キルティング",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 500,
       "note": null,
       "pageBreakAfter": false
@@ -544,6 +675,7 @@
       "year": 2021,
       "name": "2021.April-Ⅲ-レイヤードニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 510,
       "note": null,
       "pageBreakAfter": false
@@ -554,9 +686,37 @@
       "year": 2021,
       "name": "Out of the blue MVver",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 520,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0053",
@@ -564,6 +724,7 @@
       "year": 2021,
       "name": "2021.May-紅白2020衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 530,
       "note": null,
       "pageBreakAfter": false
@@ -574,6 +735,7 @@
       "year": 2021,
       "name": "2021.May-Ⅱ-レトロドレス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 540,
       "note": null,
       "pageBreakAfter": false
@@ -584,6 +746,7 @@
       "year": 2021,
       "name": "2021.May-Ⅲ-変形ブラウス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 550,
       "note": null,
       "pageBreakAfter": false
@@ -594,6 +757,7 @@
       "year": 2021,
       "name": "9th YEAR BIRTHDAY LIVE 3期生・4期生ライブ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 560,
       "note": null,
       "pageBreakAfter": false
@@ -604,6 +768,7 @@
       "year": 2021,
       "name": "2021.May-Ⅳ-紅白2020衣装2",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 570,
       "note": null,
       "pageBreakAfter": false
@@ -614,6 +779,7 @@
       "year": 2021,
       "name": "2021.May-Ⅴ-マカロンカラー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 580,
       "note": null,
       "pageBreakAfter": false
@@ -624,6 +790,7 @@
       "year": 2021,
       "name": "Wilderness world",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 590,
       "note": null,
       "pageBreakAfter": false
@@ -634,6 +801,7 @@
       "year": 2021,
       "name": "2021.June-スペシャル衣装32",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 600,
       "note": null,
       "pageBreakAfter": false
@@ -644,6 +812,7 @@
       "year": 2021,
       "name": "2021.June-Ⅱ-部分空き",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 610,
       "note": null,
       "pageBreakAfter": false
@@ -654,6 +823,7 @@
       "year": 2021,
       "name": "ごめんねFingers crossed",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 620,
       "note": null,
       "pageBreakAfter": false
@@ -664,6 +834,7 @@
       "year": 2021,
       "name": "2021.July-浴衣2021",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 630,
       "note": "座りヨリ",
       "pageBreakAfter": false
@@ -674,6 +845,7 @@
       "year": 2021,
       "name": "2021.July-Ⅱ-9thBDライブ衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 640,
       "note": null,
       "pageBreakAfter": false
@@ -684,6 +856,7 @@
       "year": 2021,
       "name": "真夏の全国ツアー2021 Tシャツ 大阪ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 650,
       "note": null,
       "pageBreakAfter": false
@@ -694,6 +867,7 @@
       "year": 2021,
       "name": "2021.July-Ⅲ-ボタニカル",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 660,
       "note": null,
       "pageBreakAfter": false
@@ -704,6 +878,7 @@
       "year": 2021,
       "name": "口ほどにもないKISS",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 670,
       "note": null,
       "pageBreakAfter": false
@@ -714,6 +889,7 @@
       "year": 2021,
       "name": "真夏の全国ツアー2021 Tシャツ 宮城ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 680,
       "note": null,
       "pageBreakAfter": false
@@ -724,6 +900,7 @@
       "year": 2021,
       "name": "2021.July-Ⅳ-セーラー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 690,
       "note": null,
       "pageBreakAfter": false
@@ -734,6 +911,7 @@
       "year": 2021,
       "name": "2021.August-27th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 700,
       "note": null,
       "pageBreakAfter": false
@@ -744,6 +922,7 @@
       "year": 2021,
       "name": "2021.August-Ⅱ-9thBDライブ期別衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 710,
       "note": null,
       "pageBreakAfter": false
@@ -754,6 +933,7 @@
       "year": 2021,
       "name": "真夏の全国ツアー2021 Tシャツ 愛知ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 720,
       "note": null,
       "pageBreakAfter": false
@@ -764,6 +944,7 @@
       "year": 2021,
       "name": "2021.August-Ⅲ-白Tシャツコーデ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 730,
       "note": null,
       "pageBreakAfter": false
@@ -774,6 +955,7 @@
       "year": 2021,
       "name": "10周年記念",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 740,
       "note": null,
       "pageBreakAfter": false
@@ -784,6 +966,7 @@
       "year": 2021,
       "name": "真夏の全国ツアー2021 Tシャツ 福岡ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 750,
       "note": null,
       "pageBreakAfter": false
@@ -794,6 +977,7 @@
       "year": 2021,
       "name": "2021.August-Ⅳ-リラックスウェア",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 760,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -804,6 +988,7 @@
       "year": 2021,
       "name": "2021.September-真夏の全国ツアー2021 Tシャツ 共通ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 770,
       "note": null,
       "pageBreakAfter": false
@@ -814,6 +999,7 @@
       "year": 2021,
       "name": "全部 夢のまま",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 780,
       "note": null,
       "pageBreakAfter": false
@@ -824,6 +1010,7 @@
       "year": 2021,
       "name": "2021.September-Ⅱ-シアー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 790,
       "note": null,
       "pageBreakAfter": false
@@ -834,6 +1021,7 @@
       "year": 2021,
       "name": "2021.September-Ⅲ-小花柄",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 800,
       "note": null,
       "pageBreakAfter": false
@@ -844,6 +1032,7 @@
       "year": 2021,
       "name": "2021.October-スペシャル衣装33",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 810,
       "note": null,
       "pageBreakAfter": false
@@ -854,6 +1043,7 @@
       "year": 2021,
       "name": "2021.October-Ⅱ-カットレース",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 820,
       "note": null,
       "pageBreakAfter": false
@@ -864,6 +1054,7 @@
       "year": 2021,
       "name": "2021.October-Ⅲ-スポーティ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 830,
       "note": null,
       "pageBreakAfter": false
@@ -874,6 +1065,7 @@
       "year": 2021,
       "name": "28thSG アンダーライブ Tシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 840,
       "note": null,
       "pageBreakAfter": false
@@ -884,9 +1076,37 @@
       "year": 2021,
       "name": "ハロウィン2021",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 850,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0086",
@@ -894,6 +1114,7 @@
       "year": 2021,
       "name": "錆びたコンパス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 860,
       "note": null,
       "pageBreakAfter": false
@@ -904,6 +1125,7 @@
       "year": 2021,
       "name": "2021.November-スキッパーシャツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 870,
       "note": null,
       "pageBreakAfter": false
@@ -914,6 +1136,7 @@
       "year": 2021,
       "name": "真夏の全国ツアー2021 Tシャツ 東京ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 880,
       "note": null,
       "pageBreakAfter": false
@@ -924,9 +1147,37 @@
       "year": 2021,
       "name": "マシンガンレインアンダーver.",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 890,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0090",
@@ -934,6 +1185,7 @@
       "year": 2021,
       "name": "2021.December-パーティドレス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 900,
       "note": null,
       "pageBreakAfter": false
@@ -944,6 +1196,7 @@
       "year": 2021,
       "name": "2021.December-Ⅱ-ノーカラージャケット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 910,
       "note": null,
       "pageBreakAfter": false
@@ -954,9 +1207,37 @@
       "year": 2021,
       "name": "クリスマス2021",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 920,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0093",
@@ -964,6 +1245,7 @@
       "year": 2021,
       "name": "君に叱られた",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 930,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -974,6 +1256,7 @@
       "year": 2021,
       "name": "最後のTight Hug",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 940,
       "note": null,
       "pageBreakAfter": false
@@ -984,6 +1267,7 @@
       "year": 2022,
       "name": "2022.Lucky Bag",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 950,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -994,6 +1278,7 @@
       "year": 2022,
       "name": "2022.Lucky Bag（ホワイトコーデ）（字の色がピンク）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 960,
       "note": null,
       "pageBreakAfter": false
@@ -1004,6 +1289,7 @@
       "year": 2022,
       "name": "Happy New Year! 2022（寅）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 970,
       "note": null,
       "pageBreakAfter": false
@@ -1014,6 +1300,7 @@
       "year": 2022,
       "name": "2022.January-レトロデザイン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 980,
       "note": null,
       "pageBreakAfter": false
@@ -1024,6 +1311,7 @@
       "year": 2022,
       "name": "2022.January-Ⅱ-ステッチデザイン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 990,
       "note": null,
       "pageBreakAfter": false
@@ -1034,6 +1322,7 @@
       "year": 2022,
       "name": "マシンガンレイン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1000,
       "note": null,
       "pageBreakAfter": false
@@ -1044,9 +1333,37 @@
       "year": 2022,
       "name": "Hard to say MVver",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1010,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0102",
@@ -1054,9 +1371,37 @@
       "year": 2022,
       "name": "2022.Valentine",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 1020,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0103",
@@ -1064,6 +1409,7 @@
       "year": 2022,
       "name": "新内眞衣卒業セレモニーTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1030,
       "note": null,
       "pageBreakAfter": false
@@ -1074,6 +1420,7 @@
       "year": 2022,
       "name": "星野みなみ卒業セレモニーTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1040,
       "note": null,
       "pageBreakAfter": false
@@ -1084,6 +1431,7 @@
       "year": 2022,
       "name": "10周年記念A",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 1050,
       "note": null,
       "pageBreakAfter": false
@@ -1094,6 +1442,7 @@
       "year": 2022,
       "name": "10周年記念B",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 1060,
       "note": null,
       "pageBreakAfter": false
@@ -1104,6 +1453,7 @@
       "year": 2022,
       "name": "乃木坂46時間TV Tシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1070,
       "note": null,
       "pageBreakAfter": false
@@ -1114,6 +1464,7 @@
       "year": 2022,
       "name": "2022.February-ニットセットアップワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1080,
       "note": null,
       "pageBreakAfter": false
@@ -1124,6 +1475,7 @@
       "year": 2022,
       "name": "2022.February-Ⅱ-カラーコート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1090,
       "note": null,
       "pageBreakAfter": false
@@ -1134,6 +1486,7 @@
       "year": 2022,
       "name": "2022.February-Ⅲ-カーディガン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1100,
       "note": null,
       "pageBreakAfter": false
@@ -1144,6 +1497,7 @@
       "year": 2022,
       "name": "2022.March-紅白2021衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1110,
       "note": null,
       "pageBreakAfter": false
@@ -1154,6 +1508,7 @@
       "year": 2022,
       "name": "2022.March-Ⅱ-紅白2021衣装2",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 1120,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -1164,6 +1519,7 @@
       "year": 2022,
       "name": "北野日奈子卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1130,
       "note": null,
       "pageBreakAfter": false
@@ -1174,6 +1530,7 @@
       "year": 2022,
       "name": "29thSGアンダーライブTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1140,
       "note": null,
       "pageBreakAfter": false
@@ -1184,6 +1541,7 @@
       "year": 2022,
       "name": "2022.April-スペシャル衣装34",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1150,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -1194,6 +1552,7 @@
       "year": 2022,
       "name": "2022.April-Ⅱ-ツイード",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1160,
       "note": null,
       "pageBreakAfter": false
@@ -1204,6 +1563,7 @@
       "year": 2022,
       "name": "2022.April-Ⅲ-異素材ドッキング",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1170,
       "note": null,
       "pageBreakAfter": false
@@ -1214,9 +1574,37 @@
       "year": 2022,
       "name": "届かなくたって…アンダーver.",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1180,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0119",
@@ -1224,6 +1612,7 @@
       "year": 2022,
       "name": "届かなくたって…",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1190,
       "note": null,
       "pageBreakAfter": false
@@ -1234,6 +1623,7 @@
       "year": 2022,
       "name": "10thBDライブTシャツ白ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1200,
       "note": null,
       "pageBreakAfter": false
@@ -1244,6 +1634,7 @@
       "year": 2022,
       "name": "2022.May-ビタミンカラー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1210,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -1254,6 +1645,7 @@
       "year": 2022,
       "name": "10thBDライブTシャツ紫ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1220,
       "note": null,
       "pageBreakAfter": false
@@ -1264,6 +1656,7 @@
       "year": 2022,
       "name": "Actually…",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1230,
       "note": null,
       "pageBreakAfter": true
@@ -1274,6 +1667,7 @@
       "year": 2022,
       "name": "2022.May-Ⅱ-フェイクファー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1240,
       "note": null,
       "pageBreakAfter": false
@@ -1284,6 +1678,7 @@
       "year": 2022,
       "name": "2022.May-Ⅲ-フロントボタントップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1250,
       "note": null,
       "pageBreakAfter": false
@@ -1294,6 +1689,7 @@
       "year": 2022,
       "name": "2022.May-Ⅳ-チョーカーデザイン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1260,
       "note": null,
       "pageBreakAfter": false
@@ -1304,6 +1700,7 @@
       "year": 2022,
       "name": "2022.June-夏パジャマ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1270,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -1314,6 +1711,7 @@
       "year": 2022,
       "name": "2022.June-Ⅱ-ノースリーブニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1280,
       "note": null,
       "pageBreakAfter": false
@@ -1324,6 +1722,7 @@
       "year": 2022,
       "name": "2022.June-Ⅲ-麦わら帽子",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1290,
       "note": "ヨリチュウ？どこ？多分ない",
       "pageBreakAfter": false
@@ -1334,6 +1733,7 @@
       "year": 2022,
       "name": "2022.June-Ⅳ-10thBDライブ衣装",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 1300,
       "note": null,
       "pageBreakAfter": false
@@ -1344,6 +1744,7 @@
       "year": 2022,
       "name": "2022.July-真夏の全国ツアー2022 Tシャツ 共通ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1310,
       "note": null,
       "pageBreakAfter": false
@@ -1354,6 +1755,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 大阪ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1320,
       "note": null,
       "pageBreakAfter": false
@@ -1364,6 +1766,7 @@
       "year": 2022,
       "name": "2022.July-Ⅱ-浴衣",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 1330,
       "note": "座りヨリ座りヒキ",
       "pageBreakAfter": false
@@ -1374,6 +1777,7 @@
       "year": 2022,
       "name": "2022.July-Ⅲ-刺繍",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1340,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -1384,6 +1788,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 広島ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1350,
       "note": null,
       "pageBreakAfter": false
@@ -1394,6 +1799,7 @@
       "year": 2022,
       "name": "2022.July-Ⅳ-アウトドア",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1360,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -1404,6 +1810,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 福岡ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1370,
       "note": null,
       "pageBreakAfter": false
@@ -1414,6 +1821,7 @@
       "year": 2022,
       "name": "2022.July-Ⅴ-メッシュニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1380,
       "note": null,
       "pageBreakAfter": false
@@ -1424,6 +1832,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 北海道ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1390,
       "note": null,
       "pageBreakAfter": false
@@ -1434,6 +1843,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 宮城ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1400,
       "note": null,
       "pageBreakAfter": false
@@ -1444,6 +1854,7 @@
       "year": 2022,
       "name": "2022.August-サマーベスト",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1410,
       "note": null,
       "pageBreakAfter": false
@@ -1454,6 +1865,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 愛知ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1420,
       "note": null,
       "pageBreakAfter": false
@@ -1464,6 +1876,7 @@
       "year": 2022,
       "name": "2022.August-Ⅱ-ビビットトップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1430,
       "note": null,
       "pageBreakAfter": false
@@ -1474,6 +1887,7 @@
       "year": 2022,
       "name": "2022.August-Ⅲ-アシメフリル",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1440,
       "note": null,
       "pageBreakAfter": false
@@ -1484,6 +1898,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Tシャツ 東京ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1450,
       "note": null,
       "pageBreakAfter": false
@@ -1494,6 +1909,7 @@
       "year": 2022,
       "name": "真夏の全国ツアー2022 Special",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1460,
       "note": null,
       "pageBreakAfter": false
@@ -1504,6 +1920,7 @@
       "year": 2022,
       "name": "2022.August-Ⅳ-ストライプ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1470,
       "note": null,
       "pageBreakAfter": false
@@ -1514,6 +1931,7 @@
       "year": 2022,
       "name": "2022.September-マリンルック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1480,
       "note": null,
       "pageBreakAfter": false
@@ -1524,6 +1942,7 @@
       "year": 2022,
       "name": "2022.September-Ⅱ-オフィスカジュアル",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1490,
       "note": null,
       "pageBreakAfter": false
@@ -1534,9 +1953,37 @@
       "year": 2022,
       "name": "好きというのはロックだぜ！選抜ver.",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1500,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0151",
@@ -1544,9 +1991,37 @@
       "year": 2022,
       "name": "ジャンピングジョーカーフラッシュ MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1510,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0152",
@@ -1554,6 +2029,7 @@
       "year": 2022,
       "name": "好きというのはロックだぜ！",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1520,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -1564,9 +2040,37 @@
       "year": 2022,
       "name": "ハロウィン2022",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 1530,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0154",
@@ -1574,6 +2078,7 @@
       "year": 2022,
       "name": "2022.October-ウィンドウペンチェック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1540,
       "note": null,
       "pageBreakAfter": false
@@ -1584,6 +2089,7 @@
       "year": 2022,
       "name": "2022.October-Ⅱ-ポップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1550,
       "note": null,
       "pageBreakAfter": false
@@ -1594,6 +2100,7 @@
       "year": 2022,
       "name": "樋口日奈卒業セレモニー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1560,
       "note": null,
       "pageBreakAfter": false
@@ -1604,6 +2111,7 @@
       "year": 2022,
       "name": "Under's Love",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1570,
       "note": null,
       "pageBreakAfter": false
@@ -1614,6 +2122,7 @@
       "year": 2022,
       "name": "2022.November-真夏の全国ツアー2022衣装",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 1580,
       "note": "ヨリヒキ",
       "pageBreakAfter": false
@@ -1624,6 +2133,7 @@
       "year": 2022,
       "name": "2022.December-スペシャル衣装35",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1590,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -1634,6 +2144,7 @@
       "year": 2022,
       "name": "2022.December-Ⅱ-ゴルフウェア",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1600,
       "note": null,
       "pageBreakAfter": false
@@ -1644,6 +2155,7 @@
       "year": 2022,
       "name": "2022.December-Ⅲ-ハーフジップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1610,
       "note": null,
       "pageBreakAfter": false
@@ -1654,9 +2166,37 @@
       "year": 2022,
       "name": "クリスマス2022",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 1620,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0163",
@@ -1664,6 +2204,7 @@
       "year": 2022,
       "name": "2022.December-Ⅳ-ジャガード",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1630,
       "note": null,
       "pageBreakAfter": false
@@ -1674,6 +2215,7 @@
       "year": 2022,
       "name": "2022.December-Ⅴ-ケーブルニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1640,
       "note": null,
       "pageBreakAfter": false
@@ -1684,6 +2226,7 @@
       "year": 2023,
       "name": "2023.Lucky Bag（パステル）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1650,
       "note": null,
       "pageBreakAfter": false
@@ -1694,6 +2237,7 @@
       "year": 2023,
       "name": "2023.Lucky Bag（カレンダー衣装）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1660,
       "note": null,
       "pageBreakAfter": false
@@ -1704,6 +2248,7 @@
       "year": 2023,
       "name": "Happy New Year! 2023（兎）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1670,
       "note": null,
       "pageBreakAfter": false
@@ -1714,6 +2259,7 @@
       "year": 2023,
       "name": "2023.January-リブチェンジワンピース",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1680,
       "note": null,
       "pageBreakAfter": false
@@ -1724,6 +2270,7 @@
       "year": 2023,
       "name": "2023.January-Ⅱ-マルチカラーニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1690,
       "note": null,
       "pageBreakAfter": false
@@ -1734,9 +2281,37 @@
       "year": 2023,
       "name": "ここにはないもの 選抜ver.",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1700,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0171",
@@ -1744,6 +2319,7 @@
       "year": 2023,
       "name": "ここにはないもの",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1710,
       "note": null,
       "pageBreakAfter": false
@@ -1754,6 +2330,7 @@
       "year": 2023,
       "name": "2023.February-31st制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1720,
       "note": null,
       "pageBreakAfter": false
@@ -1764,9 +2341,37 @@
       "year": 2023,
       "name": "2023.Valentine",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 1730,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0174",
@@ -1774,6 +2379,7 @@
       "year": 2023,
       "name": "11周年記念",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 1740,
       "note": "チュウ、座りヨリ",
       "pageBreakAfter": false
@@ -1784,6 +2390,7 @@
       "year": 2023,
       "name": "11thBDライブTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1750,
       "note": null,
       "pageBreakAfter": false
@@ -1794,6 +2401,7 @@
       "year": 2023,
       "name": "2023.February-Ⅱ-スタジャン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1760,
       "note": null,
       "pageBreakAfter": false
@@ -1804,6 +2412,7 @@
       "year": 2023,
       "name": "2023.February-Ⅲ-ワンカラーニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1770,
       "note": null,
       "pageBreakAfter": false
@@ -1814,6 +2423,7 @@
       "year": 2023,
       "name": "11thBDライブ 4期Tシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1780,
       "note": null,
       "pageBreakAfter": false
@@ -1824,6 +2434,7 @@
       "year": 2023,
       "name": "2023.February-Ⅳ-ファーベスト",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1790,
       "note": null,
       "pageBreakAfter": false
@@ -1834,6 +2445,7 @@
       "year": 2023,
       "name": "2023.February-Ⅴ-カラーロングカーディガン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1800,
       "note": null,
       "pageBreakAfter": false
@@ -1844,6 +2456,7 @@
       "year": 2023,
       "name": "秋元真夏卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1810,
       "note": null,
       "pageBreakAfter": false
@@ -1854,6 +2467,7 @@
       "year": 2023,
       "name": "悪い成分",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1820,
       "note": null,
       "pageBreakAfter": false
@@ -1864,6 +2478,7 @@
       "year": 2023,
       "name": "2023.March-ビッグボーダー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1830,
       "note": null,
       "pageBreakAfter": false
@@ -1874,6 +2489,7 @@
       "year": 2023,
       "name": "2023.March-Ⅱ-ファーニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1840,
       "note": null,
       "pageBreakAfter": false
@@ -1884,6 +2500,7 @@
       "year": 2023,
       "name": "2023.March-Ⅲ-ツートーントップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1850,
       "note": null,
       "pageBreakAfter": false
@@ -1894,6 +2511,7 @@
       "year": 2023,
       "name": "2023.April-スペシャル衣装36",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1860,
       "note": null,
       "pageBreakAfter": false
@@ -1904,9 +2522,37 @@
       "year": 2023,
       "name": "人は夢を二度見るMV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 1870,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0188",
@@ -1914,6 +2560,7 @@
       "year": 2023,
       "name": "2023.April-Ⅱ-トラディショナル",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1880,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -1924,6 +2571,7 @@
       "year": 2023,
       "name": "2023.April-Ⅲ-紅白2022衣装",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 1890,
       "note": null,
       "pageBreakAfter": false
@@ -1934,6 +2582,7 @@
       "year": 2023,
       "name": "齋藤飛鳥卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1900,
       "note": null,
       "pageBreakAfter": false
@@ -1944,6 +2593,7 @@
       "year": 2023,
       "name": "2023.May-スペシャル衣装37",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1910,
       "note": null,
       "pageBreakAfter": false
@@ -1954,6 +2604,7 @@
       "year": 2023,
       "name": "2023.May-Ⅱ-フロントレースアップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1920,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -1964,6 +2615,7 @@
       "year": 2023,
       "name": "2023.May-Ⅲ-ビビッドパーカー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1930,
       "note": null,
       "pageBreakAfter": false
@@ -1974,6 +2626,7 @@
       "year": 2023,
       "name": "2023.May-Ⅳ-チュニック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1940,
       "note": null,
       "pageBreakAfter": false
@@ -1984,6 +2637,7 @@
       "year": 2023,
       "name": "2023.May-Ⅴ-ダメージ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1950,
       "note": null,
       "pageBreakAfter": false
@@ -1994,6 +2648,7 @@
       "year": 2023,
       "name": "2023.June-11thBDライブ衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1960,
       "note": null,
       "pageBreakAfter": false
@@ -2004,6 +2659,7 @@
       "year": 2023,
       "name": "2023.June-Ⅱ-11thBDライブ期別衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1970,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -2014,6 +2670,7 @@
       "year": 2023,
       "name": "2023.June-Ⅲ-チュール",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 1980,
       "note": null,
       "pageBreakAfter": false
@@ -2024,6 +2681,7 @@
       "year": 2023,
       "name": "2023.July-真夏の全国ツアー2023 Tシャツ Aver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 1990,
       "note": null,
       "pageBreakAfter": false
@@ -2034,6 +2692,7 @@
       "year": 2023,
       "name": "2023.July-Ⅱ-浴衣",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 2000,
       "note": "チュウ座りヨリ",
       "pageBreakAfter": false
@@ -2044,6 +2703,7 @@
       "year": 2023,
       "name": "2023.July-Ⅲ-リボンモチーフ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2010,
       "note": null,
       "pageBreakAfter": false
@@ -2054,6 +2714,7 @@
       "year": 2023,
       "name": "緑×白コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2020,
       "note": null,
       "pageBreakAfter": false
@@ -2064,6 +2725,7 @@
       "year": 2023,
       "name": "人は夢を二度見る",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2030,
       "note": "チュウヒキ",
       "pageBreakAfter": false
@@ -2074,6 +2736,7 @@
       "year": 2023,
       "name": "さざ波は戻らない",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2040,
       "note": null,
       "pageBreakAfter": false
@@ -2084,6 +2747,7 @@
       "year": 2023,
       "name": "2023.July-Ⅳ-ビスチェ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2050,
       "note": null,
       "pageBreakAfter": false
@@ -2094,6 +2758,7 @@
       "year": 2023,
       "name": "赤×白コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2060,
       "note": null,
       "pageBreakAfter": false
@@ -2104,6 +2769,7 @@
       "year": 2023,
       "name": "2023.July-Ⅴ-制服風コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2070,
       "note": null,
       "pageBreakAfter": false
@@ -2114,6 +2780,7 @@
       "year": 2023,
       "name": "黄色×黒コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2080,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -2124,6 +2791,7 @@
       "year": 2023,
       "name": "2023.July-Ⅵ-ハワイアン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2090,
       "note": null,
       "pageBreakAfter": false
@@ -2134,6 +2802,7 @@
       "year": 2023,
       "name": "エメラルドグリーン×ブラウンコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2100,
       "note": null,
       "pageBreakAfter": false
@@ -2144,6 +2813,7 @@
       "year": 2023,
       "name": "2023.August-真夏の全国ツアー2023 Tシャツ B＆Cver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2110,
       "note": null,
       "pageBreakAfter": false
@@ -2154,6 +2824,7 @@
       "year": 2023,
       "name": "2023.August-Ⅱ-アメリカンポップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2120,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -2164,6 +2835,7 @@
       "year": 2023,
       "name": "白×白コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2130,
       "note": null,
       "pageBreakAfter": false
@@ -2174,6 +2846,7 @@
       "year": 2023,
       "name": "2023.August-Ⅲ-エスニック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2140,
       "note": null,
       "pageBreakAfter": false
@@ -2184,6 +2857,7 @@
       "year": 2023,
       "name": "青×白コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2150,
       "note": null,
       "pageBreakAfter": false
@@ -2194,6 +2868,7 @@
       "year": 2023,
       "name": "真夏の全国ツアー2023 Tシャツ 東京ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2160,
       "note": null,
       "pageBreakAfter": false
@@ -2204,6 +2879,7 @@
       "year": 2023,
       "name": "真夏の全国ツアー2023 Special",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2170,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -2214,6 +2890,7 @@
       "year": 2023,
       "name": "紫コーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2180,
       "note": null,
       "pageBreakAfter": false
@@ -2224,6 +2901,7 @@
       "year": 2023,
       "name": "2023.August-Ⅳ-キャミワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2190,
       "note": null,
       "pageBreakAfter": false
@@ -2234,6 +2912,7 @@
       "year": 2023,
       "name": "2023.August-V-スペシャル衣装38",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 2200,
       "note": null,
       "pageBreakAfter": false
@@ -2244,6 +2923,7 @@
       "year": 2023,
       "name": "2023.September-ベースボールシャツ2023",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2210,
       "note": null,
       "pageBreakAfter": false
@@ -2254,9 +2934,37 @@
       "year": 2023,
       "name": "ハロウィン2023",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 2220,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0223",
@@ -2264,9 +2972,37 @@
       "year": 2023,
       "name": "おひとりさま天国MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 2230,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0224",
@@ -2274,6 +3010,7 @@
       "year": 2023,
       "name": "2023.October-真夏の全国ツアー2023衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2240,
       "note": null,
       "pageBreakAfter": false
@@ -2284,6 +3021,7 @@
       "year": 2023,
       "name": "2023.October-Ⅱ-ポイント花柄ワンピース",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2250,
       "note": null,
       "pageBreakAfter": false
@@ -2294,6 +3032,7 @@
       "year": 2023,
       "name": "2023.November-バスケコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2260,
       "note": null,
       "pageBreakAfter": false
@@ -2304,6 +3043,7 @@
       "year": 2023,
       "name": "おひとりさま天国",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2270,
       "note": null,
       "pageBreakAfter": false
@@ -2314,6 +3054,7 @@
       "year": 2023,
       "name": "踏んでしまった",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 2280,
       "note": null,
       "pageBreakAfter": false
@@ -2324,6 +3065,7 @@
       "year": 2023,
       "name": "2023.December-真夏の全国ツアー2023衣装2",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2290,
       "note": null,
       "pageBreakAfter": false
@@ -2334,9 +3076,37 @@
       "year": 2023,
       "name": "monopoly MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 2300,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0231",
@@ -2344,9 +3114,37 @@
       "year": 2023,
       "name": "クリスマス2023",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 2310,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0232",
@@ -2354,6 +3152,7 @@
       "year": 2024,
       "name": "2024.Lucky Bag（カレンダー衣装）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2320,
       "note": null,
       "pageBreakAfter": false
@@ -2364,6 +3163,7 @@
       "year": 2024,
       "name": "2024.Lucky Bag（冬コーデ）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2330,
       "note": null,
       "pageBreakAfter": false
@@ -2374,6 +3174,7 @@
       "year": 2024,
       "name": "Happy New Year! 2024（辰）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2340,
       "note": null,
       "pageBreakAfter": false
@@ -2384,6 +3185,7 @@
       "year": 2024,
       "name": "2024.January-ルーズソックス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2350,
       "note": null,
       "pageBreakAfter": false
@@ -2394,6 +3196,7 @@
       "year": 2024,
       "name": "Monopoly",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2360,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -2404,9 +3207,37 @@
       "year": 2024,
       "name": "2024.Valentine",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 2370,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0238",
@@ -2414,6 +3245,7 @@
       "year": 2024,
       "name": "2024.February-タータンチェック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2380,
       "note": null,
       "pageBreakAfter": false
@@ -2424,6 +3256,7 @@
       "year": 2024,
       "name": "2024.February-Ⅱ-MA-1×スカート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2390,
       "note": null,
       "pageBreakAfter": false
@@ -2434,6 +3267,7 @@
       "year": 2024,
       "name": "2024.February-Ⅲ-レザー×ニットワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2400,
       "note": null,
       "pageBreakAfter": false
@@ -2444,6 +3278,7 @@
       "year": 2024,
       "name": "2024.March-スペシャル衣装39",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2410,
       "note": null,
       "pageBreakAfter": false
@@ -2454,6 +3289,7 @@
       "year": 2024,
       "name": "12周年記念 2shot ver.",
       "template": "event6",
+      "kind": "event",
       "sortIndex": 2420,
       "note": "＆あやめ3種類 タテのみ",
       "pageBreakAfter": false
@@ -2464,6 +3300,7 @@
       "year": 2024,
       "name": "12周年記念",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 2430,
       "note": null,
       "pageBreakAfter": false
@@ -2474,6 +3311,7 @@
       "year": 2024,
       "name": "12thBDライブTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2440,
       "note": null,
       "pageBreakAfter": false
@@ -2484,6 +3322,7 @@
       "year": 2024,
       "name": "2024.March-Ⅱ-ショートコート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2450,
       "note": null,
       "pageBreakAfter": false
@@ -2494,6 +3333,7 @@
       "year": 2024,
       "name": "2024.March-Ⅲ-アニマルルームウェア",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2460,
       "note": null,
       "pageBreakAfter": false
@@ -2504,6 +3344,7 @@
       "year": 2024,
       "name": "2024.March-Ⅳ-ラガーシャツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2470,
       "note": null,
       "pageBreakAfter": false
@@ -2514,6 +3355,7 @@
       "year": 2024,
       "name": "2024.March-Ⅴ-メタリック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2480,
       "note": null,
       "pageBreakAfter": false
@@ -2524,6 +3366,7 @@
       "year": 2024,
       "name": "2024.March-Ⅵ-刺繍カーディガン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2490,
       "note": null,
       "pageBreakAfter": false
@@ -2534,6 +3377,7 @@
       "year": 2024,
       "name": "2024.March-Ⅶ-ネクタイ付きシャツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2500,
       "note": null,
       "pageBreakAfter": false
@@ -2544,6 +3388,7 @@
       "year": 2024,
       "name": "2024.March-Ⅷ-34th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2510,
       "note": null,
       "pageBreakAfter": false
@@ -2554,6 +3399,7 @@
       "year": 2024,
       "name": "2024.March-Ⅸ-デニムジャケット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2520,
       "note": null,
       "pageBreakAfter": false
@@ -2564,6 +3410,7 @@
       "year": 2024,
       "name": "2024.April-紅白2023衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2530,
       "note": null,
       "pageBreakAfter": false
@@ -2574,6 +3421,7 @@
       "year": 2024,
       "name": "2024.April-Ⅱ-白シャツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2540,
       "note": null,
       "pageBreakAfter": false
@@ -2584,9 +3432,37 @@
       "year": 2024,
       "name": "チャンスは平等MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 2550,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0256",
@@ -2594,6 +3470,7 @@
       "year": 2024,
       "name": "思い出が止まらなくなる",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2560,
       "note": null,
       "pageBreakAfter": false
@@ -2604,6 +3481,7 @@
       "year": 2024,
       "name": "2024.April-Ⅲ-スペシャル衣装40",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 2570,
       "note": null,
       "pageBreakAfter": false
@@ -2614,6 +3492,7 @@
       "year": 2024,
       "name": "山下美月卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2580,
       "note": null,
       "pageBreakAfter": false
@@ -2624,6 +3503,7 @@
       "year": 2024,
       "name": "2024.May-カーゴパンツ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2590,
       "note": null,
       "pageBreakAfter": false
@@ -2634,6 +3514,7 @@
       "year": 2024,
       "name": "2024.May-Ⅱ-レモンイエロー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2600,
       "note": null,
       "pageBreakAfter": false
@@ -2644,6 +3525,7 @@
       "year": 2024,
       "name": "チャンスは平等",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2610,
       "note": null,
       "pageBreakAfter": false
@@ -2654,6 +3536,7 @@
       "year": 2024,
       "name": "2024.May-Ⅲ-バラモチーフ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2620,
       "note": null,
       "pageBreakAfter": false
@@ -2664,6 +3547,7 @@
       "year": 2024,
       "name": "2024.May-Ⅳ-マーメイドワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2630,
       "note": null,
       "pageBreakAfter": false
@@ -2674,6 +3558,7 @@
       "year": 2024,
       "name": "2024.June-スペシャル衣装41",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2640,
       "note": null,
       "pageBreakAfter": false
@@ -2684,6 +3569,7 @@
       "year": 2024,
       "name": "2024.June-Ⅱ-35th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2650,
       "note": "チュウヒキ",
       "pageBreakAfter": false
@@ -2694,6 +3580,7 @@
       "year": 2024,
       "name": "2024.July-12thBDライブ衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2660,
       "note": null,
       "pageBreakAfter": false
@@ -2704,6 +3591,7 @@
       "year": 2024,
       "name": "2024.July-Ⅱ-浴衣",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 2670,
       "note": null,
       "pageBreakAfter": false
@@ -2714,6 +3602,7 @@
       "year": 2024,
       "name": "真夏の全国ツアー2024 Tシャツ 大阪ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2680,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -2724,6 +3613,7 @@
       "year": 2024,
       "name": "2024.July-Ⅲ-オーバーオール",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2690,
       "note": null,
       "pageBreakAfter": false
@@ -2734,6 +3624,7 @@
       "year": 2024,
       "name": "2024.August-スペシャル衣装42",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2700,
       "note": null,
       "pageBreakAfter": false
@@ -2744,6 +3635,7 @@
       "year": 2024,
       "name": "車道側",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2710,
       "note": null,
       "pageBreakAfter": false
@@ -2754,9 +3646,37 @@
       "year": 2024,
       "name": "チートデイMV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 2720,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0273",
@@ -2764,6 +3684,7 @@
       "year": 2024,
       "name": "真夏の全国ツアー2024 Tシャツ 愛知ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2730,
       "note": null,
       "pageBreakAfter": false
@@ -2774,6 +3695,7 @@
       "year": 2024,
       "name": "2024.August-Ⅱ-ギンガムチェック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2740,
       "note": null,
       "pageBreakAfter": false
@@ -2784,6 +3706,7 @@
       "year": 2024,
       "name": "2024.August-Ⅲ-スペシャル衣装43",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 2750,
       "note": null,
       "pageBreakAfter": false
@@ -2794,6 +3717,7 @@
       "year": 2024,
       "name": "2024.September-真夏の全国ツアー2024衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2760,
       "note": null,
       "pageBreakAfter": false
@@ -2804,6 +3728,7 @@
       "year": 2024,
       "name": "真夏の全国ツアー2024 Tシャツ東京ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2770,
       "note": null,
       "pageBreakAfter": false
@@ -2814,6 +3739,7 @@
       "year": 2024,
       "name": "真夏の全国ツアー2024 Special",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2780,
       "note": null,
       "pageBreakAfter": false
@@ -2824,6 +3750,7 @@
       "year": 2024,
       "name": "2024.September-Ⅱ-リボンコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2790,
       "note": null,
       "pageBreakAfter": false
@@ -2834,6 +3761,7 @@
       "year": 2024,
       "name": "2024.September-Ⅲ-フリルTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 2800,
       "note": null,
       "pageBreakAfter": false
@@ -2844,6 +3772,7 @@
       "year": 2024,
       "name": "2024.September-Ⅳ-ポロニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2810,
       "note": null,
       "pageBreakAfter": false
@@ -2854,6 +3783,7 @@
       "year": 2024,
       "name": "2024.September-Ⅴ-36th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2820,
       "note": null,
       "pageBreakAfter": false
@@ -2864,9 +3794,37 @@
       "year": 2024,
       "name": "ハロウィン2024",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 2830,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0284",
@@ -2874,6 +3832,7 @@
       "year": 2024,
       "name": "チートデイ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2840,
       "note": null,
       "pageBreakAfter": false
@@ -2884,6 +3843,7 @@
       "year": 2024,
       "name": "2024.October-トラックジャケット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2850,
       "note": null,
       "pageBreakAfter": false
@@ -2894,6 +3854,7 @@
       "year": 2024,
       "name": "2024.October-Ⅱ-バルーンスカート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2860,
       "note": null,
       "pageBreakAfter": false
@@ -2904,6 +3865,7 @@
       "year": 2024,
       "name": "2024.November-真夏の全国ツアー2024衣装2",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2870,
       "note": null,
       "pageBreakAfter": false
@@ -2914,6 +3876,7 @@
       "year": 2024,
       "name": "2024.November-Ⅱ-メガネコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2880,
       "note": null,
       "pageBreakAfter": false
@@ -2924,9 +3887,37 @@
       "year": 2024,
       "name": "クリスマス2024",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 2890,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0290",
@@ -2934,6 +3925,7 @@
       "year": 2024,
       "name": "2024.December-真夏の全国ツアー2024衣装3",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2900,
       "note": null,
       "pageBreakAfter": false
@@ -2944,6 +3936,7 @@
       "year": 2024,
       "name": "大感謝祭 ダウンベスト",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2910,
       "note": null,
       "pageBreakAfter": false
@@ -2954,6 +3947,7 @@
       "year": 2024,
       "name": "大感謝祭 千鳥格子",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2920,
       "note": null,
       "pageBreakAfter": false
@@ -2964,6 +3958,7 @@
       "year": 2024,
       "name": "落とし物",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 2930,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -2974,6 +3969,7 @@
       "year": 2025,
       "name": "2025.Lucky Bag（カレンダー衣装）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2940,
       "note": null,
       "pageBreakAfter": false
@@ -2984,6 +3980,7 @@
       "year": 2025,
       "name": "2025.Lucky Bag（パジャマ）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2950,
       "note": null,
       "pageBreakAfter": false
@@ -2994,6 +3991,7 @@
       "year": 2025,
       "name": "Happy New Year! 2025（巳）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2960,
       "note": null,
       "pageBreakAfter": false
@@ -3004,9 +4002,37 @@
       "year": 2025,
       "name": "歩道橋MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 2970,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0298",
@@ -3014,6 +4040,7 @@
       "year": 2025,
       "name": "2025.January-ソフトピンク",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2980,
       "note": "ヨリ",
       "pageBreakAfter": false
@@ -3024,6 +4051,7 @@
       "year": 2025,
       "name": "2025.January-Ⅱ-猫耳ニット帽",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 2990,
       "note": null,
       "pageBreakAfter": false
@@ -3034,6 +4062,7 @@
       "year": 2025,
       "name": "歩道橋",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3000,
       "note": null,
       "pageBreakAfter": false
@@ -3044,6 +4073,7 @@
       "year": 2025,
       "name": "2025.February-オフショルニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3010,
       "note": null,
       "pageBreakAfter": false
@@ -3054,9 +4084,37 @@
       "year": 2025,
       "name": "2025.Valentine",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 3020,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0303",
@@ -3064,6 +4122,7 @@
       "year": 2025,
       "name": "与田祐希卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3030,
       "note": null,
       "pageBreakAfter": false
@@ -3074,6 +4133,7 @@
       "year": 2025,
       "name": "ごんぞうカチューシャ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3040,
       "note": null,
       "pageBreakAfter": false
@@ -3084,6 +4144,7 @@
       "year": 2025,
       "name": "2025.February-Ⅱ-37th制服",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 3050,
       "note": null,
       "pageBreakAfter": false
@@ -3094,6 +4155,7 @@
       "year": 2025,
       "name": "2025.February-Ⅲ-紅白2024衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3060,
       "note": null,
       "pageBreakAfter": false
@@ -3104,6 +4166,7 @@
       "year": 2025,
       "name": "2025.February-Ⅳ-スペシャル衣装44",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3070,
       "note": null,
       "pageBreakAfter": false
@@ -3114,6 +4177,7 @@
       "year": 2025,
       "name": "懐かしさの先MV",
       "template": "standard3",
+      "kind": "mv",
       "sortIndex": 3080,
       "note": null,
       "pageBreakAfter": false
@@ -3124,6 +4188,7 @@
       "year": 2025,
       "name": "ミニ生写真歩道橋",
       "template": "standard3",
+      "kind": "mini",
       "sortIndex": 3090,
       "note": null,
       "pageBreakAfter": false
@@ -3134,6 +4199,7 @@
       "year": 2025,
       "name": "2025.March-スペシャル衣装45",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3100,
       "note": null,
       "pageBreakAfter": false
@@ -3144,6 +4210,7 @@
       "year": 2025,
       "name": "2025.March-Ⅱ-ファー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3110,
       "note": null,
       "pageBreakAfter": false
@@ -3154,6 +4221,7 @@
       "year": 2025,
       "name": "2025.March-Ⅲ-ジップアップカーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3120,
       "note": "チュウヒキ",
       "pageBreakAfter": false
@@ -3164,6 +4232,7 @@
       "year": 2025,
       "name": "それまでの猶予",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3130,
       "note": null,
       "pageBreakAfter": false
@@ -3174,6 +4243,7 @@
       "year": 2025,
       "name": "2025.April-カレッジ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3140,
       "note": null,
       "pageBreakAfter": false
@@ -3184,6 +4254,7 @@
       "year": 2025,
       "name": "2025.April-Ⅱ-シャギーアンサンブル",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3150,
       "note": null,
       "pageBreakAfter": false
@@ -3194,9 +4265,37 @@
       "year": 2025,
       "name": "「ネーブルオレンジ」MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 3160,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0317",
@@ -3204,6 +4303,7 @@
       "year": 2025,
       "name": "ネーブルオレンジ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3170,
       "note": null,
       "pageBreakAfter": false
@@ -3214,6 +4314,7 @@
       "year": 2025,
       "name": "2025.May-ボヘミアン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3180,
       "note": null,
       "pageBreakAfter": false
@@ -3224,6 +4325,7 @@
       "year": 2025,
       "name": "2025.May-Ⅱ-スペシャル衣装46",
       "template": "rareSet8",
+      "kind": "rare8",
       "sortIndex": 3190,
       "note": null,
       "pageBreakAfter": false
@@ -3234,6 +4336,7 @@
       "year": 2025,
       "name": "13周年記念",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 3200,
       "note": null,
       "pageBreakAfter": false
@@ -3244,6 +4347,7 @@
       "year": 2025,
       "name": "13thBDライブTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3210,
       "note": null,
       "pageBreakAfter": false
@@ -3254,6 +4358,7 @@
       "year": 2025,
       "name": "2025.May-Ⅲ-レイヤードトップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3220,
       "note": null,
       "pageBreakAfter": false
@@ -3264,6 +4369,7 @@
       "year": 2025,
       "name": "2025.May-Ⅳ-デニムワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3230,
       "note": null,
       "pageBreakAfter": false
@@ -3274,6 +4380,7 @@
       "year": 2025,
       "name": "2025.May-Ⅴ-ビッグボウタイブラウス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3240,
       "note": null,
       "pageBreakAfter": false
@@ -3284,6 +4391,7 @@
       "year": 2025,
       "name": "交感神経優位",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3250,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -3294,6 +4402,7 @@
       "year": 2025,
       "name": "2025.June-38th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3260,
       "note": "チュウ",
       "pageBreakAfter": false
@@ -3304,6 +4413,7 @@
       "year": 2025,
       "name": "ミニ生写真ネーブルオレンジ",
       "template": "standard3",
+      "kind": "mini",
       "sortIndex": 3270,
       "note": null,
       "pageBreakAfter": false
@@ -3314,6 +4424,7 @@
       "year": 2025,
       "name": "2025.July-ベースボールシャツ2025",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3280,
       "note": null,
       "pageBreakAfter": false
@@ -3324,6 +4435,7 @@
       "year": 2025,
       "name": "2025.July-Ⅱ-浴衣",
       "template": "five5",
+      "kind": "suwari",
       "sortIndex": 3290,
       "note": null,
       "pageBreakAfter": false
@@ -3334,6 +4446,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 北海道ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3300,
       "note": null,
       "pageBreakAfter": false
@@ -3344,6 +4457,7 @@
       "year": 2025,
       "name": "2025.July-Ⅲ-フリルミニスカ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3310,
       "note": null,
       "pageBreakAfter": false
@@ -3354,6 +4468,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 静岡ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3320,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -3364,6 +4479,7 @@
       "year": 2025,
       "name": "2025.July-Ⅳ-メッシュニット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3330,
       "note": null,
       "pageBreakAfter": false
@@ -3374,6 +4490,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 大坂ver",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3340,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -3384,6 +4501,7 @@
       "year": 2025,
       "name": "2025.July-Ⅴ-ドット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3350,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -3394,6 +4512,7 @@
       "year": 2025,
       "name": "乃木坂配信中限定！MV衣装生写真",
       "template": "single1",
+      "kind": "mv",
       "sortIndex": 3360,
       "note": null,
       "pageBreakAfter": false
@@ -3404,6 +4523,7 @@
       "year": 2025,
       "name": "2025.August-13thBDライブ衣装1",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3370,
       "note": null,
       "pageBreakAfter": true
@@ -3414,6 +4534,7 @@
       "year": 2025,
       "name": "2025.July-Ⅵ-真夏の全国ツアー2025 Tシャツ B ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3380,
       "note": null,
       "pageBreakAfter": false
@@ -3424,6 +4545,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 宮城ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3390,
       "note": null,
       "pageBreakAfter": false
@@ -3434,6 +4556,7 @@
       "year": 2025,
       "name": "2025.August-Ⅱ-スウェット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3400,
       "note": null,
       "pageBreakAfter": false
@@ -3444,9 +4567,37 @@
       "year": 2025,
       "name": "「Same numbers」MV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 3410,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0342",
@@ -3454,6 +4605,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 福岡ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3420,
       "note": null,
       "pageBreakAfter": false
@@ -3464,6 +4616,7 @@
       "year": 2025,
       "name": "2025.August-Ⅲ-シャーリングワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3430,
       "note": null,
       "pageBreakAfter": false
@@ -3474,6 +4627,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 香川ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3440,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -3484,6 +4638,7 @@
       "year": 2025,
       "name": "2025.August-Ⅳ-アシンメトリー",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3450,
       "note": null,
       "pageBreakAfter": false
@@ -3494,6 +4649,7 @@
       "year": 2025,
       "name": "2025.August-Ⅴ-13thBDライブ衣装2",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3460,
       "note": null,
       "pageBreakAfter": false
@@ -3504,6 +4660,7 @@
       "year": 2025,
       "name": "Same numbers",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3470,
       "note": null,
       "pageBreakAfter": false
@@ -3514,6 +4671,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Special",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3480,
       "note": null,
       "pageBreakAfter": false
@@ -3524,6 +4682,7 @@
       "year": 2025,
       "name": "真夏の全国ツアー2025 Tシャツ 東京ver.",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3490,
       "note": null,
       "pageBreakAfter": false
@@ -3534,6 +4693,7 @@
       "year": 2025,
       "name": "2025.September-サマージャケット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3500,
       "note": null,
       "pageBreakAfter": false
@@ -3544,9 +4704,37 @@
       "year": 2025,
       "name": "ハロウィン2025",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 3510,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0352",
@@ -3554,6 +4742,7 @@
       "year": 2025,
       "name": "2025.September-Ⅱ-肩あきトップス",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3520,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -3564,6 +4753,7 @@
       "year": 2025,
       "name": "2025.September-Ⅲ-スパンコール",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3530,
       "note": null,
       "pageBreakAfter": false
@@ -3574,6 +4764,7 @@
       "year": 2025,
       "name": "2025.October-39th制服",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3540,
       "note": null,
       "pageBreakAfter": false
@@ -3584,6 +4775,7 @@
       "year": 2025,
       "name": "ミニ生写真Same numbers",
       "template": "standard3",
+      "kind": "mini",
       "sortIndex": 3550,
       "note": null,
       "pageBreakAfter": false
@@ -3594,6 +4786,7 @@
       "year": 2025,
       "name": "2025.November-スペシャル衣装47",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3560,
       "note": null,
       "pageBreakAfter": false
@@ -3604,9 +4797,37 @@
       "year": 2025,
       "name": "クリスマス2025",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 3570,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0358",
@@ -3614,6 +4835,7 @@
       "year": 2025,
       "name": "2025.November-Ⅱ-スカーフ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3580,
       "note": null,
       "pageBreakAfter": false
@@ -3624,6 +4846,7 @@
       "year": 2025,
       "name": "久保史緒里卒業コンサートTシャツ",
       "template": "standard3",
+      "kind": "tshirt",
       "sortIndex": 3590,
       "note": null,
       "pageBreakAfter": false
@@ -3634,6 +4857,7 @@
       "year": 2025,
       "name": "襟付きコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3600,
       "note": null,
       "pageBreakAfter": false
@@ -3644,6 +4868,7 @@
       "year": 2025,
       "name": "不道徳な夏",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3610,
       "note": null,
       "pageBreakAfter": false
@@ -3654,6 +4879,7 @@
       "year": 2026,
       "name": "2026.Lucky Bag（シャツワンピース）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3620,
       "note": "ヒキ",
       "pageBreakAfter": false
@@ -3664,6 +4890,7 @@
       "year": 2026,
       "name": "2026.Lucky Bag（カレンダー衣装）",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3630,
       "note": "ヨリチュウ",
       "pageBreakAfter": false
@@ -3674,6 +4901,7 @@
       "year": 2026,
       "name": "干支 午",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3640,
       "note": null,
       "pageBreakAfter": false
@@ -3684,9 +4912,37 @@
       "year": 2026,
       "name": "ビリヤニMV",
       "template": "five5",
+      "kind": "mv",
       "sortIndex": 3650,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0366",
@@ -3694,6 +4950,7 @@
       "year": 2026,
       "name": "2026.January-ボアコート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3660,
       "note": null,
       "pageBreakAfter": false
@@ -3704,6 +4961,7 @@
       "year": 2026,
       "name": "2026.January-Ⅱ-クロップドジャケット",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3670,
       "note": null,
       "pageBreakAfter": false
@@ -3714,6 +4972,7 @@
       "year": 2026,
       "name": "2026.February-スペシャル衣装48",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3680,
       "note": null,
       "pageBreakAfter": false
@@ -3724,6 +4983,7 @@
       "year": 2026,
       "name": "2026.February-Ⅱ-ペプラムディティール",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3690,
       "note": null,
       "pageBreakAfter": false
@@ -3734,9 +4994,37 @@
       "year": 2026,
       "name": "バレンタイン2026",
       "template": "five5",
+      "kind": "five",
       "sortIndex": 3700,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
     },
     {
       "id": "s0371",
@@ -3744,6 +5032,7 @@
       "year": 2026,
       "name": "2026.February-Ⅲ-ファーニット+キャミワンピ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3710,
       "note": null,
       "pageBreakAfter": false
@@ -3754,6 +5043,7 @@
       "year": 2026,
       "name": "2026.February-Ⅳ-期別カラーワンピース",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3720,
       "note": null,
       "pageBreakAfter": false
@@ -3764,6 +5054,7 @@
       "year": 2026,
       "name": "2026.February-Ⅴ-パステルコート",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3730,
       "note": null,
       "pageBreakAfter": false
@@ -3774,6 +5065,7 @@
       "year": 2026,
       "name": "2026.February-Ⅵ-モノトーン",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3740,
       "note": null,
       "pageBreakAfter": false
@@ -3784,6 +5076,7 @@
       "year": 2026,
       "name": "2026.February-Ⅶ-オーバージャケット+キャップ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3750,
       "note": null,
       "pageBreakAfter": false
@@ -3794,6 +5087,7 @@
       "year": 2026,
       "name": "ビリヤニ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3760,
       "note": null,
       "pageBreakAfter": false
@@ -3804,6 +5098,7 @@
       "year": 2026,
       "name": "2026.March-リラックスコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3770,
       "note": null,
       "pageBreakAfter": false
@@ -3814,6 +5109,7 @@
       "year": 2026,
       "name": "2026.March-Ⅱ-アリスコーデ",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3780,
       "note": null,
       "pageBreakAfter": false
@@ -3824,6 +5120,7 @@
       "year": 2026,
       "name": "2026.March-Ⅲ-エレガント",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3790,
       "note": null,
       "pageBreakAfter": false
@@ -3834,6 +5131,7 @@
       "year": 2026,
       "name": "純粋とは何か？",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3800,
       "note": null,
       "pageBreakAfter": false
@@ -3844,6 +5142,7 @@
       "year": 2026,
       "name": "2026.April-紅白2025衣装",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3810,
       "note": null,
       "pageBreakAfter": false
@@ -3854,6 +5153,7 @@
       "year": 2026,
       "name": "2026.April-Ⅱ-チェック",
       "template": "standard3",
+      "kind": "normal",
       "sortIndex": 3820,
       "note": null,
       "pageBreakAfter": false
@@ -3864,6 +5164,7 @@
       "year": null,
       "name": "僕は僕を好きになる",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3830,
       "note": null,
       "pageBreakAfter": false
@@ -3874,6 +5175,7 @@
       "year": null,
       "name": "ごめんねfingers crossed",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3840,
       "note": null,
       "pageBreakAfter": false
@@ -3884,6 +5186,7 @@
       "year": null,
       "name": "君に叱られた",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3850,
       "note": null,
       "pageBreakAfter": false
@@ -3894,6 +5197,7 @@
       "year": null,
       "name": "Time flies",
       "template": "standard3",
+      "kind": "sealed",
       "sortIndex": 3860,
       "note": null,
       "pageBreakAfter": false
@@ -3904,6 +5208,7 @@
       "year": null,
       "name": "Actually…",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3870,
       "note": null,
       "pageBreakAfter": false
@@ -3914,6 +5219,7 @@
       "year": null,
       "name": "好きというのはロックだぜ！",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3880,
       "note": null,
       "pageBreakAfter": false
@@ -3924,6 +5230,7 @@
       "year": null,
       "name": "ここにはないもの",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3890,
       "note": null,
       "pageBreakAfter": false
@@ -3934,6 +5241,7 @@
       "year": null,
       "name": "人は夢を二度見る",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3900,
       "note": null,
       "pageBreakAfter": false
@@ -3944,6 +5252,7 @@
       "year": null,
       "name": "おひとりさま天国",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3910,
       "note": null,
       "pageBreakAfter": false
@@ -3954,6 +5263,7 @@
       "year": null,
       "name": "Monopoly",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3920,
       "note": null,
       "pageBreakAfter": false
@@ -3964,6 +5274,7 @@
       "year": null,
       "name": "チャンスは平等",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3930,
       "note": null,
       "pageBreakAfter": false
@@ -3974,6 +5285,7 @@
       "year": null,
       "name": "チートデイ",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3940,
       "note": null,
       "pageBreakAfter": false
@@ -3984,6 +5296,7 @@
       "year": null,
       "name": "歩道橋",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3950,
       "note": null,
       "pageBreakAfter": false
@@ -3994,6 +5307,7 @@
       "year": null,
       "name": "ネーブルオレンジ",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3960,
       "note": null,
       "pageBreakAfter": false
@@ -4004,6 +5318,7 @@
       "year": null,
       "name": "セームナンバーズ",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3970,
       "note": null,
       "pageBreakAfter": false
@@ -4014,6 +5329,7 @@
       "year": null,
       "name": "ビリヤニ",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3980,
       "note": null,
       "pageBreakAfter": false
@@ -4024,6 +5340,7 @@
       "year": null,
       "name": "マイリスペクトアルバム特別版",
       "template": "four4",
+      "kind": "sealed",
       "sortIndex": 3990,
       "note": null,
       "pageBreakAfter": false

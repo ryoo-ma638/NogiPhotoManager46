@@ -4,6 +4,7 @@ import { CheckCircle, ChevronRight, SealCheck } from '../components/icons'
 import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
 import { AddSetSheet } from '../components/UserSetSheets'
+import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
 import type { CatalogSet, Template } from '../types'
 
 type Filter = 'all' | 'incomplete' | 'complete'
@@ -18,6 +19,7 @@ const TEMPLATE_BADGE: Partial<Record<Template, { label: string; cls: string }>> 
 export default function BinderPage({ binderId }: { binderId: string }) {
   const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet } = useAppData()
   const [filter, setFilter] = useState<Filter>('all')
+  const [kindFilter, setKindFilter] = useState<Kind | null>(null)
   const [showAdd, setShowAdd] = useState(false)
   useScrollRestore(`binder:${binderId}`)
 
@@ -42,7 +44,12 @@ export default function BinderPage({ binderId }: { binderId: string }) {
     )
   }
 
+  // このバインダーに存在する種類だけチップを出す（封入バインダーは全部sealedなので非表示）
+  const presentKinds = new Set(sets.map((s) => kindOf(s, binder?.sealed ?? false)))
+  const availableKinds = binder?.sealed ? [] : KIND_LABELS.filter((k) => presentKinds.has(k.id))
+
   const filtered = sets.filter((s) => {
+    if (kindFilter && kindOf(s, binder?.sealed ?? false) !== kindFilter) return false
     const st = statOf(s.id)
     const complete = st.total > 0 && st.owned === st.total
     if (filter === 'complete') return complete
@@ -78,6 +85,16 @@ export default function BinderPage({ binderId }: { binderId: string }) {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-4">
+        {/* 種類チップ */}
+        {availableKinds.length > 1 && (
+          <div className="flex gap-1.5 overflow-x-auto pb-2 -mx-4 px-4 [-webkit-overflow-scrolling:touch]">
+            <KindChip label="すべて" active={kindFilter === null} onTap={() => setKindFilter(null)} />
+            {availableKinds.map((k) => (
+              <KindChip key={k.id} label={k.label} active={kindFilter === k.id} onTap={() => setKindFilter(kindFilter === k.id ? null : k.id)} />
+            ))}
+          </div>
+        )}
+
         {/* フィルタ */}
         <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-200/60 p-1 mb-3">
           {(
@@ -141,6 +158,19 @@ export default function BinderPage({ binderId }: { binderId: string }) {
         ))}
       </div>
     </>
+  )
+}
+
+function KindChip({ label, active, onTap }: { label: string; active: boolean; onTap: () => void }) {
+  return (
+    <button
+      onClick={onTap}
+      className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors ${
+        active ? 'bg-violet-600 text-white' : 'bg-white border border-slate-200 text-slate-500'
+      }`}
+    >
+      {label}
+    </button>
   )
 }
 
