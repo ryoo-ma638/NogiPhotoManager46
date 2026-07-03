@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
-import { CheckCircle, PhotoIcon, SealCheck } from '../components/icons'
+import { CameraIcon, CheckCircle, PhotoIcon, SealCheck } from '../components/icons'
 import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
+import { PhotoViewer, ThumbImg } from '../components/images'
 import { goBack } from '../lib/router'
 import type { Photo, Rarity } from '../types'
 
@@ -13,9 +14,15 @@ const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: 
 }
 
 export default function SetDetailPage({ setId }: { setId: string }) {
-  const { catalog, setById, userSetById, photosOf, owned, toggle, setMany, updateUserSet, deleteUserSet } = useAppData()
+  const { catalog, setById, userSetById, photosOf, owned, toggle, setMany, updateUserSet, deleteUserSet, imageIds, attachImage, removeImage } =
+    useAppData()
   const [confirm, setConfirm] = useState<'own-all' | 'disown-all' | null>(null)
   const [showEdit, setShowEdit] = useState(false)
+  const [viewer, setViewer] = useState<Photo | null>(null)
+  const [imgVersion, setImgVersion] = useState(0)
+  const [toast, setToast] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const attachTarget = useRef<string | null>(null)
 
   const set = setById.get(setId)
   if (!set) return <Header title="セットが見つかりません" back />
@@ -26,6 +33,36 @@ export default function SetDetailPage({ setId }: { setId: string }) {
   const ownedCount = photos.filter((p) => owned.has(p.id)).length
   const complete = photos.length > 0 && ownedCount === photos.length
   const crumb = [binder?.name, set.year ? `${set.year}年` : null].filter(Boolean).join('・')
+
+  const showToast = (msg: string) => {
+    setToast(msg)
+    window.setTimeout(() => setToast(null), 2400)
+  }
+
+  const pickImageFor = (photoId: string) => {
+    attachTarget.current = photoId
+    fileRef.current?.click()
+  }
+
+  const onFilePicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    const target = attachTarget.current
+    attachTarget.current = null
+    if (!file || !target) return
+    try {
+      await attachImage(target, file)
+      setImgVersion((v) => v + 1)
+      if (!owned.has(target)) {
+        toggle(target)
+        showToast('画像を添付し、所有にしました')
+      } else {
+        showToast('画像を添付しました')
+      }
+    } catch (err) {
+      showToast(`添付に失敗: ${err instanceof Error ? err.message : String(err)}`)
+    }
+  }
 
   return (
     <>
@@ -66,10 +103,22 @@ export default function SetDetailPage({ setId }: { setId: string }) {
         {/* ポーズグリッド */}
         <section className="mt-4 grid grid-cols-3 gap-3">
           {photos.map((p) => (
-            <PoseCard key={p.id} photo={p} isOwned={owned.has(p.id)} onTap={() => toggle(p.id)} />
+            <PoseCard
+              key={p.id}
+              photo={p}
+              isOwned={owned.has(p.id)}
+              hasImage={imageIds.has(p.id)}
+              imgVersion={imgVersion}
+              onToggle={() => toggle(p.id)}
+              onOpen={() => setViewer(p)}
+              onAttach={() => pickImageFor(p.id)}
+            />
           ))}
         </section>
       </div>
+
+      {/* 画像選択（カメラ/ライブラリ） */}
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => void onFilePicked(e)} />
 
       {/* 下部アクション（親指到達圏） */}
       <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-10 pointer-events-none">
@@ -91,6 +140,22 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           )}
         </div>
       </div>
+
+      {viewer && (
+        <PhotoViewer
+          photo={viewer}
+          version={imgVersion}
+          onClose={() => setViewer(null)}
+          onReplace={() => pickImageFor(viewer.id)}
+          onDelete={() => {
+            void removeImage(viewer.id).then(() => {
+              setViewer(null)
+              setImgVersion((v) => v + 1)
+              showToast('画像を削除しました（○×は変わっていません）')
+            })
+          }}
+        />
+      )}
 
       {showEdit && userSet && (
         <EditSetSheet
@@ -132,35 +197,84 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           onCancel={() => setConfirm(null)}
         />
       )}
+
+      {toast && (
+        <div className="fixed inset-x-0 bottom-[calc(8rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 pointer-events-none">
+          <div className="animate-pop rounded-full bg-slate-900/90 text-white text-[13px] font-medium px-4 py-2 shadow-lg">{toast}</div>
+        </div>
+      )}
     </>
   )
 }
 
-function PoseCard({ photo, isOwned, onTap }: { photo: Photo; isOwned: boolean; onTap: () => void }) {
+function PoseCard({
+  photo,
+  isOwned,
+  hasImage,
+  imgVersion,
+  onToggle,
+  onOpen,
+  onAttach,
+}: {
+  photo: Photo
+  isOwned: boolean
+  hasImage: boolean
+  imgVersion: number
+  onToggle: () => void
+  onOpen: () => void
+  onAttach: () => void
+}) {
   const style = RARITY_STYLE[photo.rarity]
   return (
-    <button
-      onClick={onTap}
-      aria-label={`${photo.label}を${isOwned ? '未所有' : '所有'}にする`}
-      className={`relative rounded-2xl p-1.5 text-left transition-all active:scale-95 border-2 ${
+    <div
+      role="button"
+      tabIndex={0}
+      // カード本体タップ: 画像があれば拡大、なければ所有トグル
+      onClick={hasImage ? onOpen : onToggle}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') (hasImage ? onOpen : onToggle)()
+      }}
+      aria-label={photo.label}
+      className={`relative rounded-2xl p-1.5 text-left transition-all active:scale-95 border-2 cursor-pointer select-none ${
         isOwned ? 'bg-white border-emerald-400 shadow-sm' : 'bg-white/70 border-transparent'
       }`}
     >
-      {/* 写真エリア（生写真比率 89:127。P1.5でサムネに差し替え） */}
-      <div className={`aspect-[89/127] rounded-xl flex items-center justify-center ${style.tile} ${isOwned ? '' : 'grayscale opacity-70'}`}>
-        <PhotoIcon className="w-8 h-8" />
+      {/* 写真エリア（生写真比率 89:127） */}
+      <div
+        className={`relative aspect-[89/127] rounded-xl overflow-hidden flex items-center justify-center ${style.tile} ${
+          isOwned ? '' : 'grayscale opacity-70'
+        }`}
+      >
+        {hasImage ? <ThumbImg photoId={photo.id} version={imgVersion} className="absolute inset-0 w-full h-full object-cover" /> : <PhotoIcon className="w-8 h-8" />}
       </div>
-      {/* 所有チェック（独立した意味を持つ領域） */}
-      <div className="absolute top-3 right-3">
-        <CheckCircle
-          className={`w-6 h-6 drop-shadow-sm ${isOwned ? 'text-emerald-500' : 'text-slate-300'}`}
-          filled={isOwned}
-        />
-      </div>
+      {/* 所有チェック（常にトグル専用の独立ボタン） */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          onToggle()
+        }}
+        aria-label={`${photo.label}を${isOwned ? '未所有' : '所有'}にする`}
+        className="absolute top-1.5 right-1.5 p-1.5 active:scale-90 transition-transform"
+      >
+        <CheckCircle className={`w-6 h-6 drop-shadow-sm ${isOwned ? 'text-emerald-500' : 'text-slate-300'}`} filled={isOwned} />
+      </button>
       <div className="mt-1.5 px-0.5 pb-0.5 flex items-center justify-between gap-1">
         <span className={`text-[12px] font-bold truncate ${isOwned ? 'text-slate-700' : 'text-slate-400'}`}>{photo.label}</span>
-        {style.badge && <span className={`shrink-0 rounded px-1 py-px text-[9px] font-extrabold ${style.badge}`}>{style.badgeLabel}</span>}
+        <span className="flex items-center gap-1 shrink-0">
+          {style.badge && <span className={`rounded px-1 py-px text-[9px] font-extrabold ${style.badge}`}>{style.badgeLabel}</span>}
+          {/* 画像添付ボタン */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onAttach()
+            }}
+            aria-label={`${photo.label}に画像を添付`}
+            className={`p-1 -m-0.5 rounded-md active:bg-slate-200/70 transition-colors ${hasImage ? 'text-slate-300' : 'text-violet-400'}`}
+          >
+            <CameraIcon className="w-4 h-4" />
+          </button>
+        </span>
       </div>
-    </button>
+    </div>
   )
 }

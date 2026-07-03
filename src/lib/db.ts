@@ -7,13 +7,23 @@ export interface OwnedRow {
   ownedDate: string | null
 }
 
+// 添付画像（縮小済みJPEG。フル画像とサムネの2サイズ）
+export interface ImageRow {
+  photoId: string
+  full: Blob
+  thumb: Blob
+  updatedAt: string
+}
+
 class NogiDB extends Dexie {
   owned!: Table<OwnedRow, string>
   userSets!: Table<UserSet, string>
+  images!: Table<ImageRow, string>
   constructor() {
     super('NogiPhotoManager')
     this.version(1).stores({ owned: 'photoId' })
     this.version(2).stores({ owned: 'photoId', userSets: 'id' })
+    this.version(3).stores({ owned: 'photoId', userSets: 'id', images: 'photoId' })
   }
 }
 
@@ -67,12 +77,35 @@ export async function putUserSet(row: UserSet): Promise<void> {
   await db.userSets.put(row)
 }
 
-/** セット削除（所有記録も一緒に消す） */
+/** セット削除（所有記録・画像も一緒に消す） */
 export async function deleteUserSetRow(id: string, photoIds: string[]): Promise<void> {
-  await db.transaction('rw', db.userSets, db.owned, async () => {
+  await db.transaction('rw', db.userSets, db.owned, db.images, async () => {
     await db.userSets.delete(id)
-    if (photoIds.length > 0) await db.owned.bulkDelete(photoIds)
+    if (photoIds.length > 0) {
+      await db.owned.bulkDelete(photoIds)
+      await db.images.bulkDelete(photoIds)
+    }
   })
+}
+
+// ---- 添付画像 ----
+
+export async function putImage(row: ImageRow): Promise<void> {
+  await db.images.put(row)
+}
+
+export async function getImageRow(photoId: string): Promise<ImageRow | undefined> {
+  return db.images.get(photoId)
+}
+
+export async function deleteImageRow(photoId: string): Promise<void> {
+  await db.images.delete(photoId)
+}
+
+/** 画像が付いている写真IDの集合（一覧でのサムネ有無判定用） */
+export async function imageIdSet(): Promise<Set<string>> {
+  const keys = await db.images.toCollection().primaryKeys()
+  return new Set(keys)
 }
 
 /** 手動セットを丸ごと置き換える（復元用） */

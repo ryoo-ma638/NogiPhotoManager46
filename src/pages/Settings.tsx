@@ -5,7 +5,7 @@ import { allOwnedRows } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 
 export default function SettingsPage() {
-  const { catalog, owned, userSets, restoreAll } = useAppData()
+  const { catalog, owned, userSets, imageIds, restoreAll } = useAppData()
   const [persisted, setPersisted] = useState<boolean | null>(null)
   const [pending, setPending] = useState<ParsedBackup | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -65,11 +65,12 @@ export default function SettingsPage() {
           <Row label="カタログ" value={`${catalog.member.name}（v${catalog.catalogVersion}）`} />
           <Row label="セット数" value={`${catalog.sets.length} 件${userSets.length > 0 ? ` ＋手動${userSets.length}` : ''}`} />
           <Row label="所有記録" value={`${owned.size} 枚`} />
+          <Row label="添付画像" value={`${imageIds.size} 枚`} />
         </Section>
 
         <Section
           title="バックアップ"
-          footer="所有データはこの端末の中にだけ保存されます。ホーム画面からアプリを削除するとデータも消えるため、ときどき書き出して保存しておくと安心です。"
+          footer="所有データはこの端末の中にだけ保存されます。ホーム画面からアプリを削除するとデータも消えるため、ときどき書き出して保存しておくと安心です。※添付画像は容量が大きいためバックアップJSONには含まれません。"
         >
           <div className="px-4 py-3 space-y-2">
             <button

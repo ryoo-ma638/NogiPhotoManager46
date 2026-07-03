@@ -78,6 +78,15 @@ export function SearchIcon({ className = 'w-6 h-6' }: IconProps) {
   )
 }
 
+export function CameraIcon({ className = 'w-5 h-5' }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.5 4h-5L7.9 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.9L14.5 4Z" />
+      <circle cx="12" cy="13" r="3.5" />
+    </svg>
+  )
+}
+
 export function PhotoIcon({ className = 'w-8 h-8' }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

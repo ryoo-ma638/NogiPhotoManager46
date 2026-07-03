@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CatalogFile, CatalogSet, Photo, UserSet } from '../types'
 import { loadCatalog, photosForSet } from './catalog'
-import { allUserSets, deleteUserSetRow, ownedIdSet, putUserSet, replaceAllUserSets, setManyOwned, setOwned } from './db'
+import { allUserSets, deleteUserSetRow, imageIdSet, ownedIdSet, putUserSet, replaceAllUserSets, setManyOwned, setOwned } from './db'
 import type { OwnedRow } from './db'
 import { replaceAllOwned } from './db'
+import { attachImageFile, invalidateImageURLs, removeImageFile } from './images'
 
 export interface SetStat {
   owned: number
@@ -26,6 +27,10 @@ interface AppData {
   updateUserSet: (row: UserSet, removedPhotoIds: string[]) => Promise<void>
   deleteUserSet: (id: string) => Promise<void>
   restoreAll: (owned: OwnedRow[], userSets: UserSet[]) => Promise<void>
+  /** 画像が付いている写真ID */
+  imageIds: Set<string>
+  attachImage: (photoId: string, file: Blob) => Promise<void>
+  removeImage: (photoId: string) => Promise<void>
 }
 
 const Ctx = createContext<AppData | null>(null)
@@ -40,15 +45,17 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [catalog, setCatalog] = useState<CatalogFile | null>(null)
   const [userSets, setUserSets] = useState<UserSet[]>([])
   const [owned, setOwnedState] = useState<Set<string>>(new Set())
+  const [imageIds, setImageIds] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void (async () => {
       try {
-        const [cat, ids, users] = await Promise.all([loadCatalog(), ownedIdSet(), allUserSets()])
+        const [cat, ids, users, imgs] = await Promise.all([loadCatalog(), ownedIdSet(), allUserSets(), imageIdSet()])
         setCatalog(cat)
         setOwnedState(ids)
         setUserSets(users)
+        setImageIds(imgs)
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e))
       }
@@ -174,12 +181,33 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         for (const pid of photoIds) s.delete(pid)
         return s
       })
+      setImageIds((prev) => {
+        const s = new Set(prev)
+        for (const pid of photoIds) {
+          s.delete(pid)
+          invalidateImageURLs(pid)
+        }
+        return s
+      })
     },
     restoreAll: async (ownedRows, users) => {
       await replaceAllOwned(ownedRows)
       await replaceAllUserSets(users)
       setOwnedState(await ownedIdSet())
       setUserSets(await allUserSets())
+    },
+    imageIds,
+    attachImage: async (photoId, file) => {
+      await attachImageFile(photoId, file)
+      setImageIds((prev) => new Set(prev).add(photoId))
+    },
+    removeImage: async (photoId) => {
+      await removeImageFile(photoId)
+      setImageIds((prev) => {
+        const s = new Set(prev)
+        s.delete(photoId)
+        return s
+      })
     },
   }
 
