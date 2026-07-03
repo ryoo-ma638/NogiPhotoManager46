@@ -11,12 +11,12 @@ function yearChip(binderId: string): string {
 }
 
 export default function Home() {
-  const { catalog, statOf } = useAppData()
+  const { catalog, allSets, statOf } = useAppData()
   useScrollRestore('home')
 
   // バインダー別・全体の集計
   const perBinder = catalog.binders.map((b) => {
-    const sets = catalog.sets.filter((s) => s.binderId === b.id)
+    const sets = allSets.filter((s) => s.binderId === b.id)
     let owned = 0
     let total = 0
     let completeSets = 0
@@ -68,7 +68,7 @@ export default function Home() {
               <div>
                 <div className="text-[11px] text-white/70">コンプ済みセット</div>
                 <div className="text-xl font-bold leading-tight">
-                  {completeSets} <span className="text-sm font-normal text-white/70">/ {catalog.sets.length} セット</span>
+                  {completeSets} <span className="text-sm font-normal text-white/70">/ {allSets.length} セット</span>
                 </div>
               </div>
             </div>

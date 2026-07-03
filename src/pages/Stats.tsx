@@ -4,7 +4,7 @@ import { useScrollRestore } from '../lib/router'
 import type { Rarity } from '../types'
 
 export default function StatsPage() {
-  const { catalog, statOf, photosOf, owned } = useAppData()
+  const { catalog, allSets, statOf, photosOf, owned } = useAppData()
   useScrollRestore('stats')
 
   let ownedTotal = 0
@@ -18,7 +18,7 @@ export default function StatsPage() {
     SR: { owned: 0, total: 0 },
   }
 
-  for (const s of catalog.sets) {
+  for (const s of allSets) {
     const st = statOf(s.id)
     ownedTotal += st.owned
     total += st.total
@@ -59,7 +59,7 @@ export default function StatsPage() {
             </p>
             <p>
               <span className="text-slate-400">コンプ</span> <b className="text-slate-800 text-base">{completeSets}</b>
-              <span className="text-slate-400"> / {catalog.sets.length} セット</span>
+              <span className="text-slate-400"> / {allSets.length} セット</span>
             </p>
           </div>
         </section>

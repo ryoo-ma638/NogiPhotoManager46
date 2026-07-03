@@ -3,6 +3,7 @@ import { useAppData } from '../lib/appData'
 import { CheckCircle, ChevronRight, SealCheck } from '../components/icons'
 import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
+import { AddSetSheet } from '../components/UserSetSheets'
 import type { CatalogSet, Template } from '../types'
 
 type Filter = 'all' | 'incomplete' | 'complete'
@@ -15,15 +16,23 @@ const TEMPLATE_BADGE: Partial<Record<Template, { label: string; cls: string }>> 
 }
 
 export default function BinderPage({ binderId }: { binderId: string }) {
-  const { catalog, statOf, photosOf, owned, toggle } = useAppData()
+  const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet } = useAppData()
   const [filter, setFilter] = useState<Filter>('all')
+  const [showAdd, setShowAdd] = useState(false)
   useScrollRestore(`binder:${binderId}`)
 
   const binder = catalog.binders.find((b) => b.id === binderId)
   const sets = useMemo(
-    () => catalog.sets.filter((s) => s.binderId === binderId).sort((a, b) => a.sortIndex - b.sortIndex),
-    [catalog, binderId],
+    () => allSets.filter((s) => s.binderId === binderId).sort((a, b) => a.sortIndex - b.sortIndex),
+    [allSets, binderId],
   )
+
+  // 追加シート用: このバインダーで選べる年（IDの年範囲を優先）
+  const years = useMemo(() => {
+    const m = binderId.match(/b(\d{4})-(\d{4})/)
+    if (m) return [Number(m[1]), Number(m[2])]
+    return [...new Set(sets.map((s) => s.year).filter((y): y is number => y !== null))].sort()
+  }, [binderId, sets])
 
   if (!binder) {
     return (
@@ -54,7 +63,20 @@ export default function BinderPage({ binderId }: { binderId: string }) {
 
   return (
     <>
-      <Header title={binder.name} subtitle={`${o}/${t}枚（${pct(o, t)}%）`} back />
+      <Header
+        title={binder.name}
+        subtitle={`${o}/${t}枚（${pct(o, t)}%）`}
+        back
+        right={
+          <button
+            onClick={() => setShowAdd(true)}
+            aria-label="セットを追加"
+            className="p-2 -mr-2 rounded-full text-violet-600 text-2xl leading-none font-light active:bg-slate-200/70 transition-colors"
+          >
+            ＋
+          </button>
+        }
+      />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-4">
         {/* フィルタ */}
         <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-200/60 p-1 mb-3">
@@ -83,6 +105,24 @@ export default function BinderPage({ binderId }: { binderId: string }) {
             <p className="font-bold text-slate-600">{filter === 'incomplete' ? 'すべてコンプ済み！' : '該当なし'}</p>
             {filter === 'incomplete' && <p className="text-xs text-slate-400">このバインダーに未所有はありません</p>}
           </div>
+        )}
+
+        {showAdd && (
+          <AddSetSheet
+            binder={binder}
+            years={years}
+            defaultSortIndex={(year) => {
+              const same = sets.filter((s) => s.year === year)
+              return (same.length > 0 ? Math.max(...same.map((s) => s.sortIndex)) : 0) + 10
+            }}
+            onSave={(row) => {
+              void addUserSet(row).then(() => {
+                setShowAdd(false)
+                navigate(`/s/${row.id}`)
+              })
+            }}
+            onClose={() => setShowAdd(false)}
+          />
         )}
 
         {groups.map((g, gi) => (
@@ -119,10 +159,10 @@ function SetRow({
 }) {
   const st = statOf(set.id)
   const complete = st.total > 0 && st.owned === st.total
-  const badge = TEMPLATE_BADGE[set.template]
+  const badge = set.user ? { label: '追加', cls: 'bg-fuchsia-100 text-fuchsia-600' } : TEMPLATE_BADGE[set.template]
 
-  // 封入(1種)は行から直接トグル
-  if (set.template === 'single1') {
+  // 1枚だけのセットは行から直接トグル（手動セットは編集のため詳細へ飛ばす）
+  if (st.total === 1 && !set.user) {
     const photo = photosOf(set)[0]
     const isOwned = photo ? owned.has(photo.id) : false
     return (

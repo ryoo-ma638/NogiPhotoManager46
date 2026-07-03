@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { CheckCircle, PhotoIcon, SealCheck } from '../components/icons'
 import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
+import { EditSetSheet } from '../components/UserSetSheets'
+import { goBack } from '../lib/router'
 import type { Photo, Rarity } from '../types'
 
 const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: string }> = {
@@ -11,13 +13,15 @@ const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: 
 }
 
 export default function SetDetailPage({ setId }: { setId: string }) {
-  const { catalog, setById, photosOf, owned, toggle, setMany } = useAppData()
+  const { catalog, setById, userSetById, photosOf, owned, toggle, setMany, updateUserSet, deleteUserSet } = useAppData()
   const [confirm, setConfirm] = useState<'own-all' | 'disown-all' | null>(null)
+  const [showEdit, setShowEdit] = useState(false)
 
   const set = setById.get(setId)
   if (!set) return <Header title="セットが見つかりません" back />
 
   const binder = catalog.binders.find((b) => b.id === set.binderId)
+  const userSet = set.user ? userSetById.get(set.id) : undefined
   const photos = photosOf(set)
   const ownedCount = photos.filter((p) => owned.has(p.id)).length
   const complete = photos.length > 0 && ownedCount === photos.length
@@ -25,7 +29,21 @@ export default function SetDetailPage({ setId }: { setId: string }) {
 
   return (
     <>
-      <Header title={set.name} subtitle={crumb} back />
+      <Header
+        title={set.name}
+        subtitle={crumb}
+        back
+        right={
+          userSet ? (
+            <button
+              onClick={() => setShowEdit(true)}
+              className="text-[14px] font-medium text-violet-600 p-2 -mr-2 active:opacity-60 transition-opacity"
+            >
+              編集
+            </button>
+          ) : undefined
+        }
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-36">
         {/* 進捗ヘッダー */}
         <section className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
@@ -73,6 +91,27 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           )}
         </div>
       </div>
+
+      {showEdit && userSet && (
+        <EditSetSheet
+          userSet={userSet}
+          onSave={(row) => {
+            // 消えた枠の所有記録を掃除してから保存
+            const kept = new Set(row.photos.map((p) => p.slot))
+            const removedIds = userSet.photos
+              .filter((p) => !kept.has(p.slot))
+              .map((p) => `${catalog.member.id}:${userSet.id}:${p.slot}`)
+            void updateUserSet(row, removedIds).then(() => setShowEdit(false))
+          }}
+          onDelete={() => {
+            void deleteUserSet(userSet.id).then(() => {
+              setShowEdit(false)
+              goBack()
+            })
+          }}
+          onClose={() => setShowEdit(false)}
+        />
+      )}
 
       {confirm && (
         <ConfirmSheet

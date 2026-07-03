@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import type { CatalogFile, CatalogSet, Photo } from '../types'
+import type { CatalogFile, CatalogSet, Photo, UserSet } from '../types'
 import { loadCatalog, photosForSet } from './catalog'
-import { ownedIdSet, setManyOwned, setOwned } from './db'
+import { allUserSets, deleteUserSetRow, ownedIdSet, putUserSet, replaceAllUserSets, setManyOwned, setOwned } from './db'
+import type { OwnedRow } from './db'
+import { replaceAllOwned } from './db'
 
 export interface SetStat {
   owned: number
@@ -10,13 +12,20 @@ export interface SetStat {
 
 interface AppData {
   catalog: CatalogFile
+  /** カタログ＋手動追加を合わせた全セット */
+  allSets: CatalogSet[]
+  userSets: UserSet[]
   owned: Set<string>
   toggle: (photoId: string) => void
   setMany: (photoIds: string[], value: boolean) => void
-  reloadOwned: () => Promise<void>
   photosOf: (set: CatalogSet) => Photo[]
   statOf: (setId: string) => SetStat
   setById: Map<string, CatalogSet>
+  userSetById: Map<string, UserSet>
+  addUserSet: (row: UserSet) => Promise<void>
+  updateUserSet: (row: UserSet, removedPhotoIds: string[]) => Promise<void>
+  deleteUserSet: (id: string) => Promise<void>
+  restoreAll: (owned: OwnedRow[], userSets: UserSet[]) => Promise<void>
 }
 
 const Ctx = createContext<AppData | null>(null)
@@ -29,29 +38,54 @@ export function useAppData(): AppData {
 
 export function AppDataProvider({ children }: { children: ReactNode }) {
   const [catalog, setCatalog] = useState<CatalogFile | null>(null)
+  const [userSets, setUserSets] = useState<UserSet[]>([])
   const [owned, setOwnedState] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void (async () => {
       try {
-        const [cat, ids] = await Promise.all([loadCatalog(), ownedIdSet()])
+        const [cat, ids, users] = await Promise.all([loadCatalog(), ownedIdSet(), allUserSets()])
         setCatalog(cat)
         setOwnedState(ids)
+        setUserSets(users)
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e))
       }
     })()
   }, [])
 
-  // セットごとの写真枠（カタログが変わらない限り固定）
+  // カタログ＋手動追加の統合ビュー
+  const allSets = useMemo<CatalogSet[]>(() => {
+    if (!catalog) return []
+    const users: CatalogSet[] = userSets.map((u) => ({
+      id: u.id,
+      binderId: u.binderId,
+      year: u.year,
+      name: u.name,
+      template: u.template,
+      sortIndex: u.sortIndex,
+      note: u.note,
+      user: true,
+    }))
+    return [...catalog.sets, ...users]
+  }, [catalog, userSets])
+
+  // セットごとの写真枠（手動セットは保存済みphotosが正）
   const photosMap = useMemo(() => {
     const m = new Map<string, Photo[]>()
-    if (catalog) for (const s of catalog.sets) m.set(s.id, photosForSet(catalog.member.id, s))
+    if (!catalog) return m
+    const memberId = catalog.member.id
+    for (const s of catalog.sets) m.set(s.id, photosForSet(memberId, s))
+    for (const u of userSets) {
+      m.set(
+        u.id,
+        u.photos.map((p) => ({ id: `${memberId}:${u.id}:${p.slot}`, slot: p.slot, label: p.label, rarity: p.rarity })),
+      )
+    }
     return m
-  }, [catalog])
+  }, [catalog, userSets])
 
-  // セットごとの所有数（トグルのたびに再計算。1367枚なら一瞬）
   const statMap = useMemo(() => {
     const m = new Map<string, SetStat>()
     for (const [id, photos] of photosMap) {
@@ -62,9 +96,15 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const setById = useMemo(() => {
     const m = new Map<string, CatalogSet>()
-    if (catalog) for (const s of catalog.sets) m.set(s.id, s)
+    for (const s of allSets) m.set(s.id, s)
     return m
-  }, [catalog])
+  }, [allSets])
+
+  const userSetById = useMemo(() => {
+    const m = new Map<string, UserSet>()
+    for (const u of userSets) m.set(u.id, u)
+    return m
+  }, [userSets])
 
   if (error) {
     return (
@@ -107,13 +147,40 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   const data: AppData = {
     catalog,
+    allSets,
+    userSets,
     owned,
     toggle,
     setMany,
     photosOf: (set) => photosMap.get(set.id) ?? [],
     statOf: (id) => statMap.get(id) ?? { owned: 0, total: 0 },
     setById,
-    reloadOwned: async () => setOwnedState(await ownedIdSet()),
+    userSetById,
+    addUserSet: async (row) => {
+      await putUserSet(row)
+      setUserSets((prev) => [...prev, row])
+    },
+    updateUserSet: async (row, removedPhotoIds) => {
+      await putUserSet(row)
+      if (removedPhotoIds.length > 0) setMany(removedPhotoIds, false)
+      setUserSets((prev) => prev.map((u) => (u.id === row.id ? row : u)))
+    },
+    deleteUserSet: async (id) => {
+      const photoIds = (photosMap.get(id) ?? []).map((p) => p.id)
+      await deleteUserSetRow(id, photoIds)
+      setUserSets((prev) => prev.filter((u) => u.id !== id))
+      setOwnedState((prev) => {
+        const s = new Set(prev)
+        for (const pid of photoIds) s.delete(pid)
+        return s
+      })
+    },
+    restoreAll: async (ownedRows, users) => {
+      await replaceAllOwned(ownedRows)
+      await replaceAllUserSets(users)
+      setOwnedState(await ownedIdSet())
+      setUserSets(await allUserSets())
+    },
   }
 
   return <Ctx.Provider value={data}>{children}</Ctx.Provider>

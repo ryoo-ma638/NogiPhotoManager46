@@ -19,6 +19,26 @@ export interface CatalogSet {
   sortIndex: number
   note: string | null
   pageBreakAfter?: boolean
+  user?: boolean // アプリ内で手動追加したセット（カタログJSONには存在しない）
+}
+
+// 手動追加セット（IndexedDBに保存。ポーズ枠は自由に増減・改名可）
+export interface UserSetPhoto {
+  slot: string
+  label: string
+  rarity: Rarity
+}
+
+export interface UserSet {
+  id: string // "user-xxxxxxxx"
+  binderId: string
+  year: number | null
+  name: string
+  template: Template // 作成時のテンプレ（以後はphotosが正）
+  note: string | null
+  sortIndex: number
+  photos: UserSetPhoto[]
+  createdAt: string
 }
 
 export interface CatalogFile {

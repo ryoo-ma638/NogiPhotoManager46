@@ -10,7 +10,7 @@ function norm(s: string): string {
 }
 
 export default function SearchPage() {
-  const { catalog, statOf } = useAppData()
+  const { catalog, allSets, statOf } = useAppData()
   const [q, setQ] = useState('')
   const [unownedOnly, setUnownedOnly] = useState(false)
 
@@ -25,7 +25,7 @@ export default function SearchPage() {
 
   const results = useMemo(() => {
     if (!active) return []
-    return catalog.sets
+    return allSets
       .filter((s) => {
         if (query && !norm(`${s.name} ${s.note ?? ''}`).includes(query)) return false
         if (unownedOnly) {
@@ -35,7 +35,7 @@ export default function SearchPage() {
         return true
       })
       .sort((a, b) => a.sortIndex - b.sortIndex)
-  }, [active, query, unownedOnly, catalog, statOf])
+  }, [active, query, unownedOnly, allSets, statOf])
 
   return (
     <>

@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
-import { allOwnedRows, replaceAllOwned } from '../lib/db'
-import { backupFilename, buildBackup, downloadJSON, parseOwnedFile } from '../lib/backup'
-import type { OwnedRow } from '../lib/db'
+import { allOwnedRows } from '../lib/db'
+import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 
 export default function SettingsPage() {
-  const { catalog, owned, reloadOwned } = useAppData()
+  const { catalog, owned, userSets, restoreAll } = useAppData()
   const [persisted, setPersisted] = useState<boolean | null>(null)
-  const [pending, setPending] = useState<OwnedRow[] | null>(null)
+  const [pending, setPending] = useState<ParsedBackup | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -28,8 +27,8 @@ export default function SettingsPage() {
 
   const exportBackup = async () => {
     const rows = await allOwnedRows()
-    downloadJSON(backupFilename(catalog.member.id), buildBackup(catalog.member.id, rows))
-    showToast(`${rows.length}枚を書き出しました`)
+    downloadJSON(backupFilename(catalog.member.id), buildBackup(catalog.member.id, rows, userSets))
+    showToast(`所有${rows.length}枚・手動セット${userSets.length}件を書き出しました`)
   }
 
   const onFilePicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,14 +36,15 @@ export default function SettingsPage() {
     e.target.value = '' // 同じファイルを再選択できるように
     if (!file) return
     try {
-      const rows = parseOwnedFile(await file.text())
-      // カタログに存在する写真IDだけ取り込む（member:setId の prefix で判定）
+      const parsed = parseBackup(await file.text())
+      // カタログ or 復元される手動セットに存在する写真IDだけ取り込む
       const setIds = new Set(catalog.sets.map((s) => `${catalog.member.id}:${s.id}`))
-      const filtered = rows.filter((r) => {
+      for (const u of parsed.userSets) setIds.add(`${catalog.member.id}:${u.id}`)
+      const filtered = parsed.owned.filter((r) => {
         const idx = r.photoId.lastIndexOf(':')
         return idx > 0 && setIds.has(r.photoId.slice(0, idx))
       })
-      setPending(filtered)
+      setPending({ owned: filtered, userSets: parsed.userSets })
     } catch (err) {
       showToast(`読み込み失敗: ${err instanceof Error ? err.message : String(err)}`)
     }
@@ -52,9 +52,8 @@ export default function SettingsPage() {
 
   const applyImport = async () => {
     if (!pending) return
-    await replaceAllOwned(pending)
-    await reloadOwned()
-    showToast(`${pending.length}枚を取り込みました`)
+    await restoreAll(pending.owned, pending.userSets)
+    showToast(`${pending.owned.length}枚を取り込みました`)
     setPending(null)
   }
 
@@ -64,7 +63,7 @@ export default function SettingsPage() {
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
         <Section title="データ">
           <Row label="カタログ" value={`${catalog.member.name}（v${catalog.catalogVersion}）`} />
-          <Row label="セット数" value={`${catalog.sets.length} 件`} />
+          <Row label="セット数" value={`${catalog.sets.length} 件${userSets.length > 0 ? ` ＋手動${userSets.length}` : ''}`} />
           <Row label="所有記録" value={`${owned.size} 枚`} />
         </Section>
 
@@ -116,7 +115,7 @@ export default function SettingsPage() {
 
       {pending && (
         <ConfirmSheet
-          message={`バックアップから ${pending.length}枚 を復元します。\n現在の所有記録（${owned.size}枚）は置き換わります。`}
+          message={`バックアップから 所有${pending.owned.length}枚${pending.userSets.length > 0 ? `・手動セット${pending.userSets.length}件` : ''} を復元します。\n現在の所有記録（${owned.size}枚）は置き換わります。`}
           confirmLabel="復元する"
           onConfirm={() => void applyImport()}
           onCancel={() => setPending(null)}
