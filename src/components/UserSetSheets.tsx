@@ -19,20 +19,21 @@ const RARITY_CHIP: Record<Rarity, { label: string; cls: string }> = {
   SR: { label: 'SR', cls: 'bg-amber-100 text-amber-600' },
 }
 
+// 注意: パネルは「画面上部」から出す。下から出すとiOSでキーボードに隠れて操作不能になる
 export function SheetShell({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40 animate-fade" onClick={onClose}>
+    <div className="fixed inset-0 z-40 flex items-start justify-center bg-black/40 animate-fade" onClick={onClose}>
       <div
-        className="w-full max-w-lg max-h-[88dvh] overflow-y-auto rounded-t-3xl bg-slate-50 shadow-xl animate-pop"
+        className="w-full max-w-lg max-h-[75dvh] overflow-y-auto rounded-b-3xl bg-slate-50 shadow-xl animate-pop"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-slate-50/95 backdrop-blur px-5 pt-4 pb-2 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-slate-50/95 backdrop-blur px-5 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-2 flex items-center justify-between z-10">
           <h2 className="font-bold text-[16px]">{title}</h2>
-          <button onClick={onClose} className="text-[13px] text-slate-400 p-1">
+          <button onClick={onClose} className="text-[14px] font-medium text-violet-600 p-1">
             閉じる
           </button>
         </div>
-        <div className="px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">{children}</div>
+        <div className="px-5 pb-6">{children}</div>
       </div>
     </div>
   )

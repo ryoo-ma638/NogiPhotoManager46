@@ -1,5 +1,6 @@
 import type { CatalogSet } from '../types'
 import type { Kind } from './kinds'
+import { lookupSRCL, parseSRCL } from './srcl'
 
 // 写真の印字（例: "2022.May-Ⅱ"）とカタログのセット名を照合する
 
@@ -37,25 +38,58 @@ export function parseDateCode(text: string): DateCode | null {
   return { year: Number(m[1]), month, suffix }
 }
 
-/** 印字テキストからセット候補を探す（日付コード完全一致 → 名前の部分一致） */
-export function matchByCaption(caption: string, sets: CatalogSet[]): CatalogSet[] {
+export interface CaptionMatch {
+  sets: CatalogSet[]
+  slot: string | null // SRCL品番から盤が特定できた場合（'A'等）
+  via: 'srcl' | 'date' | 'anniversary' | 'name' | null
+}
+
+/**
+ * 印字テキストからセット候補を探す。
+ * 優先順: SRCL品番(封入) → 日付コード → 周年記念 → 名前の部分一致
+ */
+export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderIds: Set<string>): CaptionMatch {
+  // 1) SRCL品番 → 封入セット＋盤(A/B/C/D)
+  const srcl = parseSRCL(caption)
+  if (srcl !== null) {
+    const hit = lookupSRCL(srcl)
+    if (hit) {
+      const found = sets.filter((s) => sealedBinderIds.has(s.binderId) && norm(s.name) === norm(hit.setName))
+      if (found.length > 0) return { sets: found, slot: hit.slot, via: 'srcl' }
+    }
+    // SRCLはあるが表に無い → 封入のどれか（手動選択）
+    return { sets: sets.filter((s) => sealedBinderIds.has(s.binderId)), slot: null, via: null }
+  }
+
+  // 2) 日付コード（年.月-ローマ数字）
   const code = parseDateCode(caption)
   if (code) {
     const hits = sets.filter((s) => {
       const c = parseDateCode(s.name)
       return c && c.year === code.year && c.month === code.month && c.suffix === code.suffix
     })
-    if (hits.length > 0) return hits
+    if (hits.length > 0) return { sets: hits, slot: null, via: 'date' }
   }
-  // フォールバック: 正規化した名前の部分一致
+
+  // 3) 周年記念（例: "12th Anniversary" → 12周年記念）
+  const am = /(\d{1,2})\s*(?:th|st|nd|rd)\s*anniversary/i.exec(caption.normalize('NFKC'))
+  if (am) {
+    const exact = sets.filter((s) => s.name === `${am[1]}周年記念`)
+    if (exact.length > 0) return { sets: exact, slot: null, via: 'anniversary' }
+    const partial = sets.filter((s) => s.name.includes(`${am[1]}周年記念`))
+    if (partial.length > 0) return { sets: partial, slot: null, via: 'anniversary' }
+  }
+
+  // 4) フォールバック: 正規化した名前の部分一致
   const t = norm(caption).replace(/[\s._-]+/g, '')
   if (t.length >= 3) {
-    return sets.filter((s) => {
+    const hits = sets.filter((s) => {
       const n = norm(s.name).replace(/[\s._-]+/g, '')
       return n.includes(t) || t.includes(n)
     })
+    if (hits.length > 0) return { sets: hits, slot: null, via: 'name' }
   }
-  return []
+  return { sets: [], slot: null, via: null }
 }
 
 /**

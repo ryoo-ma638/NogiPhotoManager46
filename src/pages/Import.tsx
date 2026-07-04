@@ -3,9 +3,9 @@ import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
 import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
-import { processImage } from '../lib/images'
-import { recognizeImage } from '../lib/recognize'
-import { matchByCaption, slotForPose } from '../lib/match'
+import { cropImage, processImage } from '../lib/images'
+import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
+import { matchCaption, slotForPose } from '../lib/match'
 import { kindOf } from '../lib/kinds'
 import type { CatalogSet } from '../types'
 
@@ -14,7 +14,7 @@ const MIN_CONFIDENCE = 0.6
 
 interface ImportItem {
   id: string
-  file: File
+  file: Blob // 保存する画像（バインダーページから切り出した場合は切り出し後）
   url: string // プレビュー用オブジェクトURL
   status: 'waiting' | 'analyzing' | 'done' | 'saved'
   caption: string | null
@@ -74,24 +74,71 @@ export default function ImportPage() {
     setBusy(false)
   }
 
+  /** 1枚の認識結果 → セット/枠の推定 */
+  const classify = (rec: RecognizedPhoto): Pick<ImportItem, 'caption' | 'pose' | 'setId' | 'slot' | 'auto'> => {
+    let setId: string | null = null
+    let slot: string | null = null
+    if (rec.caption) {
+      const m = matchCaption(rec.caption, allSets, sealedBinders)
+      if (m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
+        const hit = m.sets[0]!
+        setId = hit.id
+        const slots = photosOf(hit).map((p) => p.slot)
+        if (m.slot && slots.includes(m.slot)) {
+          slot = m.slot // SRCL品番から盤(A/B/C/D)が確定
+        } else if (rec.pose !== 'unknown' && rec.poseConfidence >= MIN_CONFIDENCE) {
+          slot = slotForPose(rec.pose, kindOf(hit, sealedBinders.has(hit.binderId)), slots)
+        }
+      }
+    }
+    return { caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot) }
+  }
+
   const analyze = async (it: ImportItem) => {
     update(it.id, { status: 'analyzing' })
     try {
       const { full } = await processImage(it.file)
-      const rec = await recognizeImage(full)
-      const hits = rec.caption ? matchByCaption(rec.caption, allSets) : []
-      let setId: string | null = null
-      let slot: string | null = null
-      if (hits.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
-        const hit = hits[0]!
-        setId = hit.id
-        if (rec.pose !== 'unknown' && rec.poseConfidence >= MIN_CONFIDENCE) {
-          const kind = kindOf(hit, sealedBinders.has(hit.binderId))
-          const slots = photosOf(hit).map((p) => p.slot)
-          slot = slotForPose(rec.pose, kind, slots)
+      const photos = await recognizeImage(full)
+
+      if (photos.length <= 1) {
+        // 1枚だけ（または検出なし）→ この項目をそのまま更新。検出枠があれば切り出してきれいに保存
+        const rec = photos[0]
+        let file = it.file
+        let url = it.url
+        if (rec?.box) {
+          const area = ((rec.box[2] - rec.box[0]) * (rec.box[3] - rec.box[1])) / 1_000_000
+          if (area < 0.85) {
+            file = await cropImage(full, rec.box)
+            URL.revokeObjectURL(it.url)
+            url = URL.createObjectURL(file)
+          }
         }
+        update(it.id, {
+          status: 'done',
+          file,
+          url,
+          error: rec ? null : '生写真を検出できませんでした',
+          ...(rec ? classify(rec) : {}),
+        })
+        return
       }
-      update(it.id, { status: 'done', caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot), error: null })
+
+      // 複数枚検出（バインダーページ等）→ 1枚ずつ切り出して項目を分割
+      const subItems: ImportItem[] = []
+      for (const rec of photos) {
+        if (!rec.box) continue
+        const cropped = await cropImage(full, rec.box)
+        subItems.push({
+          id: crypto.randomUUID(),
+          file: cropped,
+          url: URL.createObjectURL(cropped),
+          status: 'done',
+          error: null,
+          ...classify(rec),
+        })
+      }
+      URL.revokeObjectURL(it.url)
+      setItems((prev) => prev.flatMap((x) => (x.id === it.id ? subItems : [x])))
     } catch (e) {
       update(it.id, { status: 'done', error: e instanceof Error ? e.message : String(e) })
     }
@@ -284,7 +331,6 @@ function SetPicker({ allSets, onPick, onClose }: { allSets: CatalogSet[]; onPick
       <div className="relative mb-2">
         <SearchIcon className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input
-          autoFocus
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}

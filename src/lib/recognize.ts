@@ -1,6 +1,7 @@
 // クライアント側から解析APIを呼ぶ薄いラッパー
 
-export interface Recognition {
+export interface RecognizedPhoto {
+  box: [number, number, number, number] | null // [ymin,xmin,ymax,xmax] 0〜1000正規化
   caption: string | null
   captionConfidence: number
   pose: string // 'yori' | 'chu' | 'hiki' | 'suwari-yori' | 'suwari-hiki' | 'unknown'
@@ -19,7 +20,8 @@ function blobToBase64(blob: Blob): Promise<string> {
   })
 }
 
-export async function recognizeImage(blob: Blob): Promise<Recognition> {
+/** 1枚の画像を解析し、写っている生写真の一覧を返す */
+export async function recognizeImage(blob: Blob): Promise<RecognizedPhoto[]> {
   const image = await blobToBase64(blob)
   const res = await fetch('/api/analyze', {
     method: 'POST',
@@ -36,5 +38,6 @@ export async function recognizeImage(blob: Blob): Promise<Recognition> {
     const msg = (body as { error?: string })?.error ?? `解析に失敗しました (${res.status})`
     throw new Error(msg)
   }
-  return body as Recognition
+  const photos = (body as { photos?: RecognizedPhoto[] })?.photos
+  return Array.isArray(photos) ? photos : []
 }

@@ -34,6 +34,39 @@ export async function processImage(file: Blob): Promise<{ full: Blob; thumb: Blo
   }
 }
 
+/**
+ * 検出枠（[ymin,xmin,ymax,xmax] 0〜1000正規化）で画像を切り出す。
+ * 枠は少しだけ外側に広げる（検出の誤差で写真の端が切れないように）
+ */
+export async function cropImage(file: Blob, box: [number, number, number, number]): Promise<Blob> {
+  const url = URL.createObjectURL(file)
+  try {
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    const W = img.naturalWidth
+    const H = img.naturalHeight
+    const pad = 12 // /1000
+    const ymin = Math.max(0, (box[0] - pad) / 1000) * H
+    const xmin = Math.max(0, (box[1] - pad) / 1000) * W
+    const ymax = Math.min(1000, box[2] + pad) / 1000 * H
+    const xmax = Math.min(1000, box[3] + pad) / 1000 * W
+    const w = Math.max(1, Math.round(xmax - xmin))
+    const h = Math.max(1, Math.round(ymax - ymin))
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('canvasが使えません')
+    ctx.drawImage(img, xmin, ymin, w, h, 0, 0, w, h)
+    return await new Promise((resolve, reject) =>
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('切り出しに失敗しました'))), 'image/jpeg', 0.85),
+    )
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+}
+
 // オブジェクトURLのキャッシュ（スクロールのたびにIndexedDBを叩かない）
 const urlCache = new Map<string, string>()
 
