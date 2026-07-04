@@ -19,7 +19,7 @@ const RARITY_CHIP: Record<Rarity, { label: string; cls: string }> = {
   SR: { label: 'SR', cls: 'bg-amber-100 text-amber-600' },
 }
 
-function SheetShell({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
+export function SheetShell({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40 animate-fade" onClick={onClose}>
       <div

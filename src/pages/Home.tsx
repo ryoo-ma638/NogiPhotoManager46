@@ -1,5 +1,5 @@
 import { useAppData } from '../lib/appData'
-import { ChevronRight, SealCheck, SearchIcon } from '../components/icons'
+import { CameraIcon, ChevronRight, SealCheck, SearchIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
 
@@ -39,13 +39,22 @@ export default function Home() {
         title={`${catalog.member.name} 生写真`}
         subtitle="コレクション"
         right={
-          <button
-            onClick={() => navigate('/search')}
-            aria-label="検索"
-            className="p-2 -mr-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
-          >
-            <SearchIcon />
-          </button>
+          <span className="flex items-center">
+            <button
+              onClick={() => navigate('/import')}
+              aria-label="一括取込"
+              className="p-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
+            >
+              <CameraIcon className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => navigate('/search')}
+              aria-label="検索"
+              className="p-2 -mr-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
+            >
+              <SearchIcon />
+            </button>
+          </span>
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">

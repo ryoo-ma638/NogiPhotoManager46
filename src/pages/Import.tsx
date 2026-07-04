@@ -1,0 +1,306 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useAppData } from '../lib/appData'
+import { Header } from '../components/ui'
+import { SheetShell } from '../components/UserSetSheets'
+import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
+import { processImage } from '../lib/images'
+import { recognizeImage } from '../lib/recognize'
+import { matchByCaption, slotForPose } from '../lib/match'
+import { kindOf } from '../lib/kinds'
+import type { CatalogSet } from '../types'
+
+// 自動確定に必要な最低確信度
+const MIN_CONFIDENCE = 0.6
+
+interface ImportItem {
+  id: string
+  file: File
+  url: string // プレビュー用オブジェクトURL
+  status: 'waiting' | 'analyzing' | 'done' | 'saved'
+  caption: string | null
+  pose: string | null
+  setId: string | null
+  slot: string | null
+  auto: boolean // 自動判定できたか
+  error: string | null
+}
+
+export default function ImportPage() {
+  const { catalog, allSets, setById, photosOf, owned, toggle, imageIds, attachImage } = useAppData()
+  const [items, setItems] = useState<ImportItem[]>([])
+  const [busy, setBusy] = useState(false)
+  const [pickerFor, setPickerFor] = useState<{ itemId: string; mode: 'set' | 'slot' } | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
+
+  // ページを離れるときにプレビューURLを解放
+  useEffect(() => {
+    return () => {
+      for (const it of items) URL.revokeObjectURL(it.url)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const showToast = (msg: string) => {
+    setToast(msg)
+    window.setTimeout(() => setToast(null), 3000)
+  }
+
+  const update = (id: string, patch: Partial<ImportItem>) => {
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)))
+  }
+
+  const onFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    const list = [...files].slice(0, 30) // 一度に最大30枚
+    const newItems: ImportItem[] = list.map((f) => ({
+      id: crypto.randomUUID(),
+      file: f,
+      url: URL.createObjectURL(f),
+      status: 'waiting',
+      caption: null,
+      pose: null,
+      setId: null,
+      slot: null,
+      auto: false,
+      error: null,
+    }))
+    setItems((prev) => [...prev, ...newItems])
+    setBusy(true)
+    for (const it of newItems) {
+      await analyze(it)
+    }
+    setBusy(false)
+  }
+
+  const analyze = async (it: ImportItem) => {
+    update(it.id, { status: 'analyzing' })
+    try {
+      const { full } = await processImage(it.file)
+      const rec = await recognizeImage(full)
+      const hits = rec.caption ? matchByCaption(rec.caption, allSets) : []
+      let setId: string | null = null
+      let slot: string | null = null
+      if (hits.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
+        const hit = hits[0]!
+        setId = hit.id
+        if (rec.pose !== 'unknown' && rec.poseConfidence >= MIN_CONFIDENCE) {
+          const kind = kindOf(hit, sealedBinders.has(hit.binderId))
+          const slots = photosOf(hit).map((p) => p.slot)
+          slot = slotForPose(rec.pose, kind, slots)
+        }
+      }
+      update(it.id, { status: 'done', caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot), error: null })
+    } catch (e) {
+      update(it.id, { status: 'done', error: e instanceof Error ? e.message : String(e) })
+    }
+  }
+
+  const pending = items.filter((it) => it.status !== 'saved')
+  const ready = pending.filter((it) => it.setId && it.slot)
+  const apiMissing = pending.some((it) => it.error?.includes('未設定'))
+
+  const saveAll = async () => {
+    setBusy(true)
+    let n = 0
+    for (const it of ready) {
+      const photoId = `${catalog.member.id}:${it.setId}:${it.slot}`
+      try {
+        await attachImage(photoId, it.file)
+        if (!owned.has(photoId)) toggle(photoId)
+        update(it.id, { status: 'saved' })
+        n++
+      } catch (e) {
+        update(it.id, { error: e instanceof Error ? e.message : String(e) })
+      }
+    }
+    setBusy(false)
+    showToast(`${n}枚を保存しました（画像＋所有○）`)
+  }
+
+  const pickerItem = pickerFor ? items.find((i) => i.id === pickerFor.itemId) : null
+  const pickerSet = pickerItem?.setId ? setById.get(pickerItem.setId) : null
+
+  return (
+    <>
+      <Header title="一括取込" subtitle="写真から自動判定して振り分け" back />
+      <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
+        {apiMissing && (
+          <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">
+            自動判定は準備中です（認識APIキー未設定）。今は手動で「セット」と「枠」を選んで保存できます。
+          </div>
+        )}
+
+        <button
+          onClick={() => fileRef.current?.click()}
+          disabled={busy}
+          className="w-full h-24 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50/60 text-violet-600 font-bold flex flex-col items-center justify-center gap-1 disabled:opacity-50 active:scale-[0.99] transition"
+        >
+          <CameraIcon className="w-6 h-6" />
+          写真を選ぶ（複数OK・最大30枚）
+        </button>
+        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => void onFiles(e.target.files)} />
+
+        {pending.length > 0 && (
+          <p className="text-[12px] text-slate-400">
+            {pending.length}枚中 自動判定 {pending.filter((i) => i.auto).length} ／ 保存可能 {ready.length}
+            {busy && ' ・解析中…'}
+          </p>
+        )}
+
+        {pending.map((it) => {
+          const set = it.setId ? setById.get(it.setId) : null
+          const photo = set && it.slot ? photosOf(set).find((p) => p.slot === it.slot) : null
+          const photoId = it.setId && it.slot ? `${catalog.member.id}:${it.setId}:${it.slot}` : null
+          const overwrite = photoId ? imageIds.has(photoId) : false
+          return (
+            <div key={it.id} className="rounded-2xl bg-white border border-slate-100 shadow-sm p-3 flex gap-3">
+              <img src={it.url} alt="" className="w-16 h-[91px] shrink-0 rounded-lg object-cover bg-slate-100" />
+              <div className="min-w-0 flex-1 space-y-1.5">
+                {/* 状態 */}
+                <div className="flex items-center gap-1.5 text-[11px]">
+                  {it.status === 'analyzing' && <span className="text-violet-500 animate-pulse">解析中…</span>}
+                  {it.status === 'done' && it.auto && (
+                    <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
+                      <CheckCircle className="w-3.5 h-3.5" filled /> 自動判定
+                    </span>
+                  )}
+                  {it.status === 'done' && !it.auto && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
+                  {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
+                  {it.caption && <span className="text-slate-400 truncate">印字: {it.caption}</span>}
+                </div>
+                {/* セット選択 */}
+                <button
+                  onClick={() => setPickerFor({ itemId: it.id, mode: 'set' })}
+                  className={`w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border ${
+                    set ? 'bg-violet-50 border-violet-200 text-violet-700' : 'bg-slate-50 border-slate-200 text-slate-400'
+                  }`}
+                >
+                  {set ? set.name : 'セットを選ぶ'}
+                </button>
+                {/* 枠選択 */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => it.setId && setPickerFor({ itemId: it.id, mode: 'slot' })}
+                    disabled={!it.setId}
+                    className={`flex-1 h-9 rounded-lg px-2.5 text-left text-[13px] font-medium border disabled:opacity-40 ${
+                      photo ? 'bg-violet-50 border-violet-200 text-violet-700' : 'bg-slate-50 border-slate-200 text-slate-400'
+                    }`}
+                  >
+                    {photo ? `枠: ${photo.label}` : '枠を選ぶ'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      URL.revokeObjectURL(it.url)
+                      setItems((prev) => prev.filter((x) => x.id !== it.id))
+                    }}
+                    aria-label="この写真を取り込まない"
+                    className="shrink-0 w-9 h-9 rounded-lg bg-red-50 text-red-500 font-bold"
+                  >
+                    −
+                  </button>
+                </div>
+                {overwrite && <p className="text-[11px] text-amber-600">※この枠の既存画像を上書きします</p>}
+              </div>
+            </div>
+          )
+        })}
+
+        {items.some((i) => i.status === 'saved') && (
+          <p className="text-[12px] text-emerald-600 font-medium">✓ 保存済み {items.filter((i) => i.status === 'saved').length}枚</p>
+        )}
+      </div>
+
+      {/* 保存バー */}
+      {ready.length > 0 && (
+        <div className="fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-10">
+          <div className="mx-auto max-w-lg px-4">
+            <button
+              onClick={() => void saveAll()}
+              disabled={busy}
+              className="w-full h-12 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 disabled:opacity-50 active:scale-[0.98] transition"
+            >
+              {ready.length}枚を保存（画像＋所有○）
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* セット/枠ピッカー */}
+      {pickerFor && pickerItem && pickerFor.mode === 'set' && (
+        <SetPicker
+          allSets={allSets}
+          onPick={(s) => {
+            update(pickerFor.itemId, { setId: s.id, slot: null, auto: false })
+            setPickerFor({ itemId: pickerFor.itemId, mode: 'slot' })
+          }}
+          onClose={() => setPickerFor(null)}
+        />
+      )}
+      {pickerFor && pickerItem && pickerFor.mode === 'slot' && pickerSet && (
+        <SheetShell title={`枠を選ぶ — ${pickerSet.name}`} onClose={() => setPickerFor(null)}>
+          <div className="grid grid-cols-3 gap-2 pb-2">
+            {photosOf(pickerSet).map((p) => {
+              const has = imageIds.has(p.id)
+              const own = owned.has(p.id)
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    update(pickerFor.itemId, { slot: p.slot, auto: false })
+                    setPickerFor(null)
+                  }}
+                  className="h-14 rounded-xl border border-slate-200 bg-white text-[13px] font-bold text-slate-700 flex flex-col items-center justify-center gap-0.5 active:bg-violet-50"
+                >
+                  {p.label}
+                  <span className="text-[10px] font-normal text-slate-400">
+                    {own ? '所有' : '未所有'}
+                    {has ? '・画像あり' : ''}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </SheetShell>
+      )}
+
+      {toast && (
+        <div className="fixed inset-x-0 bottom-[calc(8rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 pointer-events-none">
+          <div className="animate-pop rounded-full bg-slate-900/90 text-white text-[13px] font-medium px-4 py-2 shadow-lg">{toast}</div>
+        </div>
+      )}
+    </>
+  )
+}
+
+function SetPicker({ allSets, onPick, onClose }: { allSets: CatalogSet[]; onPick: (s: CatalogSet) => void; onClose: () => void }) {
+  const [q, setQ] = useState('')
+  const norm = (s: string) => s.normalize('NFKC').toLowerCase()
+  const t = norm(q.trim())
+  const results = t ? allSets.filter((s) => norm(s.name).includes(t)).slice(0, 30) : []
+  return (
+    <SheetShell title="セットを選ぶ" onClose={onClose}>
+      <div className="relative mb-2">
+        <SearchIcon className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <input
+          autoFocus
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="セット名で検索"
+          className="w-full h-11 rounded-xl bg-white border border-slate-200 pl-10 pr-3 text-[15px] outline-none focus:border-violet-400"
+        />
+      </div>
+      <div className="divide-y divide-slate-100 pb-2">
+        {results.map((s) => (
+          <button key={s.id} onClick={() => onPick(s)} className="w-full text-left px-1 py-2.5 text-[14px] text-slate-700 active:bg-slate-50">
+            {s.name}
+            <span className="block text-[11px] text-slate-400">{s.year ? `${s.year}年` : '封入'}</span>
+          </button>
+        ))}
+        {t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">見つかりません</p>}
+      </div>
+    </SheetShell>
+  )
+}
