@@ -3,7 +3,7 @@ import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
 import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
-import { cropImage, processImage } from '../lib/images'
+import { cropImage, ensurePortrait, processImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { matchCaption, slotForPose } from '../lib/match'
 import { kindOf } from '../lib/kinds'
@@ -22,6 +22,7 @@ interface ImportItem {
   setId: string | null
   slot: string | null
   auto: boolean // 自動判定できたか
+  candidates: string[] | null // セット候補（複数該当時。「セットを選ぶ」の初期リスト）
   error: string | null
 }
 
@@ -64,6 +65,7 @@ export default function ImportPage() {
       setId: null,
       slot: null,
       auto: false,
+      candidates: null,
       error: null,
     }))
     setItems((prev) => [...prev, ...newItems])
@@ -75,23 +77,28 @@ export default function ImportPage() {
   }
 
   /** 1枚の認識結果 → セット/枠の推定 */
-  const classify = (rec: RecognizedPhoto): Pick<ImportItem, 'caption' | 'pose' | 'setId' | 'slot' | 'auto'> => {
+  const classify = (rec: RecognizedPhoto): Pick<ImportItem, 'caption' | 'pose' | 'setId' | 'slot' | 'auto' | 'candidates'> => {
     let setId: string | null = null
     let slot: string | null = null
+    let candidates: string[] | null = null
     if (rec.caption) {
       const m = matchCaption(rec.caption, allSets, sealedBinders)
       if (m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
         const hit = m.sets[0]!
         setId = hit.id
-        const slots = photosOf(hit).map((p) => p.slot)
-        if (m.slot && slots.includes(m.slot)) {
-          slot = m.slot // SRCL品番から盤(A/B/C/D)が確定
+        const photos = photosOf(hit)
+        // ※封入のSRCL品番→盤(A/B/C/D)の自動割当は行わない:
+        //   印字の品番が盤共通のシングルがあり誤登録の危険があるため（m.slotは使わない）
+        if (photos.length === 1) {
+          slot = photos[0]!.slot // 1種セット（配信限定等）は枠も確定
         } else if (rec.pose !== 'unknown' && rec.poseConfidence >= MIN_CONFIDENCE) {
-          slot = slotForPose(rec.pose, kindOf(hit, sealedBinders.has(hit.binderId)), slots)
+          slot = slotForPose(rec.pose, kindOf(hit, sealedBinders.has(hit.binderId)), photos.map((p) => p.slot))
         }
+      } else if (m.sets.length > 1 && m.sets.length <= 20) {
+        candidates = m.sets.map((s) => s.id) // 絞り込めた候補を「セットを選ぶ」の初期表示に
       }
     }
-    return { caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot) }
+    return { caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot), candidates }
   }
 
   const analyze = async (it: ImportItem) => {
@@ -108,17 +115,19 @@ export default function ImportPage() {
       }
 
       if (photos.length <= 1) {
-        // 1枚だけ（または検出なし）→ この項目をそのまま更新。検出枠があれば切り出してきれいに保存
+        // 1枚だけ（または検出なし）→ この項目をそのまま更新。
+        // 検出枠があれば必ず切り出す（余白除去＋横撮りでも中の写真が縦なら縦になる）
         const rec = photos[0]
-        let file = it.file
+        let file: Blob = it.file
         let url = it.url
         if (rec?.box) {
-          const area = ((rec.box[2] - rec.box[0]) * (rec.box[3] - rec.box[1])) / 1_000_000
-          if (area < 0.85) {
-            file = await cropImage(full, rec.box)
-            URL.revokeObjectURL(it.url)
-            url = URL.createObjectURL(file)
-          }
+          file = await cropImage(full, rec.box)
+        } else {
+          file = await ensurePortrait(it.file) // 枠なし＝画像全体。横長なら縦に回転
+        }
+        if (file !== it.file) {
+          URL.revokeObjectURL(it.url)
+          url = URL.createObjectURL(file)
         }
         update(it.id, {
           status: 'done',
@@ -222,7 +231,7 @@ export default function ImportPage() {
                   )}
                   {it.status === 'done' && !it.auto && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
-                  {it.caption && <span className="text-slate-400 truncate">印字: {it.caption}</span>}
+                  {it.caption && <span className="text-slate-400 line-clamp-2 break-all">印字: {it.caption}</span>}
                 </div>
                 {/* セット選択 */}
                 <button
@@ -285,6 +294,7 @@ export default function ImportPage() {
       {pickerFor && pickerItem && pickerFor.mode === 'set' && (
         <SetPicker
           allSets={allSets}
+          candidates={(pickerItem.candidates ?? []).map((id) => setById.get(id)).filter((s): s is CatalogSet => !!s)}
           onPick={(s) => {
             update(pickerFor.itemId, { setId: s.id, slot: null, auto: false })
             setPickerFor({ itemId: pickerFor.itemId, mode: 'slot' })
@@ -328,22 +338,37 @@ export default function ImportPage() {
   )
 }
 
-function SetPicker({ allSets, onPick, onClose }: { allSets: CatalogSet[]; onPick: (s: CatalogSet) => void; onClose: () => void }) {
+function SetPicker({
+  allSets,
+  candidates,
+  onPick,
+  onClose,
+}: {
+  allSets: CatalogSet[]
+  candidates: CatalogSet[]
+  onPick: (s: CatalogSet) => void
+  onClose: () => void
+}) {
   const [q, setQ] = useState('')
   const norm = (s: string) => s.normalize('NFKC').toLowerCase()
   const t = norm(q.trim())
-  const results = t ? allSets.filter((s) => norm(s.name).includes(t)).slice(0, 30) : []
+  // 入力が無いときは自動判定の候補を表示（複数該当だった場合、検索せずに選べる）
+  const results = t ? allSets.filter((s) => norm(s.name).includes(t)).slice(0, 30) : candidates
   return (
     <SheetShell title="セットを選ぶ" onClose={onClose}>
-      <div className="relative mb-2">
-        <SearchIcon className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="セット名で検索"
-          className="w-full h-11 rounded-xl bg-white border border-slate-200 pl-10 pr-3 text-[15px] outline-none focus:border-violet-400"
-        />
+      {/* 入力欄は上部に固定し、候補はその下に出す（重ならない） */}
+      <div className="sticky top-[52px] z-10 bg-slate-50 pb-2 -mt-1 pt-1">
+        <div className="relative">
+          <SearchIcon className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="セット名で検索"
+            className="w-full h-11 rounded-xl bg-white border border-slate-200 pl-10 pr-3 text-[15px] outline-none focus:border-violet-400"
+          />
+        </div>
+        {!t && candidates.length > 0 && <p className="pt-1.5 text-[11px] text-slate-400">印字から絞り込んだ候補 {candidates.length}件</p>}
       </div>
       <div className="divide-y divide-slate-100 pb-2">
         {results.map((s) => (
@@ -353,6 +378,7 @@ function SetPicker({ allSets, onPick, onClose }: { allSets: CatalogSet[]; onPick
           </button>
         ))}
         {t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">見つかりません</p>}
+        {!t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">セット名を入力して検索</p>}
       </div>
     </SheetShell>
   )

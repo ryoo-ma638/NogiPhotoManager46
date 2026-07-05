@@ -24,7 +24,7 @@ export function SheetShell({ title, children, onClose }: { title: string; childr
   return (
     <div className="fixed inset-0 z-40 flex items-start justify-center bg-black/40 animate-fade" onClick={onClose}>
       <div
-        className="w-full max-w-lg max-h-[75dvh] overflow-y-auto rounded-b-3xl bg-slate-50 shadow-xl animate-pop"
+        className="w-full max-w-lg max-h-[62dvh] overflow-y-auto rounded-b-3xl bg-slate-50 shadow-xl animate-pop"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-slate-50/95 backdrop-blur px-5 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-2 flex items-center justify-between z-10">

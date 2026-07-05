@@ -80,7 +80,13 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
     if (partial.length > 0) return { sets: partial, slot: null, via: 'anniversary' }
   }
 
-  // 4) フォールバック: 正規化した名前の部分一致
+  // 4) 配信限定・MV衣装系の印字 → 「その他」バインダーの候補
+  if (/配信|MV衣装/.test(caption.normalize('NFKC'))) {
+    const others = sets.filter((s) => s.binderId === 'b-other')
+    if (others.length > 0) return { sets: others, slot: null, via: 'name' }
+  }
+
+  // 5) フォールバック: 正規化した名前の部分一致
   const t = norm(caption).replace(/[\s._-]+/g, '')
   if (t.length >= 3) {
     const hits = sets.filter((s) => {

@@ -58,7 +58,7 @@ MV5_LABELS = ["①", "②", "③", "④", "⑤"]
 
 # 既存セットのバインダー移動（※行の位置=IDなので原文の行は絶対に動かさない。ここで移す）
 BINDER_OVERRIDES = {
-    "乃木坂配信中限定！MV衣装生写真": "b-other",  # 配信限定系は「その他」へ
+    "乃木坂配信中限定！MV衣装生写真（Same numbers）": "b-other",  # 配信限定系は「その他」へ
 }
 
 def parse_note_to_slots(note):

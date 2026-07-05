@@ -59,8 +59,35 @@ export async function cropImage(file: Blob, box: [number, number, number, number
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('canvasが使えません')
     ctx.drawImage(img, xmin, ymin, w, h, 0, 0, w, h)
-    return await new Promise((resolve, reject) =>
+    const blob: Blob = await new Promise((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('切り出しに失敗しました'))), 'image/jpeg', 0.85),
+    )
+    return await ensurePortrait(blob) // 生写真は縦なので、横長になったら回転
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+}
+
+/** 横長の画像を時計回りに90°回転して縦にする（縦ならそのまま返す） */
+export async function ensurePortrait(file: Blob): Promise<Blob> {
+  const url = URL.createObjectURL(file)
+  try {
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    const W = img.naturalWidth
+    const H = img.naturalHeight
+    if (H >= W) return file // すでに縦（または正方形）
+    const canvas = document.createElement('canvas')
+    canvas.width = H
+    canvas.height = W
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return file
+    ctx.translate(H, 0)
+    ctx.rotate(Math.PI / 2)
+    ctx.drawImage(img, 0, 0)
+    return await new Promise((resolve, reject) =>
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('回転に失敗しました'))), 'image/jpeg', 0.88),
     )
   } finally {
     URL.revokeObjectURL(url)
@@ -94,7 +121,8 @@ export async function imageURL(photoId: string, kind: 'thumb' | 'full'): Promise
 }
 
 export async function attachImageFile(photoId: string, file: Blob): Promise<void> {
-  const { full, thumb } = await processImage(file)
+  const upright = await ensurePortrait(file) // 横撮りは縦に直してから保存
+  const { full, thumb } = await processImage(upright)
   await putImage({ photoId, full, thumb, updatedAt: new Date().toISOString() })
   invalidateImageURLs(photoId)
 }
