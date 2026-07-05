@@ -9,7 +9,7 @@ const TEMPLATE_OPTIONS: { value: Template; label: string }[] = [
   { value: 'rareSet8', label: '8種（＋R/SR①〜④）' },
   { value: 'event6', label: '6種（①〜⑥）' },
   { value: 'four4', label: '4種（A/B/C/D）' },
-  { value: 'single1', label: '1種（封入など）' },
+  { value: 'single1', label: '1種（種類なし・その他向け）' },
 ]
 
 const RARITY_CYCLE: Rarity[] = ['normal', 'R', 'SR', 'other']
@@ -59,7 +59,7 @@ export function AddSetSheet({
 }) {
   const [name, setName] = useState('')
   const [year, setYear] = useState<number | null>(binder.sealed ? null : (years[years.length - 1] ?? null))
-  const [template, setTemplate] = useState<Template>(binder.sealed ? 'four4' : 'standard3')
+  const [template, setTemplate] = useState<Template>(binder.id === 'b-other' ? 'single1' : binder.sealed ? 'four4' : 'standard3')
   const [note, setNote] = useState('')
 
   const preview = TEMPLATES[template].map((s) => s.label).join('・')
@@ -73,7 +73,8 @@ export function AddSetSheet({
       template,
       note: note.trim() || null,
       sortIndex: defaultSortIndex(year),
-      photos: TEMPLATES[template].map((s) => ({ slot: s.slot, label: s.label, rarity: s.rarity })),
+      // 「その他」バインダーの写真はレアリティ「その他」
+      photos: TEMPLATES[template].map((s) => ({ slot: s.slot, label: s.label, rarity: binder.id === 'b-other' ? 'other' : s.rarity })),
       createdAt: new Date().toISOString(),
     }
     onSave(row)

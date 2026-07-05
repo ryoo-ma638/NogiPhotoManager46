@@ -26,11 +26,16 @@ interface ImportItem {
   error: string | null
 }
 
+// 「その他」の枠ラベル（種類なし＝連番）
+const CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
+const circled = (n: number) => CIRCLED[n - 1] ?? `${n}`
+
 export default function ImportPage() {
-  const { catalog, allSets, setById, photosOf, owned, toggle, imageIds, attachImage } = useAppData()
+  const { catalog, allSets, setById, userSetById, photosOf, owned, toggle, imageIds, attachImage, addUserSet, updateUserSet } = useAppData()
   const [items, setItems] = useState<ImportItem[]>([])
   const [busy, setBusy] = useState(false)
   const [pickerFor, setPickerFor] = useState<{ itemId: string; mode: 'set' | 'slot' } | null>(null)
+  const [otherFor, setOtherFor] = useState<string | null>(null) // 「その他として登録」対象のitemId
   const [preview, setPreview] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -191,6 +196,46 @@ export default function ImportPage() {
   const pickerItem = pickerFor ? items.find((i) => i.id === pickerFor.itemId) : null
   const pickerSet = pickerItem?.setId ? setById.get(pickerItem.setId) : null
 
+  // ---- 「その他」への登録（判別不能な写真の受け皿） ----
+  const otherSets = allSets.filter((s) => s.binderId === 'b-other').sort((a, b) => a.sortIndex - b.sortIndex)
+
+  /** 既存のその他セットに割り当て（手動セットなら「種類なし」の枠を1つ追加して入れる） */
+  const assignToOther = async (itemId: string, s: CatalogSet) => {
+    if (s.user) {
+      const u = userSetById.get(s.id)
+      if (!u) return
+      const used = new Set(u.photos.map((p) => p.slot))
+      let n = 1
+      while (used.has(`c${n}`)) n++
+      const slot = `c${n}`
+      await updateUserSet({ ...u, photos: [...u.photos, { slot, label: circled(u.photos.length + 1), rarity: 'other' }] }, [])
+      update(itemId, { setId: s.id, slot, auto: false })
+    } else {
+      // カタログ由来（枠固定）は最初の枠に割り当て
+      const ph = photosOf(s)
+      update(itemId, { setId: s.id, slot: ph[0]?.slot ?? null, auto: false })
+    }
+    setOtherFor(null)
+  }
+
+  /** 新しいその他セットを作って割り当て（種類なし＝①の1枠から始まり、追加のたびに枠が増える） */
+  const createOtherSet = async (itemId: string, name: string) => {
+    const row = {
+      id: `user-${crypto.randomUUID().slice(0, 8)}`,
+      binderId: 'b-other',
+      year: null,
+      name: name.trim(),
+      template: 'single1' as const,
+      note: null,
+      sortIndex: (otherSets.length > 0 ? Math.max(...otherSets.map((s) => s.sortIndex)) : 0) + 10,
+      photos: [{ slot: 'p1', label: '①', rarity: 'other' as const }],
+      createdAt: new Date().toISOString(),
+    }
+    await addUserSet(row)
+    update(itemId, { setId: row.id, slot: 'p1', auto: false })
+    setOtherFor(null)
+  }
+
   return (
     <>
       <Header title="一括取込" subtitle="写真から自動判定して振り分け" back />
@@ -273,6 +318,15 @@ export default function ImportPage() {
                   </button>
                 </div>
                 {overwrite && <p className="text-[11px] text-amber-600">※この枠の既存画像を上書きします</p>}
+                {/* 判別できない写真の受け皿: ミニ生写真・スタ誕など年度別/封入でないもの */}
+                {it.status === 'done' && !it.setId && (
+                  <button
+                    onClick={() => setOtherFor(it.id)}
+                    className="w-full h-8 rounded-lg text-[12px] font-medium bg-fuchsia-50 border border-fuchsia-200 text-fuchsia-600 active:bg-fuchsia-100 transition-colors"
+                  >
+                    「その他」として登録（ミニ生写真・スタ誕など）
+                  </button>
+                )}
               </div>
             </div>
           )
@@ -344,6 +398,16 @@ export default function ImportPage() {
         </SheetShell>
       )}
 
+      {otherFor && (
+        <OtherRegisterSheet
+          otherSets={otherSets}
+          photosOf={photosOf}
+          onPickExisting={(s) => void assignToOther(otherFor, s)}
+          onCreate={(name) => void createOtherSet(otherFor, name)}
+          onClose={() => setOtherFor(null)}
+        />
+      )}
+
       {preview && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade" onClick={() => setPreview(null)}>
           <img src={preview} alt="" className="max-h-[92dvh] max-w-[94vw] object-contain rounded-lg" />
@@ -357,6 +421,67 @@ export default function ImportPage() {
         </div>
       )}
     </>
+  )
+}
+
+/** 「その他」への登録シート: 既存のその他セットに追加 or 新規作成（種類なし＝連番枠） */
+function OtherRegisterSheet({
+  otherSets,
+  photosOf,
+  onPickExisting,
+  onCreate,
+  onClose,
+}: {
+  otherSets: CatalogSet[]
+  photosOf: (s: CatalogSet) => { id: string }[]
+  onPickExisting: (s: CatalogSet) => void
+  onCreate: (name: string) => void
+  onClose: () => void
+}) {
+  const [name, setName] = useState('')
+  return (
+    <SheetShell title="「その他」として登録" onClose={onClose}>
+      <div className="space-y-4 pb-2">
+        <p className="text-[12px] text-slate-400 leading-relaxed">
+          年度別・封入以外の写真（ライブBOXのミニ生写真、乃木坂スター誕生！など）は「その他」に入れます。ポーズの区別なし（①②③…の連番）で登録されます。
+        </p>
+
+        {otherSets.length > 0 && (
+          <div>
+            <p className="text-[13px] font-bold text-slate-500 pb-1.5">既存のセットに追加</p>
+            <div className="rounded-xl bg-white border border-slate-200 divide-y divide-slate-100 overflow-hidden">
+              {otherSets.map((s) => (
+                <button key={s.id} onClick={() => onPickExisting(s)} className="w-full text-left px-3 py-2.5 text-[14px] text-slate-700 active:bg-fuchsia-50">
+                  {s.name}
+                  <span className="block text-[11px] text-slate-400">
+                    現在{photosOf(s).length}枚{s.user ? '・枠を1つ増やして追加します' : ''}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <p className="text-[13px] font-bold text-slate-500 pb-1.5">新しいセットを作る</p>
+          <div className="flex gap-2">
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="例: 乃木坂スター誕生！"
+              className="flex-1 h-11 rounded-xl bg-white border border-slate-200 px-3 text-[15px] outline-none focus:border-fuchsia-400"
+            />
+            <button
+              disabled={!name.trim()}
+              onClick={() => onCreate(name)}
+              className="shrink-0 h-11 px-4 rounded-xl bg-fuchsia-500 text-white font-bold text-[14px] disabled:opacity-40"
+            >
+              作成
+            </button>
+          </div>
+        </div>
+      </div>
+    </SheetShell>
   )
 }
 
