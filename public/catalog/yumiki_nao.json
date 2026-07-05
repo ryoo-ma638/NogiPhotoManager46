@@ -35,6 +35,12 @@
       "name": "弓木封入",
       "sortIndex": 4,
       "sealed": true
+    },
+    {
+      "id": "b-other",
+      "name": "その他",
+      "sortIndex": 5,
+      "sealed": true
     }
   ],
   "sets": [
@@ -4508,7 +4514,7 @@
     },
     {
       "id": "s0336",
-      "binderId": "b2024-2025",
+      "binderId": "b-other",
       "year": 2025,
       "name": "乃木坂配信中限定！MV衣装生写真",
       "template": "single1",
@@ -5342,6 +5348,17 @@
       "template": "four4",
       "kind": "sealed",
       "sortIndex": 3990,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0400",
+      "binderId": "b-other",
+      "year": null,
+      "name": "乃木坂配信中限定！MV衣装生写真（Same numbers）",
+      "template": "single1",
+      "kind": "mv",
+      "sortIndex": 4000,
       "note": null,
       "pageBreakAfter": false
     }

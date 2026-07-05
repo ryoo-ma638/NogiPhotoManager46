@@ -22,7 +22,7 @@ TEMPLATES = {
     "rareSet8": STD3 + [("r1", "R", "R"), ("sr1", "SR①", "SR"), ("sr2", "SR②", "SR"), ("sr3", "SR③", "SR"), ("sr4", "SR④", "SR")],
     "event6": [(f"p{i}", "①②③④⑤⑥"[i - 1], "normal") for i in range(1, 7)],
     "four4": [("A", "A", "normal"), ("B", "B", "normal"), ("C", "C", "normal"), ("D", "D", "normal")],
-    "single1": [("p1", "封入", "normal")],
+    "single1": [("p1", "①", "normal")],
 }
 # 種類数 → テンプレ（8はrareフラグで判定）。4種は封入(A/B/C/D)
 COUNT_TO_TEMPLATE = {3: "standard3", 4: "four4", 5: "five5", 6: "event6", 1: "single1"}
@@ -56,6 +56,11 @@ def detect_kind(name, template, sealed):
 # MV系5種のポーズ表示名（slotは変えない＝所有IDを壊さない）
 MV5_LABELS = ["①", "②", "③", "④", "⑤"]
 
+# 既存セットのバインダー移動（※行の位置=IDなので原文の行は絶対に動かさない。ここで移す）
+BINDER_OVERRIDES = {
+    "乃木坂配信中限定！MV衣装生写真": "b-other",  # 配信限定系は「その他」へ
+}
+
 def parse_note_to_slots(note):
     """注記 → (欠けslot集合, 未解釈の残り文字列)。残りが空なら綺麗に解釈できた。"""
     slots, rest = [], note
@@ -84,7 +89,8 @@ def main():
             _, bid, bname = line.split(" ", 2)
             cur_binder = bid
             cur_year = None  # バインダーが変わったら年をリセット（封入は年なし）
-            binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": "封入" in bname})
+            # sealed=年層なしのフラット表示（封入・その他）
+            binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": ("封入" in bname) or ("その他" in bname)})
             continue
         if line.startswith("YEAR"):
             cur_year = int(line.split(" ", 1)[1])
@@ -132,10 +138,12 @@ def main():
         seq += 1
         set_id = f"s{seq:04d}"
         slots = TEMPLATES[template]
-        is_sealed = any(b["id"] == cur_binder and b.get("sealed") for b in binders)
-        kind = detect_kind(name, template, is_sealed)
+        binder_id = BINDER_OVERRIDES.get(name, cur_binder)
+        is_flat = any(b["id"] == binder_id and b.get("sealed") for b in binders)
+        # kind=sealed は本当の封入だけ（「その他」の配信限定MV等は名前からmv等に）
+        kind = detect_kind(name, template, binder_id == "b-sealed")
         entry = {
-            "id": set_id, "binderId": cur_binder, "year": cur_year,
+            "id": set_id, "binderId": binder_id, "year": None if is_flat else cur_year,
             "name": name, "template": template, "kind": kind,
             "sortIndex": seq * 10, "note": notes, "pageBreakAfter": False,
         }

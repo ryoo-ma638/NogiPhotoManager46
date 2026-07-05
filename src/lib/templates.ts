@@ -30,5 +30,5 @@ export const TEMPLATES: Record<Template, SlotDef[]> = {
     { slot: 'sr4', label: 'SR④', rarity: 'SR' },
   ],
   event6: ['①', '②', '③', '④', '⑤', '⑥'].map((l, i) => ({ slot: `p${i + 1}`, label: l, rarity: 'normal' as Rarity })),
-  single1: [{ slot: 'p1', label: '封入', rarity: 'normal' }],
+  single1: [{ slot: 'p1', label: '①', rarity: 'normal' }],
 }

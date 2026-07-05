@@ -98,7 +98,14 @@ export default function ImportPage() {
     update(it.id, { status: 'analyzing' })
     try {
       const { full } = await processImage(it.file)
-      const photos = await recognizeImage(full)
+      let photos: RecognizedPhoto[]
+      try {
+        photos = await recognizeImage(full)
+      } catch {
+        // 一時的な失敗（時間切れ・混雑等）は5秒待って1回だけ再試行
+        await new Promise((r) => setTimeout(r, 5000))
+        photos = await recognizeImage(full)
+      }
 
       if (photos.length <= 1) {
         // 1枚だけ（または検出なし）→ この項目をそのまま更新。検出枠があれば切り出してきれいに保存
@@ -342,7 +349,7 @@ function SetPicker({ allSets, onPick, onClose }: { allSets: CatalogSet[]; onPick
         {results.map((s) => (
           <button key={s.id} onClick={() => onPick(s)} className="w-full text-left px-1 py-2.5 text-[14px] text-slate-700 active:bg-slate-50">
             {s.name}
-            <span className="block text-[11px] text-slate-400">{s.year ? `${s.year}年` : '封入'}</span>
+            <span className="block text-[11px] text-slate-400">{s.year ? `${s.year}年` : ''}</span>
           </button>
         ))}
         {t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">見つかりません</p>}

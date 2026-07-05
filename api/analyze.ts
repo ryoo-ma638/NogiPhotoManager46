@@ -55,7 +55,12 @@ export default async function handler(req: any, res: any) {
           ],
         },
       ],
-      generationConfig: { response_mime_type: 'application/json', temperature: 0 },
+      generationConfig: {
+        response_mime_type: 'application/json',
+        temperature: 0,
+        // 2.5系の「考える」モードを止めて高速化（10秒台→数秒。制限時間対策）
+        thinkingConfig: { thinkingBudget: 0 },
+      },
     }),
   })
 

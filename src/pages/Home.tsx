@@ -7,7 +7,7 @@ import { navigate, useScrollRestore } from '../lib/router'
 function yearChip(binderId: string): string {
   const m = binderId.match(/b(\d{4})-(\d{4})/)
   if (m) return `'${m[1]!.slice(2)}–'${m[2]!.slice(2)}`
-  return '封入'
+  return binderId === 'b-other' ? '他' : '封入'
 }
 
 export default function Home() {

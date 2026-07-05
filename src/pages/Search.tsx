@@ -108,7 +108,7 @@ export default function SearchPage() {
                 {results.map((s) => {
                   const st = statOf(s.id)
                   const complete = st.total > 0 && st.owned === st.total
-                  const crumb = [s.year ? `${s.year}年` : '封入', binderName.get(s.binderId)].filter(Boolean).join('・')
+                  const crumb = [s.year ? `${s.year}年` : null, binderName.get(s.binderId)].filter(Boolean).join('・')
                   return (
                     <button
                       key={s.id}
