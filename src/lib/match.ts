@@ -40,8 +40,8 @@ export function parseDateCode(text: string): DateCode | null {
 
 export interface CaptionMatch {
   sets: CatalogSet[]
-  slot: string | null // SRCL品番から盤が特定できた場合（'A'等）
-  via: 'srcl' | 'date' | 'anniversary' | 'name' | null
+  slot: string | null // SRCL品番から盤が特定できた場合（'A'等）※現在は自動割当に使わない
+  via: 'srcl' | 'date' | 'anniversary' | 'other' | 'name' | null
 }
 
 /**
@@ -80,10 +80,12 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
     if (partial.length > 0) return { sets: partial, slot: null, via: 'anniversary' }
   }
 
-  // 4) 配信限定・MV衣装系の印字 → 「その他」バインダーの候補
-  if (/配信|MV衣装/.test(caption.normalize('NFKC'))) {
+  // 4) 「NOT FOR SALE / Sony Music」系の印字なのにSRCL品番が無い → 配信限定など「その他」の候補
+  //    ※実物確認済み: 配信中限定MV衣装生写真の印字は「©Sony Music Labels Inc. / NOT FOR SALE」のみ（SRCLなし）。
+  //    　封入は同じ文言＋SRCLあり。品番が読めなかった封入の可能性も残るため、自動確定はせず候補提示に留める
+  if (/not\s*for\s*sale|sony\s*music/.test(norm(caption))) {
     const others = sets.filter((s) => s.binderId === 'b-other')
-    if (others.length > 0) return { sets: others, slot: null, via: 'name' }
+    if (others.length > 0) return { sets: others, slot: null, via: 'other' }
   }
 
   // 5) フォールバック: 正規化した名前の部分一致

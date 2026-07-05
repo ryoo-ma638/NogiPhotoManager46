@@ -1,6 +1,6 @@
 // カタログとアプリ内データの型
 
-export type Rarity = 'normal' | 'R' | 'SR'
+export type Rarity = 'normal' | 'R' | 'SR' | 'other'
 export type Template = 'standard3' | 'four4' | 'five5' | 'rareSet8' | 'event6' | 'single1'
 
 export interface Binder {

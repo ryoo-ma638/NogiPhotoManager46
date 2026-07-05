@@ -11,6 +11,7 @@ const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: 
   normal: { tile: 'bg-slate-100 text-slate-300' },
   R: { tile: 'bg-gradient-to-br from-sky-100 to-sky-200 text-sky-300', badge: 'bg-sky-500 text-white', badgeLabel: 'R' },
   SR: { tile: 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-300', badge: 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white', badgeLabel: 'SR' },
+  other: { tile: 'bg-gradient-to-br from-fuchsia-100 to-violet-200 text-fuchsia-300', badge: 'bg-fuchsia-500 text-white', badgeLabel: '他' },
 }
 
 export default function SetDetailPage({ setId }: { setId: string }) {

@@ -17,7 +17,7 @@ const TEMPLATE_BADGE: Partial<Record<Template, { label: string; cls: string }>> 
 }
 
 export default function BinderPage({ binderId }: { binderId: string }) {
-  const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet } = useAppData()
+  const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet, imageIds } = useAppData()
   const [filter, setFilter] = useState<Filter>('all')
   const [kindFilter, setKindFilter] = useState<Kind | null>(null)
   const [showAdd, setShowAdd] = useState(false)
@@ -151,7 +151,7 @@ export default function BinderPage({ binderId }: { binderId: string }) {
             )}
             <div className="rounded-2xl bg-white border border-slate-100 shadow-sm divide-y divide-slate-100 overflow-hidden">
               {g.sets.map((s) => (
-                <SetRow key={s.id} set={s} statOf={statOf} photosOf={photosOf} owned={owned} toggle={toggle} />
+                <SetRow key={s.id} set={s} statOf={statOf} photosOf={photosOf} owned={owned} toggle={toggle} imageIds={imageIds} />
               ))}
             </div>
           </section>
@@ -180,15 +180,18 @@ function SetRow({
   photosOf,
   owned,
   toggle,
+  imageIds,
 }: {
   set: CatalogSet
   statOf: (id: string) => { owned: number; total: number }
   photosOf: (s: CatalogSet) => { id: string }[]
   owned: Set<string>
   toggle: (id: string) => void
+  imageIds: Set<string>
 }) {
   const st = statOf(set.id)
   const complete = st.total > 0 && st.owned === st.total
+  const hasImg = photosOf(set).some((p) => imageIds.has(p.id))
   const badge = set.user ? { label: '追加', cls: 'bg-fuchsia-100 text-fuchsia-600' } : TEMPLATE_BADGE[set.template]
 
   // 1枚だけのセットは行から直接トグル（手動セットは編集のため詳細へ飛ばす）
@@ -221,6 +224,7 @@ function SetRow({
         <div className="flex items-center gap-1.5">
           <span className={`text-[15px] font-medium truncate ${complete ? '' : 'text-slate-600'}`}>{set.name}</span>
           {badge && <span className={`shrink-0 px-1.5 py-0.5 rounded-md text-[10px] font-bold ${badge.cls}`}>{badge.label}</span>}
+          {hasImg && <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-600">画像あり</span>}
         </div>
         <div className="mt-1.5 flex items-center gap-2">
           <ProgressBar value={pct(st.owned, st.total)} className="flex-1" />

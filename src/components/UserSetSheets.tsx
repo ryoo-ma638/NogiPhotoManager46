@@ -12,11 +12,12 @@ const TEMPLATE_OPTIONS: { value: Template; label: string }[] = [
   { value: 'single1', label: '1種（封入など）' },
 ]
 
-const RARITY_CYCLE: Rarity[] = ['normal', 'R', 'SR']
+const RARITY_CYCLE: Rarity[] = ['normal', 'R', 'SR', 'other']
 const RARITY_CHIP: Record<Rarity, { label: string; cls: string }> = {
   normal: { label: '通常', cls: 'bg-slate-100 text-slate-500' },
   R: { label: 'R', cls: 'bg-sky-100 text-sky-600' },
   SR: { label: 'SR', cls: 'bg-amber-100 text-amber-600' },
+  other: { label: '他', cls: 'bg-fuchsia-100 text-fuchsia-600' },
 }
 
 // 注意: パネルは「画面上部」から出す。下から出すとiOSでキーボードに隠れて操作不能になる
@@ -160,7 +161,7 @@ export function EditSetSheet({
   }
 
   const cycleRarity = (i: number) => {
-    setPhotos(photos.map((p, j) => (j === i ? { ...p, rarity: RARITY_CYCLE[(RARITY_CYCLE.indexOf(p.rarity) + 1) % 3]! } : p)))
+    setPhotos(photos.map((p, j) => (j === i ? { ...p, rarity: RARITY_CYCLE[(RARITY_CYCLE.indexOf(p.rarity) + 1) % RARITY_CYCLE.length]! } : p)))
   }
 
   const save = () => {

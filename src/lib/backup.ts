@@ -39,7 +39,7 @@ export function downloadJSON(filename: string, data: unknown): void {
   URL.revokeObjectURL(url)
 }
 
-const RARITIES: Rarity[] = ['normal', 'R', 'SR']
+const RARITIES: Rarity[] = ['normal', 'R', 'SR', 'other']
 
 /**
  * 次の3形式をすべて受け付けて正規化する:

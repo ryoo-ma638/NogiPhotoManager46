@@ -48,6 +48,12 @@ describe('matchCaption', () => {
   it('該当なしは空', () => {
     expect(matchCaption('2029.May', sets, NO_SEALED).sets).toEqual([])
   })
+  it('SRCLの無いNOT FOR SALE印字は「その他」の候補になる（自動確定はしない）', () => {
+    const withOther = [...sets, set('o1', '乃木坂配信中限定！MV衣装生写真（Same numbers）', 'b-other')]
+    const m = matchCaption('乃木坂46 弓木 奈於 NAO YUMIKI © Sony Music Labels Inc. / NOT FOR SALE', withOther, NO_SEALED)
+    expect(m.via).toBe('other')
+    expect(m.sets.map((s) => s.id)).toEqual(['o1'])
+  })
 })
 
 describe('SRCL品番（封入）', () => {

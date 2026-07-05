@@ -59,17 +59,16 @@ export async function cropImage(file: Blob, box: [number, number, number, number
     const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('canvasが使えません')
     ctx.drawImage(img, xmin, ymin, w, h, 0, 0, w, h)
-    const blob: Blob = await new Promise((resolve, reject) =>
+    return await new Promise((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('切り出しに失敗しました'))), 'image/jpeg', 0.85),
     )
-    return await ensurePortrait(blob) // 生写真は縦なので、横長になったら回転
   } finally {
     URL.revokeObjectURL(url)
   }
 }
 
-/** 横長の画像を時計回りに90°回転して縦にする（縦ならそのまま返す） */
-export async function ensurePortrait(file: Blob): Promise<Blob> {
+/** 画像を時計回りに回転する（90/180/270度） */
+export async function rotateImage(file: Blob, deg: 90 | 180 | 270): Promise<Blob> {
   const url = URL.createObjectURL(file)
   try {
     const img = new Image()
@@ -77,14 +76,21 @@ export async function ensurePortrait(file: Blob): Promise<Blob> {
     await img.decode()
     const W = img.naturalWidth
     const H = img.naturalHeight
-    if (H >= W) return file // すでに縦（または正方形）
     const canvas = document.createElement('canvas')
-    canvas.width = H
-    canvas.height = W
+    canvas.width = deg === 180 ? W : H
+    canvas.height = deg === 180 ? H : W
     const ctx = canvas.getContext('2d')
     if (!ctx) return file
-    ctx.translate(H, 0)
-    ctx.rotate(Math.PI / 2)
+    if (deg === 90) {
+      ctx.translate(H, 0)
+      ctx.rotate(Math.PI / 2)
+    } else if (deg === 180) {
+      ctx.translate(W, H)
+      ctx.rotate(Math.PI)
+    } else {
+      ctx.translate(0, W)
+      ctx.rotate(-Math.PI / 2)
+    }
     ctx.drawImage(img, 0, 0)
     return await new Promise((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('回転に失敗しました'))), 'image/jpeg', 0.88),
@@ -92,6 +98,21 @@ export async function ensurePortrait(file: Blob): Promise<Blob> {
   } finally {
     URL.revokeObjectURL(url)
   }
+}
+
+/** 横長なら時計回りに90°回転して縦にする（AI判定が無い場合の保険） */
+export async function ensurePortrait(file: Blob): Promise<Blob> {
+  const url = URL.createObjectURL(file)
+  let landscape = false
+  try {
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    landscape = img.naturalWidth > img.naturalHeight
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+  return landscape ? rotateImage(file, 90) : file
 }
 
 // オブジェクトURLのキャッシュ（スクロールのたびにIndexedDBを叩かない）

@@ -2,6 +2,7 @@
 
 export interface RecognizedPhoto {
   box: [number, number, number, number] | null // [ymin,xmin,ymax,xmax] 0〜1000正規化
+  rotation: number // 正しい向きにするための時計回り回転角（0/90/180/270）
   caption: string | null
   captionConfidence: number
   pose: string // 'yori' | 'chu' | 'hiki' | 'suwari-yori' | 'suwari-hiki' | 'unknown'

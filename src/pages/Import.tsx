@@ -3,7 +3,7 @@ import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
 import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
-import { cropImage, ensurePortrait, processImage } from '../lib/images'
+import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { matchCaption, slotForPose } from '../lib/match'
 import { kindOf } from '../lib/kinds'
@@ -31,6 +31,7 @@ export default function ImportPage() {
   const [items, setItems] = useState<ImportItem[]>([])
   const [busy, setBusy] = useState(false)
   const [pickerFor, setPickerFor] = useState<{ itemId: string; mode: 'set' | 'slot' } | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
@@ -83,7 +84,10 @@ export default function ImportPage() {
     let candidates: string[] | null = null
     if (rec.caption) {
       const m = matchCaption(rec.caption, allSets, sealedBinders)
-      if (m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
+      if (m.via === 'other') {
+        // その他（配信限定等）: SRCLが読めなかった封入の可能性もあるため自動確定せず候補提示
+        candidates = m.sets.map((s) => s.id)
+      } else if (m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
         const hit = m.sets[0]!
         setId = hit.id
         const photos = photosOf(hit)
@@ -114,17 +118,19 @@ export default function ImportPage() {
         photos = await recognizeImage(full)
       }
 
+      // 切り出し後、AIの回転判定（顔と印字の向き）で正しい向きに直す。判定が無ければ横→縦の保険のみ
+      const orient = async (blob: Blob, rotation: number): Promise<Blob> => {
+        let f = blob
+        if (rotation === 90 || rotation === 180 || rotation === 270) f = await rotateImage(f, rotation)
+        return ensurePortrait(f)
+      }
+
       if (photos.length <= 1) {
-        // 1枚だけ（または検出なし）→ この項目をそのまま更新。
-        // 検出枠があれば必ず切り出す（余白除去＋横撮りでも中の写真が縦なら縦になる）
+        // 1枚だけ（または検出なし）→ この項目をそのまま更新（検出枠があれば切り出し）
         const rec = photos[0]
-        let file: Blob = it.file
+        let file: Blob = rec?.box ? await cropImage(full, rec.box) : it.file
+        file = await orient(file, rec?.rotation ?? 0)
         let url = it.url
-        if (rec?.box) {
-          file = await cropImage(full, rec.box)
-        } else {
-          file = await ensurePortrait(it.file) // 枠なし＝画像全体。横長なら縦に回転
-        }
         if (file !== it.file) {
           URL.revokeObjectURL(it.url)
           url = URL.createObjectURL(file)
@@ -143,7 +149,7 @@ export default function ImportPage() {
       const subItems: ImportItem[] = []
       for (const rec of photos) {
         if (!rec.box) continue
-        const cropped = await cropImage(full, rec.box)
+        const cropped = await orient(await cropImage(full, rec.box), rec.rotation)
         subItems.push({
           id: crypto.randomUUID(),
           file: cropped,
@@ -219,7 +225,9 @@ export default function ImportPage() {
           const overwrite = photoId ? imageIds.has(photoId) : false
           return (
             <div key={it.id} className="rounded-2xl bg-white border border-slate-100 shadow-sm p-3 flex gap-3">
-              <img src={it.url} alt="" className="w-16 h-[91px] shrink-0 rounded-lg object-cover bg-slate-100" />
+              <button onClick={() => setPreview(it.url)} aria-label="画像を拡大" className="shrink-0 active:opacity-70 transition-opacity">
+                <img src={it.url} alt="" className="w-16 h-[91px] rounded-lg object-cover bg-slate-100" />
+              </button>
               <div className="min-w-0 flex-1 space-y-1.5">
                 {/* 状態 */}
                 <div className="flex items-center gap-1.5 text-[11px]">
@@ -237,10 +245,10 @@ export default function ImportPage() {
                 <button
                   onClick={() => setPickerFor({ itemId: it.id, mode: 'set' })}
                   className={`w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border ${
-                    set ? 'bg-violet-50 border-violet-200 text-violet-700' : 'bg-slate-50 border-slate-200 text-slate-400'
+                    set ? 'bg-violet-50 border-violet-200 text-violet-700' : it.candidates?.length ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-slate-50 border-slate-200 text-slate-400'
                   }`}
                 >
-                  {set ? set.name : 'セットを選ぶ'}
+                  {set ? set.name : it.candidates?.length ? `候補から選ぶ（${it.candidates.length}件）` : 'セットを選ぶ'}
                 </button>
                 {/* 枠選択 */}
                 <div className="flex items-center gap-2">
@@ -296,8 +304,15 @@ export default function ImportPage() {
           allSets={allSets}
           candidates={(pickerItem.candidates ?? []).map((id) => setById.get(id)).filter((s): s is CatalogSet => !!s)}
           onPick={(s) => {
-            update(pickerFor.itemId, { setId: s.id, slot: null, auto: false })
-            setPickerFor({ itemId: pickerFor.itemId, mode: 'slot' })
+            const ph = photosOf(s)
+            if (ph.length === 1) {
+              // 枠が1つしかないセットは枠選択を省略して確定
+              update(pickerFor.itemId, { setId: s.id, slot: ph[0]!.slot, auto: false })
+              setPickerFor(null)
+            } else {
+              update(pickerFor.itemId, { setId: s.id, slot: null, auto: false })
+              setPickerFor({ itemId: pickerFor.itemId, mode: 'slot' })
+            }
           }}
           onClose={() => setPickerFor(null)}
         />
@@ -327,6 +342,13 @@ export default function ImportPage() {
             })}
           </div>
         </SheetShell>
+      )}
+
+      {preview && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade" onClick={() => setPreview(null)}>
+          <img src={preview} alt="" className="max-h-[92dvh] max-w-[94vw] object-contain rounded-lg" />
+          <button className="absolute top-[calc(0.75rem+env(safe-area-inset-top))] right-4 text-white/80 text-2xl p-2" aria-label="閉じる">✕</button>
+        </div>
       )}
 
       {toast && (

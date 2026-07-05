@@ -147,8 +147,13 @@ def main():
             "name": name, "template": template, "kind": kind,
             "sortIndex": seq * 10, "note": notes, "pageBreakAfter": False,
         }
+        # 「その他」バインダー（配信限定等）はレアリティ「その他」
+        if binder_id == "b-other":
+            entry["photos"] = [
+                {"slot": s[0], "label": s[1], "rarity": "other"} for s in slots
+            ]
         # 座りあり以外の5種は表示名を①〜⑤に（slot/所有IDは不変）
-        if template == "five5" and kind != "suwari":
+        elif template == "five5" and kind != "suwari":
             entry["photos"] = [
                 {"slot": s[0], "label": MV5_LABELS[i], "rarity": s[2]}
                 for i, s in enumerate(slots)

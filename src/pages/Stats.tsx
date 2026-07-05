@@ -16,6 +16,7 @@ export default function StatsPage() {
     normal: { owned: 0, total: 0 },
     R: { owned: 0, total: 0 },
     SR: { owned: 0, total: 0 },
+    other: { owned: 0, total: 0 },
   }
 
   for (const s of allSets) {
@@ -72,6 +73,7 @@ export default function StatsPage() {
               ['normal', '通常', 'text-slate-600'],
               ['R', 'レア（R）', 'text-sky-600'],
               ['SR', 'スペシャルレア（SR）', 'text-amber-600'],
+              ['other', 'その他（配信限定など）', 'text-fuchsia-600'],
             ] as [Rarity, string, string][]
           ).map(([key, label, cls]) => (
             <div key={key}>

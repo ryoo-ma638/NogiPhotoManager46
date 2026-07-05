@@ -11,7 +11,7 @@ function norm(s: string): string {
 }
 
 export default function SearchPage() {
-  const { catalog, allSets, statOf } = useAppData()
+  const { catalog, allSets, statOf, photosOf, imageIds } = useAppData()
   const [q, setQ] = useState('')
   const [unownedOnly, setUnownedOnly] = useState(false)
   const [kindFilter, setKindFilter] = useState<Kind | null>(null)
@@ -116,7 +116,12 @@ export default function SearchPage() {
                       className="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-slate-50 transition-colors"
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="text-[15px] font-medium text-slate-700 truncate">{s.name}</div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[15px] font-medium text-slate-700 truncate">{s.name}</span>
+                          {photosOf(s).some((p) => imageIds.has(p.id)) && (
+                            <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-600">画像あり</span>
+                          )}
+                        </div>
                         <div className="text-[11px] text-slate-400 truncate">{crumb}</div>
                         <div className="mt-1.5 flex items-center gap-2">
                           <ProgressBar value={pct(st.owned, st.total)} className="flex-1" />

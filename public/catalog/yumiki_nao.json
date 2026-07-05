@@ -4521,7 +4521,14 @@
       "kind": "mv",
       "sortIndex": 3360,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
     },
     {
       "id": "s0337",
