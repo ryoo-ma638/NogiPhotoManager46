@@ -4,6 +4,8 @@ import { CameraIcon, CheckCircle, PhotoIcon, SealCheck } from '../components/ico
 import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
 import { PhotoViewer, ThumbImg } from '../components/images'
+import { getImageRow } from '../lib/db'
+import { rotateImage } from '../lib/images'
 import { goBack } from '../lib/router'
 import type { Photo, Rarity } from '../types'
 
@@ -148,6 +150,15 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           version={imgVersion}
           onClose={() => setViewer(null)}
           onReplace={() => pickImageFor(viewer.id)}
+          onRotate={() => {
+            void (async () => {
+              const row = await getImageRow(viewer.id)
+              if (!row) return
+              const rotated = await rotateImage(row.full, 180)
+              await attachImage(viewer.id, rotated)
+              setImgVersion((v) => v + 1)
+            })()
+          }}
           onDelete={() => {
             void removeImage(viewer.id).then(() => {
               setViewer(null)

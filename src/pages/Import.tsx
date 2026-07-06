@@ -308,6 +308,18 @@ export default function ImportPage() {
                   </button>
                   <button
                     onClick={() => {
+                      void rotateImage(it.file, 180).then((rotated) => {
+                        URL.revokeObjectURL(it.url)
+                        update(it.id, { file: rotated, url: URL.createObjectURL(rotated) })
+                      })
+                    }}
+                    aria-label="上下回転"
+                    className="shrink-0 w-9 h-9 rounded-lg bg-slate-100 text-slate-500 text-lg"
+                  >
+                    ↻
+                  </button>
+                  <button
+                    onClick={() => {
                       URL.revokeObjectURL(it.url)
                       setItems((prev) => prev.filter((x) => x.id !== it.id))
                     }}

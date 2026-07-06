@@ -25,12 +25,14 @@ export function PhotoViewer({
   version = 0,
   onClose,
   onReplace,
+  onRotate,
   onDelete,
 }: {
   photo: Photo
   version?: number
   onClose: () => void
   onReplace: () => void
+  onRotate: () => void
   onDelete: () => void
 }) {
   const [url, setUrl] = useState<string | null>(null)
@@ -61,9 +63,12 @@ export function PhotoViewer({
           <p className="text-white/50 text-sm">読み込み中…</p>
         )}
       </div>
-      <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-2 grid grid-cols-2 gap-2">
+      <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-2 grid grid-cols-3 gap-2">
         <button onClick={onReplace} className="h-11 rounded-xl bg-white/15 text-white font-medium text-[14px] active:bg-white/25 transition-colors">
           差し替え
+        </button>
+        <button onClick={onRotate} className="h-11 rounded-xl bg-white/15 text-white font-medium text-[14px] active:bg-white/25 transition-colors">
+          上下回転
         </button>
         <button onClick={() => setConfirmDel(true)} className="h-11 rounded-xl bg-red-500/85 text-white font-bold text-[14px] active:bg-red-500 transition-colors">
           画像を削除

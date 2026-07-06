@@ -194,18 +194,29 @@ function SetRow({
   const hasImg = photosOf(set).some((p) => imageIds.has(p.id))
   const badge = set.user ? { label: '追加', cls: 'bg-fuchsia-100 text-fuchsia-600' } : TEMPLATE_BADGE[set.template]
 
-  // 1枚だけのセットは行から直接トグル（手動セットは編集のため詳細へ飛ばす）
+  // 1枚だけのセット: 行タップで詳細（画像閲覧）へ、右端の○は直接トグル
   if (st.total === 1 && !set.user) {
     const photo = photosOf(set)[0]
     const isOwned = photo ? owned.has(photo.id) : false
     return (
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate(`/s/${set.id}`)}
+        className="flex items-center gap-3 px-4 py-3 cursor-pointer active:bg-slate-50 transition-colors"
+      >
         <div className="min-w-0 flex-1">
-          <span className={`text-[15px] font-medium ${isOwned ? '' : 'text-slate-500'}`}>{set.name}</span>
+          <span className="flex items-center gap-1.5">
+            <span className={`text-[15px] font-medium truncate ${isOwned ? '' : 'text-slate-500'}`}>{set.name}</span>
+            {hasImg && <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-600">画像あり</span>}
+          </span>
           {set.note && <p className="text-[11px] text-slate-400 truncate">{set.note}</p>}
         </div>
         <button
-          onClick={() => photo && toggle(photo.id)}
+          onClick={(e) => {
+            e.stopPropagation()
+            if (photo) toggle(photo.id)
+          }}
           aria-label={isOwned ? '未所有にする' : '所有にする'}
           className="p-1.5 -m-1 active:scale-90 transition-transform"
         >
