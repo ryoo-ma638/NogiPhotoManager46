@@ -7,7 +7,7 @@ import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/ima
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { matchCaption, slotForPose } from '../lib/match'
 import { kindOf } from '../lib/kinds'
-import type { CatalogSet } from '../types'
+import type { Binder, CatalogSet } from '../types'
 
 // 自動確定に必要な最低確信度
 const MIN_CONFIDENCE = 0.6
@@ -22,6 +22,7 @@ interface ImportItem {
   setId: string | null
   slot: string | null
   auto: boolean // 自動判定できたか
+  sequenced: boolean // 一番上のセット選択から連番(ABCD/ヨリチュウヒキ)で自動割当された
   candidates: string[] | null // セット候補（複数該当時。「セットを選ぶ」の初期リスト）
   error: string | null
 }
@@ -71,6 +72,7 @@ export default function ImportPage() {
       setId: null,
       slot: null,
       auto: false,
+      sequenced: false,
       candidates: null,
       error: null,
     }))
@@ -160,6 +162,7 @@ export default function ImportPage() {
           file: cropped,
           url: URL.createObjectURL(cropped),
           status: 'done',
+          sequenced: false,
           error: null,
           ...classify(rec),
         })
@@ -195,6 +198,30 @@ export default function ImportPage() {
 
   const pickerItem = pickerFor ? items.find((i) => i.id === pickerFor.itemId) : null
   const pickerSet = pickerItem?.setId ? setById.get(pickerItem.setId) : null
+
+  /**
+   * 一番上のセット選択から、続く未割当の写真へ同じセットを連番で自動割当する。
+   * 例: 封入4枚 → A/B/C/D、年度別3種 → ヨリ/チュウ/ヒキ。
+   * 連番分は「そのまま押さなければ確定、押せば変更可」（sequenced=true）。
+   */
+  const cascadeAssign = (itemId: string, set: CatalogSet) => {
+    const slots = photosOf(set).map((p) => p.slot)
+    setItems((prev) => {
+      const idx = prev.findIndex((i) => i.id === itemId)
+      if (idx < 0) return prev
+      const next = [...prev]
+      next[idx] = { ...next[idx]!, setId: set.id, slot: slots[0] ?? null, auto: false, sequenced: false, candidates: null }
+      let s = 1
+      for (let j = idx + 1; j < next.length && s < slots.length; j++) {
+        const item = next[j]!
+        if (item.status === 'saved') continue
+        if (item.setId && item.setId !== set.id) break // 別セットが割当済み＝連番が途切れるので止める
+        next[j] = { ...item, setId: set.id, slot: slots[s]!, auto: false, sequenced: true, candidates: null }
+        s++
+      }
+      return next
+    })
+  }
 
   // ---- 「その他」への登録（判別不能な写真の受け皿） ----
   const otherSets = allSets.filter((s) => s.binderId === 'b-other').sort((a, b) => a.sortIndex - b.sortIndex)
@@ -282,7 +309,8 @@ export default function ImportPage() {
                       <CheckCircle className="w-3.5 h-3.5" filled /> 自動判定
                     </span>
                   )}
-                  {it.status === 'done' && !it.auto && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
+                  {it.status === 'done' && !it.auto && it.sequenced && <span className="text-violet-600 font-bold">連番で割当（変更可）</span>}
+                  {it.status === 'done' && !it.setId && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
                   {it.caption && <span className="text-slate-400 line-clamp-2 break-all">印字: {it.caption}</span>}
                 </div>
@@ -368,17 +396,12 @@ export default function ImportPage() {
       {pickerFor && pickerItem && pickerFor.mode === 'set' && (
         <SetPicker
           allSets={allSets}
+          binders={catalog.binders}
           candidates={(pickerItem.candidates ?? []).map((id) => setById.get(id)).filter((s): s is CatalogSet => !!s)}
           onPick={(s) => {
-            const ph = photosOf(s)
-            if (ph.length === 1) {
-              // 枠が1つしかないセットは枠選択を省略して確定
-              update(pickerFor.itemId, { setId: s.id, slot: ph[0]!.slot, auto: false })
-              setPickerFor(null)
-            } else {
-              update(pickerFor.itemId, { setId: s.id, slot: null, auto: false })
-              setPickerFor({ itemId: pickerFor.itemId, mode: 'slot' })
-            }
+            // 選んだ写真に先頭枠、続く写真に連番で自動割当（あとで各枠は変更可）
+            cascadeAssign(pickerFor.itemId, s)
+            setPickerFor(null)
           }}
           onClose={() => setPickerFor(null)}
         />
@@ -393,7 +416,7 @@ export default function ImportPage() {
                 <button
                   key={p.id}
                   onClick={() => {
-                    update(pickerFor.itemId, { slot: p.slot, auto: false })
+                    update(pickerFor.itemId, { slot: p.slot, auto: false, sequenced: false })
                     setPickerFor(null)
                   }}
                   className="h-14 rounded-xl border border-slate-200 bg-white text-[13px] font-bold text-slate-700 flex flex-col items-center justify-center gap-0.5 active:bg-violet-50"
@@ -499,45 +522,83 @@ function OtherRegisterSheet({
 
 function SetPicker({
   allSets,
+  binders,
   candidates,
   onPick,
   onClose,
 }: {
   allSets: CatalogSet[]
+  binders: Binder[]
   candidates: CatalogSet[]
   onPick: (s: CatalogSet) => void
   onClose: () => void
 }) {
   const [q, setQ] = useState('')
+  // フィルタ: number=年 / string=バインダーID(封入・その他) / 'candidates'=印字の候補 / null=未選択
+  const [filter, setFilter] = useState<number | string | null>(candidates.length > 0 ? 'candidates' : null)
   const norm = (s: string) => s.normalize('NFKC').toLowerCase()
   const t = norm(q.trim())
-  // 入力が無いときは自動判定の候補を表示（複数該当だった場合、検索せずに選べる）
-  const results = t ? allSets.filter((s) => norm(s.name).includes(t)).slice(0, 30) : candidates
+
+  const years = useMemo(
+    () => [...new Set(allSets.map((s) => s.year).filter((y): y is number => y != null))].sort((a, b) => b - a),
+    [allSets],
+  )
+  const flatBinders = binders.filter((b) => b.sealed) // 封入・その他（年なし）
+
+  // 表示対象のプール（フィルタ適用）。年度を選ぶと、その中で検索が効く
+  let pool: CatalogSet[]
+  if (filter === 'candidates') pool = candidates
+  else if (typeof filter === 'number') pool = allSets.filter((s) => s.year === filter)
+  else if (typeof filter === 'string') pool = allSets.filter((s) => s.binderId === filter)
+  else pool = t ? allSets : [] // 未選択なら検索したときだけ全体から
+
+  const results = (t ? pool.filter((s) => norm(s.name).includes(t)) : pool).slice(0, 200)
+
+  const Chip = ({ label, active, onTap }: { label: string; active: boolean; onTap: () => void }) => (
+    <button
+      onClick={onTap}
+      className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors ${
+        active ? 'bg-violet-600 text-white' : 'bg-white border border-slate-200 text-slate-500'
+      }`}
+    >
+      {label}
+    </button>
+  )
+
   return (
     <SheetShell title="セットを選ぶ" onClose={onClose}>
-      {/* 入力欄は上部に固定し、候補はその下に出す（重ならない） */}
-      <div className="sticky top-[52px] z-10 bg-slate-50 pb-2 -mt-1 pt-1">
+      <div className="sticky top-[52px] z-10 bg-slate-50 pb-2 -mt-1 pt-1 space-y-2">
         <div className="relative">
           <SearchIcon className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="セット名で検索"
+            placeholder={typeof filter === 'number' ? `${filter}年の中を検索` : 'セット名で検索'}
             className="w-full h-11 rounded-xl bg-white border border-slate-200 pl-10 pr-3 text-[15px] outline-none focus:border-violet-400"
           />
         </div>
-        {!t && candidates.length > 0 && <p className="pt-1.5 text-[11px] text-slate-400">印字から絞り込んだ候補 {candidates.length}件</p>}
+        {/* 年度・バインダーのチップ（最初から年度で選べる） */}
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch]">
+          {candidates.length > 0 && <Chip label={`候補${candidates.length}`} active={filter === 'candidates'} onTap={() => setFilter('candidates')} />}
+          {years.map((y) => (
+            <Chip key={y} label={`${y}`} active={filter === y} onTap={() => setFilter(y)} />
+          ))}
+          {flatBinders.map((b) => (
+            <Chip key={b.id} label={b.name.replace('弓木', '')} active={filter === b.id} onTap={() => setFilter(b.id)} />
+          ))}
+        </div>
       </div>
       <div className="divide-y divide-slate-100 pb-2">
         {results.map((s) => (
           <button key={s.id} onClick={() => onPick(s)} className="w-full text-left px-1 py-2.5 text-[14px] text-slate-700 active:bg-slate-50">
             {s.name}
-            <span className="block text-[11px] text-slate-400">{s.year ? `${s.year}年` : ''}</span>
+            <span className="block text-[11px] text-slate-400">{s.year ? `${s.year}年` : (binders.find((b) => b.id === s.binderId)?.name ?? '')}</span>
           </button>
         ))}
-        {t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">見つかりません</p>}
-        {!t && results.length === 0 && <p className="py-6 text-center text-[13px] text-slate-400">セット名を入力して検索</p>}
+        {results.length === 0 && (
+          <p className="py-8 text-center text-[13px] text-slate-400">{filter === null && !t ? '年度を選ぶか、セット名で検索' : '見つかりません'}</p>
+        )}
       </div>
     </SheetShell>
   )
