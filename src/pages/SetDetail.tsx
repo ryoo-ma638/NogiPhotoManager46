@@ -154,7 +154,7 @@ export default function SetDetailPage({ setId }: { setId: string }) {
             void (async () => {
               const row = await getImageRow(viewer.id)
               if (!row) return
-              const rotated = await rotateImage(row.full, 180)
+              const rotated = await rotateImage(row.full, 90)
               await attachImage(viewer.id, rotated)
               setImgVersion((v) => v + 1)
             })()

@@ -142,8 +142,8 @@ export async function imageURL(photoId: string, kind: 'thumb' | 'full'): Promise
 }
 
 export async function attachImageFile(photoId: string, file: Blob): Promise<void> {
-  const upright = await ensurePortrait(file) // 横撮りは縦に直してから保存
-  const { full, thumb } = await processImage(upright)
+  // 縦補正はしない（取込時のAI向き補正＋手動90度回転で向きを決める。ここで縦強制すると手動回転が打ち消される）
+  const { full, thumb } = await processImage(file)
   await putImage({ photoId, full, thumb, updatedAt: new Date().toISOString() })
   invalidateImageURLs(photoId)
 }

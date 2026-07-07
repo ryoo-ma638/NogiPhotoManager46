@@ -68,7 +68,7 @@ export function PhotoViewer({
           差し替え
         </button>
         <button onClick={onRotate} className="h-11 rounded-xl bg-white/15 text-white font-medium text-[14px] active:bg-white/25 transition-colors">
-          上下回転
+回転（90°）
         </button>
         <button onClick={() => setConfirmDel(true)} className="h-11 rounded-xl bg-red-500/85 text-white font-bold text-[14px] active:bg-red-500 transition-colors">
           画像を削除
