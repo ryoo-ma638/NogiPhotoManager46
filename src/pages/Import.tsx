@@ -32,6 +32,16 @@ interface ImportItem {
 const CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
 const circled = (n: number) => CIRCLED[n - 1] ?? `${n}`
 
+/** 検出枠が「生写真1枚」らしい大きさ・比率か（端の切れ端・極端に細い/小さい検出を除外） */
+function isCardLikeBox(box: [number, number, number, number]): boolean {
+  const [ymin, xmin, ymax, xmax] = box
+  const w = xmax - xmin
+  const h = ymax - ymin
+  const area = (w * h) / 1e6 // 画像全体に対する面積比
+  const aspect = w / Math.max(1, h)
+  return area >= 0.02 && aspect >= 0.3 && aspect <= 3.2
+}
+
 export default function ImportPage() {
   const { catalog, allSets, setById, userSetById, photosOf, owned, toggle, imageIds, attachImage, addUserSet, updateUserSet } = useAppData()
   const [items, setItems] = useState<ImportItem[]>([])
@@ -159,6 +169,13 @@ export default function ImportPage() {
         // 一時的な失敗（時間切れ・混雑等）は5秒待って1回だけ再試行
         await new Promise((r) => setTimeout(r, 5000))
         photos = await recognizeImage(full)
+      }
+
+      // 複数検出のとき、端で見切れた小片・生写真の比率でない検出を除外
+      // （隣の写真の切れ端が別カードとして混ざるのを防ぐ）。実カードが残る場合だけ適用。
+      if (photos.length > 1) {
+        const kept = photos.filter((p) => p.box && isCardLikeBox(p.box))
+        if (kept.length > 0 && kept.length < photos.length) photos = kept
       }
 
       // 切り出し後、AIの回転判定（顔と印字の向き）で正しい向きに直す。判定が無ければ横→縦の保険のみ

@@ -110,6 +110,10 @@ describe('matchCaption', () => {
     expect(ids).not.toContain('other')
     expect(ids[0]).toBe('t4') // 11周年・4期が最上位（9周年より上）
   })
+  it('短い題名（4文字「悪い成分」）も印字にまるごと含まれれば候補に出る', () => {
+    const arr = [set('w', '悪い成分'), set('x', 'ハロウィン2022')]
+    expect(matchCaption('乃木坂46 悪い成分 弓木奈於', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['w'])
+  })
   it('年"2022"だけの偶然一致では候補にしない（誤読対策）', () => {
     const arr = [set('v1', 'バレンタイン2026'), set('v2', 'ハロウィン2022')]
     // 「真夏の全国ツアー2022 愛知」は v2 と "2022"(4文字)しか共有しない → 候補にしない

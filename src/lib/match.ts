@@ -156,8 +156,13 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
   const cap = canon(caption)
   if (cap.length >= 3) {
     const scored = sets
-      .map((s) => ({ s, score: commonRunLen(cap, canon(s.name)) }))
-      .filter((x) => x.score >= 5) // 5文字以上一致（年"2022"だけの偶然一致は拾わない）
+      .map((s) => {
+        const cn = canon(s.name)
+        return { s, cn, score: commonRunLen(cap, cn) }
+      })
+      // 5文字以上一致 or セット名まるごとが印字に含まれる（「悪い成分」等の短い題名を拾う。
+      // ただし年"2022"だけの数字偶然一致は除く＝非数字を含むこと）
+      .filter((x) => x.score >= 5 || (x.score >= 3 && x.score === x.cn.length && /\D/.test(x.cn)))
       .sort((a, b) => b.score - a.score)
     if (scored.length > 0) return { sets: scored.slice(0, 20).map((x) => x.s), slot: null, via: 'name' }
   }
