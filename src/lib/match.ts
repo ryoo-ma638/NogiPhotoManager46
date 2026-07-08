@@ -21,14 +21,34 @@ function norm(s: string): string {
   return s.normalize('NFKC').toLowerCase()
 }
 
-// 季節イベントは印字が英語・カタログ名が日本語（またはその逆）で混在するため、共通の綴りに寄せる
+// 生写真の印字はほぼ英語、カタログ名は英日混在。共通の綴りに寄せて噛み合わせる。
+// （順番が大事: 世代→周年 の順。"4th members"は世代、残った"11th"は周年）
 const SYNONYMS: Array<[RegExp, string]> = [
   [/ハロウィン|halloween/g, 'halloween'],
-  [/クリスマス|christmas|xmas/g, 'christmas'],
+  [/クリスマス|christmas|x'?mas/g, 'christmas'],
   [/バレンタイン|valentine'?s?/g, 'valentine'],
+  // 誕生日ライブ（BIRTHDAY / BD / バースデー、LIVE / ライブ）
+  [/バースデー|birthday|bd/g, 'birthday'],
+  [/ライブ/g, 'live'],
+  // 期生（世代）: 英単語序数・カタカナ・「N期生」→「N期」。"fourth members"／"4th members"／"フォース"→4期
+  [/(?:1st|first|ファースト)\s*(?:members?|メンバーズ?)?/g, '1期'],
+  [/(?:2nd|second|セカンド)\s*(?:members?|メンバーズ?)?/g, '2期'],
+  [/(?:3rd|third|サード)\s*(?:members?|メンバーズ?)?/g, '3期'],
+  [/(?:4th|fourth|フォース)\s*(?:members?|メンバーズ?)?/g, '4期'],
+  [/(?:5th|fifth|フィフス)\s*(?:members?|メンバーズ?)?/g, '5期'],
+  [/([1-9])期生/g, '$1期'],
+  // 周年（アニバーサリー）: 残った数字序数 "11th" → "11周年"（検索でも共通化）
+  [/(\d{1,2})(?:st|nd|rd|th)/g, '$1周年'],
 ]
-// 印字にもセット名にも出る一般語（誤一致の元）は照合から除く
-const STOPWORDS = /乃木坂46|乃木坂/g
+
+/** 周年の番号を取り出す。"11周年" / "11th BD" / "11th Anniversary" / "11th Birthday" 等に対応 */
+function anniversaryNumber(text: string): number | null {
+  const t = text.normalize('NFKC').toLowerCase()
+  const m = /(\d{1,2})\s*(?:周年|(?:st|nd|rd|th)\s*(?:b\.?d\.?|birthday|anniversary))/.exec(t)
+  return m ? Number(m[1]) : null
+}
+// 印字にもセット名にも出る一般語（誤一致の元・つなぎ語）は照合から除く
+const STOPWORDS = /乃木坂46|乃木坂|year/g
 
 /** 検索・照合の共通正規化: NFKC＋小文字＋日英シノニム統一（記号は残す） */
 export function normalizeForSearch(s: string): string {
@@ -113,12 +133,12 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
     if (hits.length > 0) return { sets: hits, slot: null, via: 'date' }
   }
 
-  // 3) 周年記念（例: "12th Anniversary" → 12周年記念）
-  const am = /(\d{1,2})\s*(?:th|st|nd|rd)\s*anniversary/i.exec(caption.normalize('NFKC'))
-  if (am) {
-    const exact = sets.filter((s) => s.name === `${am[1]}周年記念`)
+  // 3) 周年記念（"12th Anniversary" / "11th BD" / "11th Birthday" / "11周年" → N周年記念）
+  const anniv = anniversaryNumber(caption)
+  if (anniv != null) {
+    const exact = sets.filter((s) => s.name === `${anniv}周年記念`)
     if (exact.length > 0) return { sets: exact, slot: null, via: 'anniversary' }
-    const partial = sets.filter((s) => s.name.includes(`${am[1]}周年記念`))
+    const partial = sets.filter((s) => s.name.includes(`${anniv}周年記念`))
     if (partial.length > 0) return { sets: partial, slot: null, via: 'anniversary' }
   }
 

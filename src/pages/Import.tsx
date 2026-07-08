@@ -356,15 +356,20 @@ export default function ImportPage() {
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
                   {it.caption && <span className="text-slate-400 line-clamp-2 break-all">印字: {it.caption}</span>}
                 </div>
-                {/* セット選択 */}
-                <button
-                  onClick={() => setPickerFor({ itemId: it.id, mode: 'set' })}
-                  className={`w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border ${
-                    set ? 'bg-violet-50 border-violet-200 text-violet-700' : it.candidates?.length ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-slate-50 border-slate-200 text-slate-400'
-                  }`}
-                >
-                  {set ? set.name : it.candidates?.length ? `候補から選ぶ（${it.candidates.length}件）` : 'セットを選ぶ'}
-                </button>
+                {/* セット選択（候補が1件ならタップで即確定・複数ならピッカー） */}
+                {(() => {
+                  const only = !set && it.candidates?.length === 1 ? setById.get(it.candidates[0]!) ?? null : null
+                  return (
+                    <button
+                      onClick={() => (only ? cascadeAssign(it.id, only) : setPickerFor({ itemId: it.id, mode: 'set' }))}
+                      className={`w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border ${
+                        set ? 'bg-violet-50 border-violet-200 text-violet-700' : it.candidates?.length ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-slate-50 border-slate-200 text-slate-400'
+                      }`}
+                    >
+                      {set ? set.name : only ? `${only.name}（タップで確定）` : it.candidates?.length ? `候補から選ぶ（${it.candidates.length}件）` : 'セットを選ぶ'}
+                    </button>
+                  )
+                })()}
                 {/* 枠選択 */}
                 <div className="flex items-center gap-2">
                   <button

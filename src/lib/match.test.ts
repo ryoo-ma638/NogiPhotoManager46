@@ -78,7 +78,29 @@ describe('matchCaption', () => {
   it('normalizeForSearch は日英を共通化する（検索でどちらでもヒット）', () => {
     expect(normalizeForSearch('ハロウィン')).toBe(normalizeForSearch('Halloween'))
     expect(normalizeForSearch('クリスマス')).toBe(normalizeForSearch('christmas'))
+    expect(normalizeForSearch("X'mas")).toContain('christmas')
     expect(normalizeForSearch('バレンタイン')).toContain('valentine')
+  })
+  it('周年は "11th BD" でも "11周年" でも同じセットに一致（TH/周年両対応）', () => {
+    const arr = [set('a', '11周年記念'), set('b', '12周年記念')]
+    expect(matchCaption('乃木坂46 11th BD 弓木奈於', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['a'])
+    expect(matchCaption('乃木坂46 11th BIRTHDAY LIVE', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['a'])
+    expect(matchCaption('11周年', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['a'])
+    expect(matchCaption('乃木坂46 12th Anniversary', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['b'])
+  })
+  it('英語印字の誕生日ライブ+世代（FOURTH MEMBERS）で正しい期別セットを候補化', () => {
+    const arr = [
+      set('g4', '2023.June-Ⅱ-11thBDライブ期別衣装'),
+      set('t4', '11thBDライブ 4期Tシャツ'),
+      set('g9', '9th YEAR BIRTHDAY LIVE 3期生・4期生ライブ'),
+      set('other', 'おひとりさま天国'),
+    ]
+    // 英語のまま読めた印字 → 11周年・4期の誕生日ライブ系が候補、無関係セットは出ない
+    const m = matchCaption('乃木坂46 11TH YEAR BIRTHDAY LIVE FOURTH MEMBERS', arr, NO_SEALED)
+    const ids = m.sets.map((s) => s.id)
+    expect(ids).toContain('t4')
+    expect(ids).not.toContain('other')
+    expect(ids[0]).toBe('t4') // 11周年・4期が最上位（9周年より上）
   })
   it('年"2022"だけの偶然一致では候補にしない（誤読対策）', () => {
     const arr = [set('v1', 'バレンタイン2026'), set('v2', 'ハロウィン2022')]
