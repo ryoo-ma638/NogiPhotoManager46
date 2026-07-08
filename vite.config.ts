@@ -15,7 +15,6 @@ export default defineConfig({
         lang: 'ja',
         start_url: '/',
         display: 'standalone',
-        orientation: 'portrait', // 縦向き固定（撮影中・閲覧中に横回転しない）
         background_color: '#ffffff',
         theme_color: '#7c3aed',
         icons: [

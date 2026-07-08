@@ -100,63 +100,61 @@ export function CameraCapture({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col animate-fade">
-      {/* 上部バー */}
-      <div className="flex items-center justify-between px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-2 text-white">
-        <button onClick={onClose} aria-label="閉じる" className="p-2 -m-2 text-white/80 text-xl leading-none">
-          ✕
-        </button>
-        <span className="font-bold text-[14px]">連続撮影</span>
-        <span className="text-[13px] tabular-nums text-white/70 w-10 text-right">{shots.length}/{MAX_SHOTS}</span>
-      </div>
-
-      {/* プレビュー */}
-      <div className="flex-1 min-h-0 relative flex items-center justify-center">
-        <video ref={videoRef} playsInline muted autoPlay className="max-h-full max-w-full object-contain" />
-        {flash && <div className="absolute inset-0 bg-white/80 pointer-events-none" />}
-        {!ready && !error && <p className="absolute text-white/60 text-sm">カメラを起動中…</p>}
-        {error && (
-          <div className="absolute inset-x-0 px-8 text-center">
-            <p className="text-white/85 text-[14px] leading-relaxed">{error}</p>
-            <button onClick={onClose} className="mt-4 h-10 px-6 rounded-xl bg-white/15 text-white text-[14px] font-medium">
-              閉じる
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* 撮影サムネの帯（撮った端から解析中） */}
-      {shots.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto px-4 py-2 [-webkit-overflow-scrolling:touch]">
-          {shots.map((s) => (
-            <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/20" />
-          ))}
+    <div className="fixed inset-0 z-50 bg-black animate-fade">
+      {/* ライブ映像を画面いっぱいに（縦でも横でも最大表示。横持ちなら横長で大きく） */}
+      <video ref={videoRef} playsInline muted autoPlay className="absolute inset-0 w-full h-full object-contain" />
+      {flash && <div className="absolute inset-0 bg-white/80 pointer-events-none" />}
+      {!ready && !error && <p className="absolute inset-0 flex items-center justify-center text-white/60 text-sm">カメラを起動中…</p>}
+      {error && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+          <p className="text-white/85 text-[14px] leading-relaxed">{error}</p>
+          <button onClick={onClose} className="mt-4 h-10 px-6 rounded-xl bg-white/15 text-white text-[14px] font-medium">
+            閉じる
+          </button>
         </div>
       )}
 
-      {/* 操作バー */}
-      <div className="grid grid-cols-3 items-center px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-2">
-        <button
-          onClick={undo}
-          disabled={shots.length === 0}
-          className="justify-self-start text-white/80 text-[14px] font-medium disabled:opacity-30"
-        >
-          1枚戻す
+      {/* 上部バー（映像に重ねる） */}
+      <div className="absolute top-0 inset-x-0 flex items-center justify-between px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-5 text-white bg-gradient-to-b from-black/55 to-transparent">
+        <button onClick={onClose} aria-label="閉じる" className="p-2 -m-2 text-white/90 text-xl leading-none">
+          ✕
         </button>
-        <button
-          onClick={capture}
-          disabled={!ready || shots.length >= MAX_SHOTS}
-          aria-label="シャッター"
-          className="justify-self-center w-[74px] h-[74px] rounded-full bg-white/95 ring-4 ring-white/40 active:scale-90 transition-transform disabled:opacity-40"
-        >
-          <span className="block w-full h-full rounded-full border-[3px] border-black/10" />
-        </button>
-        <button
-          onClick={onClose}
-          className="justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-95 transition-transform"
-        >
-          完了{shots.length > 0 ? `(${shots.length})` : ''}
-        </button>
+        <span className="font-bold text-[14px]">連続撮影</span>
+        <span className="text-[13px] tabular-nums text-white/80 w-10 text-right">{shots.length}/{MAX_SHOTS}</span>
+      </div>
+
+      {/* 下部（撮影サムネ＋操作。映像に重ねる） */}
+      <div className="absolute bottom-0 inset-x-0 pt-8 bg-gradient-to-t from-black/60 to-transparent">
+        {shots.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto px-4 pb-2 [-webkit-overflow-scrolling:touch]">
+            {shots.map((s) => (
+              <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/30" />
+            ))}
+          </div>
+        )}
+        <div className="grid grid-cols-3 items-center px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-1">
+          <button
+            onClick={undo}
+            disabled={shots.length === 0}
+            className="justify-self-start text-white/90 text-[14px] font-medium disabled:opacity-30"
+          >
+            1枚戻す
+          </button>
+          <button
+            onClick={capture}
+            disabled={!ready || shots.length >= MAX_SHOTS}
+            aria-label="シャッター"
+            className="justify-self-center w-[74px] h-[74px] rounded-full bg-white/95 ring-4 ring-white/40 active:scale-90 transition-transform disabled:opacity-40"
+          >
+            <span className="block w-full h-full rounded-full border-[3px] border-black/10" />
+          </button>
+          <button
+            onClick={onClose}
+            className="justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-95 transition-transform"
+          >
+            完了{shots.length > 0 ? `(${shots.length})` : ''}
+          </button>
+        </div>
       </div>
     </div>
   )
