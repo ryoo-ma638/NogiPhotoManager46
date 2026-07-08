@@ -41,7 +41,7 @@ export function CameraCapture({
       }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1920 } },
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
           audio: false,
         })
         if (cancelled) {
@@ -101,8 +101,8 @@ export function CameraCapture({
 
   return (
     <div className="fixed inset-0 z-50 bg-black animate-fade">
-      {/* ライブ映像を画面いっぱいに（縦でも横でも最大表示。横持ちなら横長で大きく） */}
-      <video ref={videoRef} playsInline muted autoPlay className="absolute inset-0 w-full h-full object-contain" />
+      {/* ライブ映像を画面いっぱいに（純正カメラのように全面表示。横持ちなら横長で大きく） */}
+      <video ref={videoRef} playsInline muted autoPlay className="absolute inset-0 w-full h-full object-cover" />
       {flash && <div className="absolute inset-0 bg-white/80 pointer-events-none" />}
       {!ready && !error && <p className="absolute inset-0 flex items-center justify-center text-white/60 text-sm">カメラを起動中…</p>}
       {error && (
@@ -123,38 +123,46 @@ export function CameraCapture({
         <span className="text-[13px] tabular-nums text-white/80 w-10 text-right">{shots.length}/{MAX_SHOTS}</span>
       </div>
 
-      {/* 下部（撮影サムネ＋操作。映像に重ねる） */}
-      <div className="absolute bottom-0 inset-x-0 pt-8 bg-gradient-to-t from-black/60 to-transparent">
-        {shots.length > 0 && (
-          <div className="flex gap-2 overflow-x-auto px-4 pb-2 [-webkit-overflow-scrolling:touch]">
-            {shots.map((s) => (
-              <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/30" />
-            ))}
-          </div>
-        )}
-        <div className="grid grid-cols-3 items-center px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-1">
-          <button
-            onClick={undo}
-            disabled={shots.length === 0}
-            className="justify-self-start text-white/90 text-[14px] font-medium disabled:opacity-30"
-          >
-            1枚戻す
-          </button>
-          <button
-            onClick={capture}
-            disabled={!ready || shots.length >= MAX_SHOTS}
-            aria-label="シャッター"
-            className="justify-self-center w-[74px] h-[74px] rounded-full bg-white/95 ring-4 ring-white/40 active:scale-90 transition-transform disabled:opacity-40"
-          >
-            <span className="block w-full h-full rounded-full border-[3px] border-black/10" />
-          </button>
-          <button
-            onClick={onClose}
-            className="justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-95 transition-transform"
-          >
-            完了{shots.length > 0 ? `(${shots.length})` : ''}
-          </button>
+      {/* 撮影サムネ: 縦持ち=下（操作の上）／横持ち=左端の縦並び */}
+      {shots.length > 0 && (
+        <div
+          className="absolute z-10 flex gap-2 [-webkit-overflow-scrolling:touch]
+            portrait:inset-x-0 portrait:bottom-[calc(7.5rem+env(safe-area-inset-bottom))] portrait:flex-row portrait:overflow-x-auto portrait:px-4
+            landscape:inset-y-0 landscape:left-0 landscape:w-[4.25rem] landscape:flex-col landscape:items-center landscape:justify-center landscape:overflow-y-auto landscape:py-4 landscape:pl-[calc(0.5rem+env(safe-area-inset-left))]"
+        >
+          {shots.map((s) => (
+            <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/30" />
+          ))}
         </div>
+      )}
+
+      {/* 操作: 縦持ち=下に横並び（シャッター中央）／横持ち=右に縦並び（シャッター縦中央＝右手の親指圏） */}
+      <div
+        className="absolute z-10
+          portrait:inset-x-0 portrait:bottom-0 portrait:grid portrait:grid-cols-3 portrait:items-center portrait:px-6 portrait:pt-8 portrait:pb-[calc(1.25rem+env(safe-area-inset-bottom))] portrait:bg-gradient-to-t portrait:from-black/60 portrait:to-transparent
+          landscape:inset-y-0 landscape:right-0 landscape:flex landscape:flex-col landscape:items-center landscape:justify-center landscape:gap-6 landscape:py-6 landscape:pl-10 landscape:pr-[calc(0.75rem+env(safe-area-inset-right))] landscape:bg-gradient-to-l landscape:from-black/65 landscape:to-transparent"
+      >
+        <button
+          onClick={undo}
+          disabled={shots.length === 0}
+          className="portrait:justify-self-start text-white/90 text-[13px] font-medium disabled:opacity-30 whitespace-nowrap"
+        >
+          1枚戻す
+        </button>
+        <button
+          onClick={capture}
+          disabled={!ready || shots.length >= MAX_SHOTS}
+          aria-label="シャッター"
+          className="portrait:justify-self-center w-[74px] h-[74px] shrink-0 rounded-full bg-white/95 ring-4 ring-white/40 active:scale-90 transition-transform disabled:opacity-40"
+        >
+          <span className="block w-full h-full rounded-full border-[3px] border-black/10" />
+        </button>
+        <button
+          onClick={onClose}
+          className="portrait:justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-95 transition-transform whitespace-nowrap"
+        >
+          完了{shots.length > 0 ? `(${shots.length})` : ''}
+        </button>
       </div>
     </div>
   )
