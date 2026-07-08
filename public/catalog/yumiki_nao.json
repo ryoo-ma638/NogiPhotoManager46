@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 1,
+  "catalogVersion": 2,
   "member": {
     "id": "yumiki_nao",
     "name": "弓木奈於"
@@ -5357,6 +5357,368 @@
       "sortIndex": 3990,
       "note": null,
       "pageBreakAfter": false
+    },
+    {
+      "id": "s0400",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "5th ALBUM MEMORIAL LIVE 『My respect』 Tシャツ",
+      "template": "standard3",
+      "kind": "tshirt",
+      "sortIndex": 4000,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0401",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "最後に階段を駆け上がったのはいつだ？MV",
+      "template": "five5",
+      "kind": "mv",
+      "sortIndex": 4010,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
+    },
+    {
+      "id": "s0402",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.April-Ⅲ-パフスリーブAラインワンピ",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4020,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0403",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "君ばかりMV",
+      "template": "five5",
+      "kind": "mv",
+      "sortIndex": 4030,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "yori",
+          "label": "①",
+          "rarity": "normal"
+        },
+        {
+          "slot": "chu",
+          "label": "②",
+          "rarity": "normal"
+        },
+        {
+          "slot": "hiki",
+          "label": "③",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-yori",
+          "label": "④",
+          "rarity": "normal"
+        },
+        {
+          "slot": "suwari-hiki",
+          "label": "⑤",
+          "rarity": "normal"
+        }
+      ]
+    },
+    {
+      "id": "s0404",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.May-スペシャル衣装49",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4040,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0405",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.May-Ⅱ-スーツ",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4050,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0406",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.May-Ⅱ-ポロシャツワンピ",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4060,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0407",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "14thBDライブTシャツ",
+      "template": "standard3",
+      "kind": "tshirt",
+      "sortIndex": 4070,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0408",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "14周年記念",
+      "template": "five5",
+      "kind": "suwari",
+      "sortIndex": 4080,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0409",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.May-Ⅳ-桜カラーコーデ",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4090,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0410",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.May-Ⅴ-ショート丈ジャージ",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4100,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0411",
+      "binderId": "b2026-2027",
+      "year": 2026,
+      "name": "2026.June-41st制服",
+      "template": "standard3",
+      "kind": "normal",
+      "sortIndex": 4110,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0412",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "My respect",
+      "template": "four4",
+      "kind": "sealed",
+      "sortIndex": 4120,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0413",
+      "binderId": "b-sealed",
+      "year": null,
+      "name": "最後に階段を駆け上がったのはいつだ？",
+      "template": "four4",
+      "kind": "sealed",
+      "sortIndex": 4130,
+      "note": null,
+      "pageBreakAfter": false
+    },
+    {
+      "id": "s0414",
+      "binderId": "b-other",
+      "year": null,
+      "name": "ノギザカスキッツBlu-ray&DVD特典",
+      "template": "pair2",
+      "kind": "normal",
+      "sortIndex": 4140,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        },
+        {
+          "slot": "p2",
+          "label": "②",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0415",
+      "binderId": "b-other",
+      "year": null,
+      "name": "ノギザカスキッツBlu-ray&DVD第2弾特典",
+      "template": "pair2",
+      "kind": "normal",
+      "sortIndex": 4150,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        },
+        {
+          "slot": "p2",
+          "label": "②",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0416",
+      "binderId": "b-other",
+      "year": null,
+      "name": "ノギザカスキッツact2Blu-ray&DVD特典",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4160,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0417",
+      "binderId": "b-other",
+      "year": null,
+      "name": "ノギザカスキッツact2Blu-ray&DVD第2弾特典",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4170,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0418",
+      "binderId": "b-other",
+      "year": null,
+      "name": "9thBDライブ衣装1アザーカット",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4180,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0419",
+      "binderId": "b-other",
+      "year": null,
+      "name": "乃木坂スター誕生Blu-ray&DVD特典",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4190,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0420",
+      "binderId": "b-other",
+      "year": null,
+      "name": "乃木坂スター誕生2ndシーズン！Blu-ray&DVD特典",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4200,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
+    },
+    {
+      "id": "s0421",
+      "binderId": "b-other",
+      "year": null,
+      "name": "My respect セブン-イレブン・セブンネットショッピング限定特典",
+      "template": "single1",
+      "kind": "normal",
+      "sortIndex": 4210,
+      "note": null,
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        }
+      ]
     }
   ]
 }

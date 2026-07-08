@@ -7,7 +7,7 @@
 import json, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-TEMPLATES = {"standard3": 3, "four4": 4, "five5": 5, "rareSet8": 8, "event6": 6, "single1": 1}
+TEMPLATES = {"standard3": 3, "four4": 4, "five5": 5, "rareSet8": 8, "event6": 6, "single1": 1, "pair2": 2}
 
 def main():
     path = ROOT / "public" / "catalog" / "yumiki_nao.json"

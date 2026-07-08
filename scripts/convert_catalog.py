@@ -23,9 +23,10 @@ TEMPLATES = {
     "event6": [(f"p{i}", "①②③④⑤⑥"[i - 1], "normal") for i in range(1, 7)],
     "four4": [("A", "A", "normal"), ("B", "B", "normal"), ("C", "C", "normal"), ("D", "D", "normal")],
     "single1": [("p1", "①", "normal")],
+    "pair2": [("p1", "①", "normal"), ("p2", "②", "normal")],
 }
-# 種類数 → テンプレ（8はrareフラグで判定）。4種は封入(A/B/C/D)
-COUNT_TO_TEMPLATE = {3: "standard3", 4: "four4", 5: "five5", 6: "event6", 1: "single1"}
+# 種類数 → テンプレ（8はrareフラグで判定）。4種は封入(A/B/C/D)。2種は連番①②（主にその他特典）
+COUNT_TO_TEMPLATE = {2: "pair2", 3: "standard3", 4: "four4", 5: "five5", 6: "event6", 1: "single1"}
 # 末尾注記の語 → slot（長い語を先に）
 NOTE_TOKENS = [("座りヨリ", "suwari-yori"), ("座りヒキ", "suwari-hiki"), ("ヨリ", "yori"), ("チュウ", "chu"), ("ヒキ", "hiki")]
 
@@ -89,8 +90,10 @@ def main():
             _, bid, bname = line.split(" ", 2)
             cur_binder = bid
             cur_year = None  # バインダーが変わったら年をリセット（封入は年なし）
-            # sealed=年層なしのフラット表示（封入・その他）
-            binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": ("封入" in bname) or ("その他" in bname)})
+            # 既出バインダーの再宣言（末尾に新規追記するとき用）は重複登録しない＝cur_binderの切替だけ
+            if not any(b["id"] == bid for b in binders):
+                # sealed=年層なしのフラット表示（封入・その他）
+                binders.append({"id": bid, "name": bname, "sortIndex": len(binders), "sealed": ("封入" in bname) or ("その他" in bname)})
             continue
         if line.startswith("YEAR"):
             cur_year = int(line.split(" ", 1)[1])
@@ -226,7 +229,7 @@ def main():
     owned_ids = sorted(owned_set)
 
     catalog = {
-        "schemaVersion": 1, "catalogVersion": 1,
+        "schemaVersion": 1, "catalogVersion": 2,
         "member": {"id": MEMBER_ID, "name": MEMBER_NAME},
         "binders": binders, "sets": sets,
     }
