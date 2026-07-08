@@ -21,9 +21,27 @@ function norm(s: string): string {
   return s.normalize('NFKC').toLowerCase()
 }
 
-/** 照合用にゆらぎ（空白・記号）を落とす */
-function compact(s: string): string {
-  return norm(s).replace(/[\s._\-–—・、。,!！?？/｜|©]+/g, '')
+// 季節イベントは印字が英語・カタログ名が日本語（またはその逆）で混在するため、共通の綴りに寄せる
+const SYNONYMS: Array<[RegExp, string]> = [
+  [/ハロウィン|halloween/g, 'halloween'],
+  [/クリスマス|christmas|xmas/g, 'christmas'],
+  [/バレンタイン|valentine'?s?/g, 'valentine'],
+]
+// 印字にもセット名にも出る一般語（誤一致の元）は照合から除く
+const STOPWORDS = /乃木坂46|乃木坂/g
+
+/** 検索・照合の共通正規化: NFKC＋小文字＋日英シノニム統一（記号は残す） */
+export function normalizeForSearch(s: string): string {
+  let t = norm(s)
+  for (const [re, rep] of SYNONYMS) t = t.replace(re, rep)
+  return t
+}
+
+/** 名前照合用: シノニム統一＋一般語(乃木坂46)除去＋空白/記号除去 */
+function canon(s: string): string {
+  return normalizeForSearch(s)
+    .replace(STOPWORDS, '')
+    .replace(/[\s._\-–—・、。,!！?？/｜|©]+/g, '')
 }
 
 /** a と b の最長共通部分文字列の長さ（部分一致の強さの指標） */
@@ -114,10 +132,11 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
 
   // 5) フォールバック: 名前の部分一致。印字とセット名の「共通する文字の並び」が長い順に候補化。
   //    タイトルの一部（例:「真夏の全国ツアー」）しか読めなくても、それを含むセットを候補として出せる。
-  const cap = compact(caption)
+  //    日英シノニム統一済み（Halloween↔ハロウィン等）・「乃木坂46」等の一般語は除外済み。
+  const cap = canon(caption)
   if (cap.length >= 3) {
     const scored = sets
-      .map((s) => ({ s, score: commonRunLen(cap, compact(s.name)) }))
+      .map((s) => ({ s, score: commonRunLen(cap, canon(s.name)) }))
       .filter((x) => x.score >= 5) // 5文字以上一致（年"2022"だけの偶然一致は拾わない）
       .sort((a, b) => b.score - a.score)
     if (scored.length > 0) return { sets: scored.slice(0, 20).map((x) => x.s), slot: null, via: 'name' }

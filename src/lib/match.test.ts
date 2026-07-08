@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { matchCaption, parseDateCode, slotForPose } from './match'
+import { matchCaption, normalizeForSearch, parseDateCode, slotForPose } from './match'
 import { lookupSRCL, parseSRCL } from './srcl'
 import type { CatalogSet } from '../types'
 
@@ -61,6 +61,24 @@ describe('matchCaption', () => {
     expect(m1.sets.map((s) => s.id)).not.toContain('m3')
     // ロゴタイトルの一部でも拾える
     expect(matchCaption('ロックだぜ', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['m4'])
+  })
+  it('季節イベントは日英どちらの印字でも一致し、共通語(乃木坂46)で誤って別セットを拾わない', () => {
+    const arr = [
+      set('h', 'ハロウィン2022'),
+      set('v', '2022.Valentine'),
+      set('tv', '乃木坂46時間TV Tシャツ'),
+    ]
+    // 英語印字 "Halloween" → 日本語名「ハロウィン2022」を候補に。時間TV(共通語=乃木坂46)は拾わない
+    const mh = matchCaption('乃木坂46 2022.Halloween', arr, NO_SEALED)
+    expect(mh.sets.map((s) => s.id)).toContain('h')
+    expect(mh.sets.map((s) => s.id)).not.toContain('tv')
+    // 英語印字 "Valentine" → 英語名「2022.Valentine」も当たる
+    expect(matchCaption('乃木坂46 2022.Valentine', arr, NO_SEALED).sets.map((s) => s.id)).toContain('v')
+  })
+  it('normalizeForSearch は日英を共通化する（検索でどちらでもヒット）', () => {
+    expect(normalizeForSearch('ハロウィン')).toBe(normalizeForSearch('Halloween'))
+    expect(normalizeForSearch('クリスマス')).toBe(normalizeForSearch('christmas'))
+    expect(normalizeForSearch('バレンタイン')).toContain('valentine')
   })
   it('年"2022"だけの偶然一致では候補にしない（誤読対策）', () => {
     const arr = [set('v1', 'バレンタイン2026'), set('v2', 'ハロウィン2022')]

@@ -6,7 +6,7 @@ import { CameraCapture } from '../components/CameraCapture'
 import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
-import { matchCaption, slotForPose } from '../lib/match'
+import { matchCaption, slotForPose, normalizeForSearch } from '../lib/match'
 import { kindOf } from '../lib/kinds'
 import type { Binder, CatalogSet } from '../types'
 
@@ -602,10 +602,11 @@ function SetPicker({
   else if (typeof filter === 'string') pool = allSets.filter((s) => s.binderId === filter)
   else pool = t ? allSets : [] // 未選択なら検索したときだけ全体から
 
-  // 検索: 空白区切りの全語を含む（AND）。語は名前の「途中」にあってもよい（部分一致）
-  const tokens = t.split(/\s+/).filter(Boolean)
+  // 検索: 空白区切りの全語を含む（AND）。語は名前の「途中」にあってもよい（部分一致）。
+  // 日英シノニム統一で「ハロウィン」でも「Halloween」でも両方ヒットする。
+  const tokens = normalizeForSearch(q.trim()).split(/\s+/).filter(Boolean)
   const nameMatches = (s: CatalogSet) => {
-    const n = norm(s.name)
+    const n = normalizeForSearch(s.name)
     return tokens.every((tok) => n.includes(tok))
   }
   const scoped = tokens.length > 0 ? pool.filter(nameMatches) : pool

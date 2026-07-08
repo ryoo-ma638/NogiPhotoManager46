@@ -123,15 +123,15 @@ export function CameraCapture({
         <span className="text-[13px] tabular-nums text-white/80 w-10 text-right">{shots.length}/{MAX_SHOTS}</span>
       </div>
 
-      {/* 撮影サムネ: 縦持ち=下（操作の上）／横持ち=左端の縦並び */}
+      {/* 撮影サムネ: 縦持ち=下（操作の上）／横持ち=左端の縦並び。全体が見えるようcontainで表示 */}
       {shots.length > 0 && (
         <div
           className="absolute z-10 flex gap-2 [-webkit-overflow-scrolling:touch]
             portrait:inset-x-0 portrait:bottom-[calc(7.5rem+env(safe-area-inset-bottom))] portrait:flex-row portrait:overflow-x-auto portrait:px-4
-            landscape:inset-y-0 landscape:left-0 landscape:w-[4.25rem] landscape:flex-col landscape:items-center landscape:justify-center landscape:overflow-y-auto landscape:py-4 landscape:pl-[calc(0.5rem+env(safe-area-inset-left))]"
+            landscape:inset-y-0 landscape:left-0 landscape:w-32 landscape:flex-col landscape:items-center landscape:justify-center landscape:overflow-y-auto landscape:py-4 landscape:pl-[calc(0.5rem+env(safe-area-inset-left))]"
         >
           {shots.map((s) => (
-            <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/30" />
+            <img key={s.id} src={s.url} alt="" className="h-20 w-28 shrink-0 rounded-md object-contain bg-black/40 border border-white/25" />
           ))}
         </div>
       )}
