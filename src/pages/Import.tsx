@@ -607,11 +607,13 @@ function SetPicker({
   else if (typeof filter === 'string') pool = allSets.filter((s) => s.binderId === filter)
   else pool = t ? allSets : [] // 未選択なら検索したときだけ全体から
 
-  // 検索: 空白区切りの全語を含む（AND）。語は名前の「途中」にあってもよい（部分一致）。
-  // 日英シノニム統一で「ハロウィン」でも「Halloween」でも両方ヒットする。
-  const tokens = normalizeForSearch(q.trim()).split(/\s+/).filter(Boolean)
+  // 検索: 日英シノニム統一（「バースデーライブ」でも「BIRTHDAY LIVE」でも）＋空白/記号を無視して
+  // 部分一致（AND）。まずクエリ全体をシノニム変換（"4th members"→"4期"等の連語も効かせる）→語で分割→
+  // 各語から空白記号を落として、同じく空白記号を落としたセット名に含まれるか見る。
+  const stripSP = (s: string) => s.replace(/[\s._\-–—・、。,!！?？/｜|©'’]+/g, '')
+  const tokens = normalizeForSearch(q.trim()).split(/\s+/).map(stripSP).filter(Boolean)
   const nameMatches = (s: CatalogSet) => {
-    const n = normalizeForSearch(s.name)
+    const n = stripSP(normalizeForSearch(s.name))
     return tokens.every((tok) => n.includes(tok))
   }
   const scoped = tokens.length > 0 ? pool.filter(nameMatches) : pool

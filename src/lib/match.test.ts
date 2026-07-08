@@ -81,6 +81,14 @@ describe('matchCaption', () => {
     expect(normalizeForSearch("X'mas")).toContain('christmas')
     expect(normalizeForSearch('バレンタイン')).toContain('valentine')
   })
+  it('カタカナ入力「バースデーライブ」は英語名「BIRTHDAY LIVE」に空白無視で一致する形になる', () => {
+    const strip = (s: string) => normalizeForSearch(s).replace(/[\s・]+/g, '')
+    const q = strip('バースデーライブ')
+    expect(strip('9th YEAR BIRTHDAY LIVE 3期生・4期生ライブ').includes(q)).toBe(true)
+    // 「4th」でも「4期」でも同じ（世代の数字が効く）
+    expect(strip('4th members')).toContain('4期')
+    expect(strip('フォースメンバー')).toContain('4期')
+  })
   it('周年は "11th BD" でも "11周年" でも同じセットに一致（TH/周年両対応）', () => {
     const arr = [set('a', '11周年記念'), set('b', '12周年記念')]
     expect(matchCaption('乃木坂46 11th BD 弓木奈於', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['a'])
