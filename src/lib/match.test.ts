@@ -48,6 +48,25 @@ describe('matchCaption', () => {
   it('該当なしは空', () => {
     expect(matchCaption('2029.May', sets, NO_SEALED).sets).toEqual([])
   })
+  it('タイトルの一部だけ読めても、それを含むセットを候補に出す', () => {
+    const arr = [
+      set('m1', '真夏の全国ツアー2022 Tシャツ 愛知ver'),
+      set('m2', '真夏の全国ツアー2022 Tシャツ 東京ver'),
+      set('m3', 'バレンタイン2026'),
+      set('m4', '好きというのはロックだぜ！'),
+    ]
+    const m1 = matchCaption('真夏の全国ツアー', arr, NO_SEALED)
+    expect(m1.via).toBe('name')
+    expect(m1.sets.map((s) => s.id)).toEqual(expect.arrayContaining(['m1', 'm2']))
+    expect(m1.sets.map((s) => s.id)).not.toContain('m3')
+    // ロゴタイトルの一部でも拾える
+    expect(matchCaption('ロックだぜ', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['m4'])
+  })
+  it('年"2022"だけの偶然一致では候補にしない（誤読対策）', () => {
+    const arr = [set('v1', 'バレンタイン2026'), set('v2', 'ハロウィン2022')]
+    // 「真夏の全国ツアー2022 愛知」は v2 と "2022"(4文字)しか共有しない → 候補にしない
+    expect(matchCaption('真夏の全国ツアー2022 愛知', arr, NO_SEALED).sets).toEqual([])
+  })
   it('SRCLの無いNOT FOR SALE印字は「その他」の候補になる（自動確定はしない）', () => {
     const withOther = [...sets, set('o1', '乃木坂配信中限定！MV衣装生写真（Same numbers）', 'b-other')]
     const m = matchCaption('乃木坂46 弓木 奈於 NAO YUMIKI © Sony Music Labels Inc. / NOT FOR SALE', withOther, NO_SEALED)

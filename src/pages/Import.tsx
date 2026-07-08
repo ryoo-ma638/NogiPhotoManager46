@@ -61,34 +61,63 @@ export default function ImportPage() {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)))
   }
 
-  // ファイル選択・カメラ撮影のどちらからでも、同じ判別パイプラインに流す
-  const addBlobs = async (blobs: Blob[]) => {
-    if (blobs.length === 0) return
-    const list = blobs.slice(0, 30) // 一度に最大30枚
-    const newItems: ImportItem[] = list.map((f) => ({
-      id: crypto.randomUUID(),
-      file: f,
-      url: URL.createObjectURL(f),
-      status: 'waiting',
-      caption: null,
-      pose: null,
-      setId: null,
-      slot: null,
-      auto: false,
-      sequenced: false,
-      candidates: null,
-      error: null,
-    }))
-    setItems((prev) => [...prev, ...newItems])
+  const makeItem = (file: Blob, id: string = crypto.randomUUID()): ImportItem => ({
+    id,
+    file,
+    url: URL.createObjectURL(file),
+    status: 'waiting',
+    caption: null,
+    pose: null,
+    setId: null,
+    slot: null,
+    auto: false,
+    sequenced: false,
+    candidates: null,
+    error: null,
+  })
+
+  // 解析キュー: 撮った端から1枚ずつ順に解析する（撮影と並行して走る）
+  const queueRef = useRef<ImportItem[]>([])
+  const removedRef = useRef<Set<string>>(new Set())
+  const pumpingRef = useRef(false)
+
+  const pump = async () => {
+    if (pumpingRef.current) return
+    pumpingRef.current = true
     setBusy(true)
-    for (const it of newItems) {
+    while (queueRef.current.length > 0) {
+      const it = queueRef.current.shift()!
+      if (removedRef.current.has(it.id)) continue // 取消済みはAPIを使わずスキップ
       await analyze(it)
     }
+    pumpingRef.current = false
     setBusy(false)
   }
 
+  const enqueue = (newItems: ImportItem[]) => {
+    if (newItems.length === 0) return
+    setItems((prev) => [...prev, ...newItems])
+    queueRef.current.push(...newItems)
+    void pump()
+  }
+
+  // ファイル選択（複数）→ まとめてキューへ
   const onFiles = (files: FileList | null) => {
-    if (files) void addBlobs([...files])
+    if (!files || files.length === 0) return
+    enqueue([...files].slice(0, 30).map((f) => makeItem(f)))
+  }
+
+  // カメラの1枚撮影 → 即キューへ（解析開始）
+  const onCameraShot = (id: string, blob: Blob) => enqueue([makeItem(blob, id)])
+
+  // カメラの「1枚戻す」→ その1枚を取消（解析中なら結果は破棄される）
+  const onCameraUndo = (id: string) => {
+    removedRef.current.add(id)
+    setItems((prev) => {
+      const target = prev.find((x) => x.id === id)
+      if (target) URL.revokeObjectURL(target.url)
+      return prev.filter((x) => x.id !== id)
+    })
   }
 
   /** 1枚の認識結果 → セット/枠の推定 */
@@ -98,10 +127,10 @@ export default function ImportPage() {
     let candidates: string[] | null = null
     if (rec.caption) {
       const m = matchCaption(rec.caption, allSets, sealedBinders)
-      if (m.via === 'other') {
-        // その他（配信限定等）: SRCLが読めなかった封入の可能性もあるため自動確定せず候補提示
-        candidates = m.sets.map((s) => s.id)
-      } else if (m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
+      // 自動確定は「正確な照合（品番・日付コード・周年）＋高確信度＋1件」に限る。
+      // あいまいな名前一致・確信度不足・複数該当は、誤登録を避けて画面に候補として出す。
+      const precise = m.via === 'srcl' || m.via === 'date' || m.via === 'anniversary'
+      if (precise && m.sets.length === 1 && rec.captionConfidence >= MIN_CONFIDENCE) {
         const hit = m.sets[0]!
         setId = hit.id
         const photos = photosOf(hit)
@@ -112,8 +141,8 @@ export default function ImportPage() {
         } else if (rec.pose !== 'unknown' && rec.poseConfidence >= MIN_CONFIDENCE) {
           slot = slotForPose(rec.pose, kindOf(hit, sealedBinders.has(hit.binderId)), photos.map((p) => p.slot))
         }
-      } else if (m.sets.length > 1 && m.sets.length <= 20) {
-        candidates = m.sets.map((s) => s.id) // 絞り込めた候補を「セットを選ぶ」の初期表示に
+      } else if (m.sets.length >= 1) {
+        candidates = m.sets.slice(0, 20).map((s) => s.id) // 印字から絞った候補を「セットを選ぶ」の初期表示に
       }
     }
     return { caption: rec.caption, pose: rec.pose, setId, slot, auto: !!(setId && slot), candidates }
@@ -282,8 +311,7 @@ export default function ImportPage() {
 
         <button
           onClick={() => setShowCamera(true)}
-          disabled={busy}
-          className="w-full h-24 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 flex flex-col items-center justify-center gap-1 disabled:opacity-50 active:scale-[0.99] transition"
+          className="w-full h-24 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 flex flex-col items-center justify-center gap-1 active:scale-[0.99] transition"
         >
           <CameraIcon className="w-6 h-6" />
           カメラで撮る（連続）
@@ -459,11 +487,9 @@ export default function ImportPage() {
 
       {showCamera && (
         <CameraCapture
+          onShot={onCameraShot}
+          onUndo={onCameraUndo}
           onClose={() => setShowCamera(false)}
-          onDone={(blobs) => {
-            setShowCamera(false)
-            void addBlobs(blobs)
-          }}
         />
       )}
 

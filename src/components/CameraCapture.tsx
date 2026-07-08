@@ -10,14 +10,23 @@ function cameraErrorMessage(e: unknown): string {
 }
 
 /**
- * アプリ内ライブカメラ。連続でシャッターを切り、撮った分をまとめて渡す。
- * 撮った各コマは呼び出し側の既存AI判別に流れる（1枚でも複数枚並べても自動で処理される）。
+ * アプリ内ライブカメラ。連続でシャッターを切る。
+ * 撮った1枚ごとに onShot(id, blob) を呼び、撮影と並行して親側が解析を始める。
+ * 「1枚戻す」は onUndo(id) でその1枚を取り消す。
  */
-export function CameraCapture({ onDone, onClose }: { onDone: (blobs: Blob[]) => void; onClose: () => void }) {
+export function CameraCapture({
+  onShot,
+  onUndo,
+  onClose,
+}: {
+  onShot: (id: string, blob: Blob) => void
+  onUndo: (id: string) => void
+  onClose: () => void
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  const [shots, setShots] = useState<{ blob: Blob; url: string }[]>([])
-  const shotsRef = useRef<{ blob: Blob; url: string }[]>([])
+  const [shots, setShots] = useState<{ id: string; url: string }[]>([])
+  const shotsRef = useRef<{ id: string; url: string }[]>([])
   shotsRef.current = shots
   const [error, setError] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
@@ -67,7 +76,10 @@ export function CameraCapture({ onDone, onClose }: { onDone: (blobs: Blob[]) => 
     ctx.drawImage(video, 0, 0)
     canvas.toBlob(
       (b) => {
-        if (b) setShots((prev) => [...prev, { blob: b, url: URL.createObjectURL(b) }])
+        if (!b) return
+        const id = crypto.randomUUID()
+        setShots((prev) => [...prev, { id, url: URL.createObjectURL(b) }])
+        onShot(id, b) // 親が即・解析キューへ
       },
       'image/jpeg',
       0.92,
@@ -79,7 +91,10 @@ export function CameraCapture({ onDone, onClose }: { onDone: (blobs: Blob[]) => 
   const undo = () => {
     setShots((prev) => {
       const last = prev[prev.length - 1]
-      if (last) URL.revokeObjectURL(last.url)
+      if (last) {
+        URL.revokeObjectURL(last.url)
+        onUndo(last.id)
+      }
       return prev.slice(0, -1)
     })
   }
@@ -110,11 +125,11 @@ export function CameraCapture({ onDone, onClose }: { onDone: (blobs: Blob[]) => 
         )}
       </div>
 
-      {/* 撮影サムネの帯 */}
+      {/* 撮影サムネの帯（撮った端から解析中） */}
       {shots.length > 0 && (
         <div className="flex gap-2 overflow-x-auto px-4 py-2 [-webkit-overflow-scrolling:touch]">
-          {shots.map((s, i) => (
-            <img key={i} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/20" />
+          {shots.map((s) => (
+            <img key={s.id} src={s.url} alt="" className="h-16 w-12 shrink-0 rounded-md object-cover border border-white/20" />
           ))}
         </div>
       )}
@@ -137,11 +152,10 @@ export function CameraCapture({ onDone, onClose }: { onDone: (blobs: Blob[]) => 
           <span className="block w-full h-full rounded-full border-[3px] border-black/10" />
         </button>
         <button
-          onClick={() => onDone(shots.map((s) => s.blob))}
-          disabled={shots.length === 0}
-          className="justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] disabled:opacity-30 active:scale-95 transition-transform"
+          onClick={onClose}
+          className="justify-self-end h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-95 transition-transform"
         >
-          取り込む{shots.length > 0 ? `(${shots.length})` : ''}
+          完了{shots.length > 0 ? `(${shots.length})` : ''}
         </button>
       </div>
     </div>

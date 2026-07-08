@@ -21,6 +21,30 @@ function norm(s: string): string {
   return s.normalize('NFKC').toLowerCase()
 }
 
+/** 照合用にゆらぎ（空白・記号）を落とす */
+function compact(s: string): string {
+  return norm(s).replace(/[\s._\-–—・、。,!！?？/｜|©]+/g, '')
+}
+
+/** a と b の最長共通部分文字列の長さ（部分一致の強さの指標） */
+function commonRunLen(a: string, b: string): number {
+  if (!a || !b) return 0
+  const n = b.length
+  let prev = new Array<number>(n + 1).fill(0)
+  let best = 0
+  for (let i = 1; i <= a.length; i++) {
+    const cur = new Array<number>(n + 1).fill(0)
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        cur[j] = prev[j - 1]! + 1
+        if (cur[j]! > best) best = cur[j]!
+      }
+    }
+    prev = cur
+  }
+  return best
+}
+
 /** テキストから日付コード（年.月-ローマ数字）を取り出す。無ければnull */
 export function parseDateCode(text: string): DateCode | null {
   const t = norm(text)
@@ -88,14 +112,15 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
     if (others.length > 0) return { sets: others, slot: null, via: 'other' }
   }
 
-  // 5) フォールバック: 正規化した名前の部分一致
-  const t = norm(caption).replace(/[\s._-]+/g, '')
-  if (t.length >= 3) {
-    const hits = sets.filter((s) => {
-      const n = norm(s.name).replace(/[\s._-]+/g, '')
-      return n.includes(t) || t.includes(n)
-    })
-    if (hits.length > 0) return { sets: hits, slot: null, via: 'name' }
+  // 5) フォールバック: 名前の部分一致。印字とセット名の「共通する文字の並び」が長い順に候補化。
+  //    タイトルの一部（例:「真夏の全国ツアー」）しか読めなくても、それを含むセットを候補として出せる。
+  const cap = compact(caption)
+  if (cap.length >= 3) {
+    const scored = sets
+      .map((s) => ({ s, score: commonRunLen(cap, compact(s.name)) }))
+      .filter((x) => x.score >= 5) // 5文字以上一致（年"2022"だけの偶然一致は拾わない）
+      .sort((a, b) => b.score - a.score)
+    if (scored.length > 0) return { sets: scored.slice(0, 20).map((x) => x.s), slot: null, via: 'name' }
   }
   return { sets: [], slot: null, via: null }
 }
