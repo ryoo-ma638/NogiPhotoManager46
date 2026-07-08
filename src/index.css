@@ -17,3 +17,24 @@ html {
   to { opacity: 1; }
 }
 .animate-fade { animation: fade 0.2s ease-out; }
+
+/* 縦向き強制: スマホを横に持ってもアプリを横画面で使わせない。
+   タッチ端末が横向き かつ 画面が低い（＝スマホを横持ち）ときだけ全画面で覆う。
+   PC（マウス）や縦向き、iPadの縦横には影響しない。 */
+.rotate-guard { display: none; }
+@media screen and (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  .rotate-guard {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    background: #0f172a;
+    color: #fff;
+  }
+}
