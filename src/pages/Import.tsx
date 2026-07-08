@@ -373,17 +373,45 @@ export default function ImportPage() {
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
                   {it.caption && <span className="text-slate-400 line-clamp-2 break-all">印字: {it.caption}</span>}
                 </div>
-                {/* セット選択（候補が1件ならタップで即確定・複数ならピッカー） */}
+                {/* セット選択: 候補があれば先頭候補を「タップで確定」＋隣に「他の候補」。無ければ「セットを選ぶ」 */}
                 {(() => {
-                  const only = !set && it.candidates?.length === 1 ? setById.get(it.candidates[0]!) ?? null : null
+                  const openPicker = () => setPickerFor({ itemId: it.id, mode: 'set' })
+                  if (set) {
+                    return (
+                      <button
+                        onClick={openPicker}
+                        className="w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border bg-violet-50 border-violet-200 text-violet-700"
+                      >
+                        {set.name}
+                      </button>
+                    )
+                  }
+                  const top = it.candidates?.length ? setById.get(it.candidates[0]!) ?? null : null
+                  if (top) {
+                    const n = it.candidates!.length
+                    return (
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => cascadeAssign(it.id, top)}
+                          className="flex-1 min-w-0 h-9 rounded-lg px-2.5 text-left text-[13px] font-bold truncate border bg-amber-50 border-amber-300 text-amber-700"
+                        >
+                          {top.name} <span className="font-medium text-amber-500">（タップで確定）</span>
+                        </button>
+                        <button
+                          onClick={openPicker}
+                          className="shrink-0 h-9 px-2.5 rounded-lg text-[12px] font-medium border bg-white border-slate-200 text-slate-500 active:bg-slate-50"
+                        >
+                          {n > 1 ? `他の候補（${n}）` : '他を選ぶ'}
+                        </button>
+                      </div>
+                    )
+                  }
                   return (
                     <button
-                      onClick={() => (only ? cascadeAssign(it.id, only) : setPickerFor({ itemId: it.id, mode: 'set' }))}
-                      className={`w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border ${
-                        set ? 'bg-violet-50 border-violet-200 text-violet-700' : it.candidates?.length ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-slate-50 border-slate-200 text-slate-400'
-                      }`}
+                      onClick={openPicker}
+                      className="w-full h-9 rounded-lg px-2.5 text-left text-[13px] font-medium truncate border bg-slate-50 border-slate-200 text-slate-400"
                     >
-                      {set ? set.name : only ? `${only.name}（タップで確定）` : it.candidates?.length ? `候補から選ぶ（${it.candidates.length}件）` : 'セットを選ぶ'}
+                      セットを選ぶ
                     </button>
                   )
                 })()}

@@ -155,15 +155,19 @@ export function matchCaption(caption: string, sets: CatalogSet[], sealedBinderId
   //    日英シノニム統一済み（Halloween↔ハロウィン等）・「乃木坂46」等の一般語は除外済み。
   const cap = canon(caption)
   if (cap.length >= 3) {
+    const capYear = caption.match(/20\d{2}/)?.[0] ?? null // 印字の年（あれば同年のセットを最優先の候補に）
     const scored = sets
       .map((s) => {
         const cn = canon(s.name)
-        return { s, cn, score: commonRunLen(cap, cn) }
+        const base = commonRunLen(cap, cn)
+        // 例:「2023 Halloween」→ ハロウィン2020〜2025 が同点で並ぶので、年一致を大きく加点して先頭に
+        const rank = base + (capYear && base > 0 && String(s.year) === capYear ? 1000 : 0)
+        return { s, cn, base, rank }
       })
       // 5文字以上一致 or セット名まるごとが印字に含まれる（「悪い成分」等の短い題名を拾う。
       // ただし年"2022"だけの数字偶然一致は除く＝非数字を含むこと）
-      .filter((x) => x.score >= 5 || (x.score >= 3 && x.score === x.cn.length && /\D/.test(x.cn)))
-      .sort((a, b) => b.score - a.score)
+      .filter((x) => x.base >= 5 || (x.base >= 3 && x.base === x.cn.length && /\D/.test(x.cn)))
+      .sort((a, b) => b.rank - a.rank)
     if (scored.length > 0) return { sets: scored.slice(0, 20).map((x) => x.s), slot: null, via: 'name' }
   }
   return { sets: [], slot: null, via: null }

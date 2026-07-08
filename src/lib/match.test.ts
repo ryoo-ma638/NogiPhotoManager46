@@ -110,6 +110,13 @@ describe('matchCaption', () => {
     expect(ids).not.toContain('other')
     expect(ids[0]).toBe('t4') // 11周年・4期が最上位（9周年より上）
   })
+  it('印字に年があれば、その年のセットを先頭候補にする（2023 Halloween → ハロウィン2023が先頭）', () => {
+    const mk = (id: string, name: string, year: number): CatalogSet => ({ id, binderId: 'b', year, name, template: 'standard3', sortIndex: 10, note: null })
+    const arr = [mk('h20', 'ハロウィン2020', 2020), mk('h23', 'ハロウィン2023', 2023), mk('h22', 'ハロウィン2022', 2022)]
+    const m = matchCaption('乃木坂46 2023.Halloween 弓木奈於', arr, NO_SEALED)
+    expect(m.sets[0]!.id).toBe('h23') // 2023が先頭
+    expect(m.sets.map((s) => s.id)).toEqual(expect.arrayContaining(['h20', 'h22', 'h23'])) // 他年も候補には残す
+  })
   it('短い題名（4文字「悪い成分」）も印字にまるごと含まれれば候補に出る', () => {
     const arr = [set('w', '悪い成分'), set('x', 'ハロウィン2022')]
     expect(matchCaption('乃木坂46 悪い成分 弓木奈於', arr, NO_SEALED).sets.map((s) => s.id)).toEqual(['w'])
