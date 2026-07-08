@@ -5548,7 +5548,7 @@
       "id": "s0412",
       "binderId": "b-sealed",
       "year": null,
-      "name": "My respect",
+      "name": "最後に階段を駆け上がったのはいつだ？",
       "template": "four4",
       "kind": "sealed",
       "sortIndex": 4120,
@@ -5557,20 +5557,32 @@
     },
     {
       "id": "s0413",
-      "binderId": "b-sealed",
+      "binderId": "b-other",
       "year": null,
-      "name": "最後に階段を駆け上がったのはいつだ？",
-      "template": "four4",
-      "kind": "sealed",
+      "name": "ノギザカスキッツBlu-ray&DVD特典",
+      "template": "pair2",
+      "kind": "normal",
       "sortIndex": 4130,
       "note": null,
-      "pageBreakAfter": false
+      "pageBreakAfter": false,
+      "photos": [
+        {
+          "slot": "p1",
+          "label": "①",
+          "rarity": "other"
+        },
+        {
+          "slot": "p2",
+          "label": "②",
+          "rarity": "other"
+        }
+      ]
     },
     {
       "id": "s0414",
       "binderId": "b-other",
       "year": null,
-      "name": "ノギザカスキッツBlu-ray&DVD特典",
+      "name": "ノギザカスキッツBlu-ray&DVD第2弾特典",
       "template": "pair2",
       "kind": "normal",
       "sortIndex": 4140,
@@ -5593,8 +5605,8 @@
       "id": "s0415",
       "binderId": "b-other",
       "year": null,
-      "name": "ノギザカスキッツBlu-ray&DVD第2弾特典",
-      "template": "pair2",
+      "name": "ノギザカスキッツact2Blu-ray&DVD特典",
+      "template": "single1",
       "kind": "normal",
       "sortIndex": 4150,
       "note": null,
@@ -5604,11 +5616,6 @@
           "slot": "p1",
           "label": "①",
           "rarity": "other"
-        },
-        {
-          "slot": "p2",
-          "label": "②",
-          "rarity": "other"
         }
       ]
     },
@@ -5616,7 +5623,7 @@
       "id": "s0416",
       "binderId": "b-other",
       "year": null,
-      "name": "ノギザカスキッツact2Blu-ray&DVD特典",
+      "name": "ノギザカスキッツact2Blu-ray&DVD第2弾特典",
       "template": "single1",
       "kind": "normal",
       "sortIndex": 4160,
@@ -5634,7 +5641,7 @@
       "id": "s0417",
       "binderId": "b-other",
       "year": null,
-      "name": "ノギザカスキッツact2Blu-ray&DVD第2弾特典",
+      "name": "9thBDライブ衣装1アザーカット",
       "template": "single1",
       "kind": "normal",
       "sortIndex": 4170,
@@ -5652,7 +5659,7 @@
       "id": "s0418",
       "binderId": "b-other",
       "year": null,
-      "name": "9thBDライブ衣装1アザーカット",
+      "name": "乃木坂スター誕生Blu-ray&DVD特典",
       "template": "single1",
       "kind": "normal",
       "sortIndex": 4180,
@@ -5670,7 +5677,7 @@
       "id": "s0419",
       "binderId": "b-other",
       "year": null,
-      "name": "乃木坂スター誕生Blu-ray&DVD特典",
+      "name": "乃木坂スター誕生2ndシーズン！Blu-ray&DVD特典",
       "template": "single1",
       "kind": "normal",
       "sortIndex": 4190,
@@ -5688,28 +5695,10 @@
       "id": "s0420",
       "binderId": "b-other",
       "year": null,
-      "name": "乃木坂スター誕生2ndシーズン！Blu-ray&DVD特典",
-      "template": "single1",
-      "kind": "normal",
-      "sortIndex": 4200,
-      "note": null,
-      "pageBreakAfter": false,
-      "photos": [
-        {
-          "slot": "p1",
-          "label": "①",
-          "rarity": "other"
-        }
-      ]
-    },
-    {
-      "id": "s0421",
-      "binderId": "b-other",
-      "year": null,
       "name": "My respect セブン-イレブン・セブンネットショッピング限定特典",
       "template": "single1",
       "kind": "normal",
-      "sortIndex": 4210,
+      "sortIndex": 4200,
       "note": null,
       "pageBreakAfter": false,
       "photos": [
