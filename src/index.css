@@ -18,23 +18,24 @@ html {
 }
 .animate-fade { animation: fade 0.2s ease-out; }
 
-/* 縦向き強制: スマホを横に持ってもアプリを横画面で使わせない。
-   タッチ端末が横向き かつ 画面が低い（＝スマホを横持ち）ときだけ全画面で覆う。
-   PC（マウス）や縦向き、iPadの縦横には影響しない。 */
-.rotate-guard { display: none; }
+/* 縦向き維持: スマホを横に持っても、アプリの中身を回転させて「縦レイアウトのまま」見せる。
+   タッチ端末が横向き かつ 画面が低い（＝スマホ横持ち）ときだけ適用。
+   PC（マウス）・縦向き・iPad は対象外なので影響しない。
+   ※ホーム画面に追加したアプリ(PWA)では manifest の orientation:portrait が効き、
+   　そもそも横に回らない（この回転処理は発動しない）。Safariのタブ表示用の保険。 */
 @media screen and (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
-  .rotate-guard {
-    display: flex;
+  html { overflow: hidden; }
+  #root {
     position: fixed;
-    inset: 0;
-    z-index: 100;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 2rem;
-    text-align: center;
-    background: #0f172a;
-    color: #fff;
+    top: 50%;
+    left: 50%;
+    width: 100vh;   /* 回転後の見た目の高さ */
+    height: 100vw;  /* 回転後の見た目の幅 */
+    margin-top: -50vw;
+    margin-left: -50vh;
+    transform: rotate(-90deg);
+    transform-origin: center center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }

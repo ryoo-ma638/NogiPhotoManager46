@@ -39,12 +39,6 @@ function Shell() {
     <div className="min-h-dvh bg-slate-50 text-slate-900 pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
       {page}
       <TabBar active={tab} />
-      {/* スマホを横に持ってもアプリを横画面にしない（縦に戻すよう促す全画面ガード） */}
-      <div className="rotate-guard">
-        <span className="text-4xl">📱</span>
-        <p className="text-base font-bold">画面を縦にしてください</p>
-        <p className="text-xs text-white/70">このアプリは縦向きで使います</p>
-      </div>
     </div>
   )
 }
