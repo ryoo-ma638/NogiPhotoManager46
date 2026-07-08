@@ -16,7 +16,7 @@ export function ThumbImg({ photoId, version = 0, className = '' }: { photoId: st
     }
   }, [photoId, version])
   if (!url) return null
-  return <img src={url} alt="" className={className} draggable={false} />
+  return <img src={url} alt="" className={className} draggable={false} loading="lazy" decoding="async" />
 }
 
 /** フルスクリーンの画像ビューア（差し替え・削除つき） */

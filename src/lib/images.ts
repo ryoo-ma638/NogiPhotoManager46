@@ -115,8 +115,29 @@ export async function ensurePortrait(file: Blob): Promise<Blob> {
   return landscape ? rotateImage(file, 90) : file
 }
 
-// オブジェクトURLのキャッシュ（スクロールのたびにIndexedDBを叩かない）
-const urlCache = new Map<string, string>()
+// オブジェクトURLのLRUキャッシュ（スクロールのたびにIndexedDBを叩かない／上限で古いものを解放）。
+// 画面に一度に出る画像は少数なので、上限を超えた＝画面外のURLだけを解放する（再訪時に作り直す）。
+const MAX_URL_CACHE = 120
+const urlCache = new Map<string, string>() // Mapは挿入順を保つので先頭＝最も古い
+
+function cacheTouch(key: string): string | undefined {
+  const url = urlCache.get(key)
+  if (url !== undefined) {
+    urlCache.delete(key) // 最近使ったものを末尾へ（LRU）
+    urlCache.set(key, url)
+  }
+  return url
+}
+
+function cachePut(key: string, url: string): void {
+  urlCache.set(key, url)
+  while (urlCache.size > MAX_URL_CACHE) {
+    const oldest = urlCache.keys().next().value as string
+    const old = urlCache.get(oldest)
+    if (old) URL.revokeObjectURL(old)
+    urlCache.delete(oldest)
+  }
+}
 
 export function invalidateImageURLs(photoId: string): void {
   for (const kind of ['thumb', 'full'] as const) {
@@ -129,15 +150,15 @@ export function invalidateImageURLs(photoId: string): void {
   }
 }
 
-/** 表示用URL（無ければnull）。取得結果はセッション中キャッシュされる */
+/** 表示用URL（無ければnull）。取得結果はLRUでキャッシュされる */
 export async function imageURL(photoId: string, kind: 'thumb' | 'full'): Promise<string | null> {
   const key = `${photoId}:${kind}`
-  const hit = urlCache.get(key)
+  const hit = cacheTouch(key)
   if (hit) return hit
   const row = await getImageRow(photoId)
   if (!row) return null
   const url = URL.createObjectURL(kind === 'thumb' ? row.thumb : row.full)
-  urlCache.set(key, url)
+  cachePut(key, url)
   return url
 }
 

@@ -7,12 +7,16 @@ import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBack
 export default function SettingsPage() {
   const { catalog, owned, userSets, imageIds, restoreAll } = useAppData()
   const [persisted, setPersisted] = useState<boolean | null>(null)
+  const [storage, setStorage] = useState<{ usage: number; quota: number } | null>(null)
   const [pending, setPending] = useState<ParsedBackup | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     void navigator.storage?.persisted?.().then(setPersisted)
+    void navigator.storage?.estimate?.().then((e) => {
+      if (e && typeof e.usage === 'number' && typeof e.quota === 'number') setStorage({ usage: e.usage, quota: e.quota })
+    })
   }, [])
 
   const showToast = (msg: string) => {
@@ -66,6 +70,9 @@ export default function SettingsPage() {
           <Row label="セット数" value={`${catalog.sets.length} 件${userSets.length > 0 ? ` ＋手動${userSets.length}` : ''}`} />
           <Row label="所有記録" value={`${owned.size} 枚`} />
           <Row label="添付画像" value={`${imageIds.size} 枚`} />
+          {storage && (
+            <Row label="使用容量" value={`${fmtBytes(storage.usage)}${storage.quota > 0 ? ` ／ 上限 ${fmtBytes(storage.quota)}` : ''}`} />
+          )}
         </Section>
 
         <Section
@@ -130,6 +137,11 @@ export default function SettingsPage() {
       )}
     </>
   )
+}
+
+function fmtBytes(b: number): string {
+  if (b >= 1024 * 1024 * 1024) return `${(b / 1024 / 1024 / 1024).toFixed(1)} GB`
+  return `${Math.round(b / 1024 / 1024)} MB`
 }
 
 function Section({ title, footer, children }: { title: string; footer?: string; children: React.ReactNode }) {
