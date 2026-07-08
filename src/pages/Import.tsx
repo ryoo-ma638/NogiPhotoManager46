@@ -602,7 +602,16 @@ function SetPicker({
   else if (typeof filter === 'string') pool = allSets.filter((s) => s.binderId === filter)
   else pool = t ? allSets : [] // 未選択なら検索したときだけ全体から
 
-  const results = (t ? pool.filter((s) => norm(s.name).includes(t)) : pool).slice(0, 200)
+  // 検索: 空白区切りの全語を含む（AND）。語は名前の「途中」にあってもよい（部分一致）
+  const tokens = t.split(/\s+/).filter(Boolean)
+  const nameMatches = (s: CatalogSet) => {
+    const n = norm(s.name)
+    return tokens.every((tok) => n.includes(tok))
+  }
+  const scoped = tokens.length > 0 ? pool.filter(nameMatches) : pool
+  // 検索語があるのに今の絞り込み内で0件 → 全セットから部分一致で自動的に広げる
+  const broadened = tokens.length > 0 && scoped.length === 0 ? allSets.filter(nameMatches) : null
+  const results = (broadened ?? scoped).slice(0, 200)
 
   const Chip = ({ label, active, onTap }: { label: string; active: boolean; onTap: () => void }) => (
     <button
@@ -639,6 +648,9 @@ function SetPicker({
           ))}
         </div>
       </div>
+      {broadened && (
+        <p className="pb-1.5 text-[12px] text-violet-600">この絞り込みに無いので、全セットから「{q.trim()}」を含むものを表示中</p>
+      )}
       <div className="divide-y divide-slate-100 pb-2">
         {results.map((s) => (
           <button key={s.id} onClick={() => onPick(s)} className="w-full text-left px-1 py-2.5 text-[14px] text-slate-700 active:bg-slate-50">
