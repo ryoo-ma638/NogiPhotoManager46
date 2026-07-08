@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
+import { CameraCapture } from '../components/CameraCapture'
 import { CameraIcon, CheckCircle, SearchIcon } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
@@ -39,6 +40,7 @@ export default function ImportPage() {
   const [otherFor, setOtherFor] = useState<string | null>(null) // 「その他として登録」対象のitemId
   const [preview, setPreview] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  const [showCamera, setShowCamera] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
 
@@ -59,9 +61,10 @@ export default function ImportPage() {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)))
   }
 
-  const onFiles = async (files: FileList | null) => {
-    if (!files || files.length === 0) return
-    const list = [...files].slice(0, 30) // 一度に最大30枚
+  // ファイル選択・カメラ撮影のどちらからでも、同じ判別パイプラインに流す
+  const addBlobs = async (blobs: Blob[]) => {
+    if (blobs.length === 0) return
+    const list = blobs.slice(0, 30) // 一度に最大30枚
     const newItems: ImportItem[] = list.map((f) => ({
       id: crypto.randomUUID(),
       file: f,
@@ -82,6 +85,10 @@ export default function ImportPage() {
       await analyze(it)
     }
     setBusy(false)
+  }
+
+  const onFiles = (files: FileList | null) => {
+    if (files) void addBlobs([...files])
   }
 
   /** 1枚の認識結果 → セット/枠の推定 */
@@ -274,14 +281,21 @@ export default function ImportPage() {
         )}
 
         <button
-          onClick={() => fileRef.current?.click()}
+          onClick={() => setShowCamera(true)}
           disabled={busy}
-          className="w-full h-24 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50/60 text-violet-600 font-bold flex flex-col items-center justify-center gap-1 disabled:opacity-50 active:scale-[0.99] transition"
+          className="w-full h-24 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 flex flex-col items-center justify-center gap-1 disabled:opacity-50 active:scale-[0.99] transition"
         >
           <CameraIcon className="w-6 h-6" />
-          写真を選ぶ（複数OK・最大30枚）
+          カメラで撮る（連続）
         </button>
-        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => void onFiles(e.target.files)} />
+        <button
+          onClick={() => fileRef.current?.click()}
+          disabled={busy}
+          className="w-full h-11 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-[14px] disabled:opacity-50 active:scale-[0.99] transition"
+        >
+          写真から選ぶ（複数OK・最大30枚）
+        </button>
+        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
 
         {pending.length > 0 && (
           <p className="text-[12px] text-slate-400">
@@ -440,6 +454,16 @@ export default function ImportPage() {
           onPickExisting={(s) => void assignToOther(otherFor, s)}
           onCreate={(name) => void createOtherSet(otherFor, name)}
           onClose={() => setOtherFor(null)}
+        />
+      )}
+
+      {showCamera && (
+        <CameraCapture
+          onClose={() => setShowCamera(false)}
+          onDone={(blobs) => {
+            setShowCamera(false)
+            void addBlobs(blobs)
+          }}
         />
       )}
 
