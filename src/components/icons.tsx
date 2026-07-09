@@ -13,6 +13,22 @@ export function BooksIcon({ className = 'w-6 h-6' }: IconProps) {
   )
 }
 
+export function HeartIcon({ className = 'w-6 h-6', filled = false }: IconProps & { filled?: boolean }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.8 5.6a5 5 0 0 0-7-.1L12 7.1l-1.8-1.7a5 5 0 0 0-7 7.1l1.8 1.8L12 21l7-6.7 1.8-1.8a5 5 0 0 0 0-6.9Z" />
+    </svg>
+  )
+}
+
+export function SwapIcon({ className = 'w-6 h-6' }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 3l4 4-4 4" /><path d="M3 7h18" /><path d="M7 21l-4-4 4-4" /><path d="M21 17H3" />
+    </svg>
+  )
+}
+
 export function ChartIcon({ className = 'w-6 h-6' }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">

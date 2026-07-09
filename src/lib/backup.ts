@@ -1,4 +1,4 @@
-import type { OwnedRow } from './db'
+import type { OwnedRow, WantedRow } from './db'
 import type { Rarity, UserSet } from '../types'
 
 export interface BackupFile {
@@ -8,14 +8,16 @@ export interface BackupFile {
   exportedAt: string
   owned: OwnedRow[]
   userSets?: UserSet[]
+  wanted?: string[] // 「特に欲しい」写真ID（求）
 }
 
 export interface ParsedBackup {
   owned: OwnedRow[]
   userSets: UserSet[]
+  wanted: WantedRow[]
 }
 
-export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet[]): BackupFile {
+export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet[], wanted: WantedRow[] = []): BackupFile {
   return {
     app: 'NogiPhotoManager46',
     version: 3,
@@ -23,6 +25,7 @@ export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet
     exportedAt: new Date().toISOString(),
     owned,
     userSets,
+    wanted: wanted.map((w) => w.photoId),
   }
 }
 
@@ -95,7 +98,11 @@ export function parseBackup(text: string): ParsedBackup {
     }
   }
 
-  return { owned, userSets }
+  const wanted: WantedRow[] = Array.isArray((obj as { wanted?: unknown }).wanted)
+    ? ((obj as { wanted: unknown[] }).wanted.filter((x): x is string => typeof x === 'string').map((photoId) => ({ photoId })))
+    : []
+
+  return { owned, userSets, wanted }
 }
 
 export function backupFilename(member: string): string {

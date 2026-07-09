@@ -1,5 +1,5 @@
 import { useAppData } from '../lib/appData'
-import { CameraIcon, ChevronRight, SealCheck, SearchIcon } from '../components/icons'
+import { CameraIcon, ChevronRight, SealCheck, SearchIcon, SwapIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
 
@@ -46,6 +46,13 @@ export default function Home() {
               className="p-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
             >
               <CameraIcon className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => navigate('/trade')}
+              aria-label="トレード"
+              className="p-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
+            >
+              <SwapIcon className="w-6 h-6" />
             </button>
             <button
               onClick={() => navigate('/search')}

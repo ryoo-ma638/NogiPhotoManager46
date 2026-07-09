@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { CatalogFile, CatalogSet, Photo, UserSet } from '../types'
 import { loadCatalog, photosForSet } from './catalog'
 import { allOwnedRows, allUserSets, deleteUserSetRow, imageIdSet, putUserSet, replaceAllUserSets, setCount as dbSetCount, setManyOwned, setOwned } from './db'
-import type { OwnedRow } from './db'
+import { replaceAllWanted, setWanted as dbSetWanted, wantedIdSet } from './db'
+import type { OwnedRow, WantedRow } from './db'
 import { replaceAllOwned } from './db'
 import { attachImageFile, invalidateImageURLs, removeImageFile } from './images'
 
@@ -20,6 +21,9 @@ interface AppData {
   /** 所持枚数（トレードのダブり用）。owned=count≥1 */
   countOf: (photoId: string) => number
   setCount: (photoId: string, count: number) => void
+  /** 「特に欲しい」（求）にマークした写真 */
+  wanted: Set<string>
+  toggleWanted: (photoId: string) => void
   toggle: (photoId: string) => void
   setMany: (photoIds: string[], value: boolean) => void
   photosOf: (set: CatalogSet) => Photo[]
@@ -29,7 +33,7 @@ interface AppData {
   addUserSet: (row: UserSet) => Promise<void>
   updateUserSet: (row: UserSet, removedPhotoIds: string[]) => Promise<void>
   deleteUserSet: (id: string) => Promise<void>
-  restoreAll: (owned: OwnedRow[], userSets: UserSet[]) => Promise<void>
+  restoreAll: (owned: OwnedRow[], userSets: UserSet[], wanted: WantedRow[]) => Promise<void>
   /** 画像が付いている写真ID */
   imageIds: Set<string>
   attachImage: (photoId: string, file: Blob) => Promise<void>
@@ -49,16 +53,24 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [userSets, setUserSets] = useState<UserSet[]>([])
   const [owned, setOwnedState] = useState<Set<string>>(new Set())
   const [counts, setCountsState] = useState<Map<string, number>>(new Map())
+  const [wanted, setWantedState] = useState<Set<string>>(new Set())
   const [imageIds, setImageIds] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void (async () => {
       try {
-        const [cat, rows, users, imgs] = await Promise.all([loadCatalog(), allOwnedRows(), allUserSets(), imageIdSet()])
+        const [cat, rows, users, imgs, wants] = await Promise.all([
+          loadCatalog(),
+          allOwnedRows(),
+          allUserSets(),
+          imageIdSet(),
+          wantedIdSet(),
+        ])
         setCatalog(cat)
         setOwnedState(new Set(rows.map((r) => r.photoId)))
         setCountsState(new Map(rows.map((r) => [r.photoId, r.count ?? 1])))
+        setWantedState(wants)
         setUserSets(users)
         setImageIds(imgs)
       } catch (e) {
@@ -153,6 +165,17 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  const toggleWanted = (photoId: string) => {
+    const next = !wanted.has(photoId)
+    void dbSetWanted(photoId, next)
+    setWantedState((prev) => {
+      const s = new Set(prev)
+      if (next) s.add(photoId)
+      else s.delete(photoId)
+      return s
+    })
+  }
+
   const toggle = (photoId: string) => {
     const next = !owned.has(photoId)
     void setOwned(photoId, next)
@@ -197,6 +220,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     owned,
     countOf,
     setCount,
+    wanted,
+    toggleWanted,
     toggle,
     setMany,
     photosOf: (set) => photosMap.get(set.id) ?? [],
@@ -235,12 +260,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         return s
       })
     },
-    restoreAll: async (ownedRows, users) => {
+    restoreAll: async (ownedRows, users, wantedRows) => {
       await replaceAllOwned(ownedRows)
       await replaceAllUserSets(users)
+      await replaceAllWanted(wantedRows)
       const rows = await allOwnedRows()
       setOwnedState(new Set(rows.map((r) => r.photoId)))
       setCountsState(new Map(rows.map((r) => [r.photoId, r.count ?? 1])))
+      setWantedState(await wantedIdSet())
       setUserSets(await allUserSets())
     },
     imageIds,

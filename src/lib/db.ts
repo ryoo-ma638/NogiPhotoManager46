@@ -17,15 +17,22 @@ export interface ImageRow {
   updatedAt: string
 }
 
+// 「特に欲しい」（求＝トレードで優先的に欲しい写真）。行の存在＝特に欲しい
+export interface WantedRow {
+  photoId: string
+}
+
 class NogiDB extends Dexie {
   owned!: Table<OwnedRow, string>
   userSets!: Table<UserSet, string>
   images!: Table<ImageRow, string>
+  wanted!: Table<WantedRow, string>
   constructor() {
     super('NogiPhotoManager')
     this.version(1).stores({ owned: 'photoId' })
     this.version(2).stores({ owned: 'photoId', userSets: 'id' })
     this.version(3).stores({ owned: 'photoId', userSets: 'id', images: 'photoId' })
+    this.version(4).stores({ owned: 'photoId', userSets: 'id', images: 'photoId', wanted: 'photoId' })
   }
 }
 
@@ -77,6 +84,29 @@ export async function replaceAllOwned(rows: OwnedRow[]): Promise<void> {
   await db.transaction('rw', db.owned, async () => {
     await db.owned.clear()
     if (rows.length > 0) await db.owned.bulkPut(rows)
+  })
+}
+
+// ---- 「特に欲しい」（求） ----
+
+export async function wantedIdSet(): Promise<Set<string>> {
+  const keys = await db.wanted.toCollection().primaryKeys()
+  return new Set(keys)
+}
+
+export async function setWanted(photoId: string, wanted: boolean): Promise<void> {
+  if (wanted) await db.wanted.put({ photoId })
+  else await db.wanted.delete(photoId)
+}
+
+export async function allWanted(): Promise<WantedRow[]> {
+  return db.wanted.toArray()
+}
+
+export async function replaceAllWanted(rows: WantedRow[]): Promise<void> {
+  await db.transaction('rw', db.wanted, async () => {
+    await db.wanted.clear()
+    if (rows.length > 0) await db.wanted.bulkPut(rows)
   })
 }
 

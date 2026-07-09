@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
-import { CameraIcon, CheckCircle, PhotoIcon, SealCheck } from '../components/icons'
+import { CameraIcon, CheckCircle, HeartIcon, PhotoIcon, SealCheck } from '../components/icons'
 import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
 import { PhotoViewer, ThumbImg } from '../components/images'
@@ -17,7 +17,7 @@ const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: 
 }
 
 export default function SetDetailPage({ setId }: { setId: string }) {
-  const { catalog, setById, userSetById, photosOf, owned, countOf, setCount, toggle, setMany, updateUserSet, deleteUserSet, imageIds, attachImage, removeImage } =
+  const { catalog, setById, userSetById, photosOf, owned, countOf, setCount, wanted, toggleWanted, toggle, setMany, updateUserSet, deleteUserSet, imageIds, attachImage, removeImage } =
     useAppData()
   const [confirm, setConfirm] = useState<'own-all' | 'disown-all' | null>(null)
   const [showEdit, setShowEdit] = useState(false)
@@ -112,6 +112,8 @@ export default function SetDetailPage({ setId }: { setId: string }) {
               isOwned={owned.has(p.id)}
               count={countOf(p.id)}
               onSetCount={(n) => setCount(p.id, n)}
+              isWanted={wanted.has(p.id)}
+              onToggleWanted={() => toggleWanted(p.id)}
               hasImage={imageIds.has(p.id)}
               imgVersion={imgVersion}
               onToggle={() => toggle(p.id)}
@@ -226,6 +228,8 @@ function PoseCard({
   isOwned,
   count,
   onSetCount,
+  isWanted,
+  onToggleWanted,
   hasImage,
   imgVersion,
   onToggle,
@@ -236,6 +240,8 @@ function PoseCard({
   isOwned: boolean
   count: number
   onSetCount: (n: number) => void
+  isWanted: boolean
+  onToggleWanted: () => void
   hasImage: boolean
   imgVersion: number
   onToggle: () => void
@@ -265,6 +271,19 @@ function PoseCard({
         }`}
       >
         {hasImage ? <ThumbImg photoId={photo.id} version={imgVersion} className="absolute inset-0 w-full h-full object-cover" /> : <PhotoIcon className="w-8 h-8" />}
+        {/* 特に欲しい（求）: 未所有のときだけ。ハートで印を付ける */}
+        {!isOwned && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onToggleWanted()
+            }}
+            aria-label={`${photo.label}を特に欲しい${isWanted ? 'から外す' : 'にする'}`}
+            className="absolute top-1 left-1 p-1 active:scale-90 transition-transform"
+          >
+            <HeartIcon className={`w-5 h-5 drop-shadow ${isWanted ? 'text-pink-500' : 'text-white/80'}`} filled={isWanted} />
+          </button>
+        )}
         {/* 所持枚数の −/+（所有時のみ）。2枚以上＝ダブり（譲れる） */}
         {isOwned && (
           <div

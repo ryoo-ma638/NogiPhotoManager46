@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
-import { allOwnedRows } from '../lib/db'
+import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 
 export default function SettingsPage() {
@@ -30,8 +30,8 @@ export default function SettingsPage() {
   }
 
   const exportBackup = async () => {
-    const rows = await allOwnedRows()
-    downloadJSON(backupFilename(catalog.member.id), buildBackup(catalog.member.id, rows, userSets))
+    const [rows, wants] = await Promise.all([allOwnedRows(), allWanted()])
+    downloadJSON(backupFilename(catalog.member.id), buildBackup(catalog.member.id, rows, userSets, wants))
     showToast(`所有${rows.length}枚・手動セット${userSets.length}件を書き出しました`)
   }
 
@@ -48,7 +48,7 @@ export default function SettingsPage() {
         const idx = r.photoId.lastIndexOf(':')
         return idx > 0 && setIds.has(r.photoId.slice(0, idx))
       })
-      setPending({ owned: filtered, userSets: parsed.userSets })
+      setPending({ owned: filtered, userSets: parsed.userSets, wanted: parsed.wanted })
     } catch (err) {
       showToast(`読み込み失敗: ${err instanceof Error ? err.message : String(err)}`)
     }
@@ -56,7 +56,7 @@ export default function SettingsPage() {
 
   const applyImport = async () => {
     if (!pending) return
-    await restoreAll(pending.owned, pending.userSets)
+    await restoreAll(pending.owned, pending.userSets, pending.wanted)
     showToast(`${pending.owned.length}枚を取り込みました`)
     setPending(null)
   }

@@ -10,6 +10,7 @@ import StatsPage from './pages/Stats'
 import SettingsPage from './pages/Settings'
 import SearchPage from './pages/Search'
 import ImportPage from './pages/Import'
+import TradePage from './pages/Trade'
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ function Shell() {
   else if (seg[0] === 's') page = <SetDetailPage setId={seg[1] ?? ''} />
   else if (seg[0] === 'search') page = <SearchPage />
   else if (seg[0] === 'import') page = <ImportPage />
+  else if (seg[0] === 'trade') page = <TradePage />
   else if (seg[0] === 'stats') {
     page = <StatsPage />
     tab = 'stats'

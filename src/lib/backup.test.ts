@@ -55,6 +55,17 @@ describe('parseBackup', () => {
     expect(parsed.owned.find((o) => o.photoId.endsWith(':chu'))!.count).toBeUndefined()
   })
 
+  it('「特に欲しい」(wanted)を書き出し→読み込みで保持する（求）', () => {
+    const backup = buildBackup('yumiki_nao', [], [], [{ photoId: 'yumiki_nao:s0001:chu' }])
+    const parsed = parseBackup(JSON.stringify(backup))
+    expect(parsed.wanted).toEqual([{ photoId: 'yumiki_nao:s0001:chu' }])
+  })
+
+  it('wantedが無い旧バックアップは空の求として読む', () => {
+    const parsed = parseBackup(JSON.stringify({ owned: ['yumiki_nao:s0001:yori'] }))
+    expect(parsed.wanted).toEqual([])
+  })
+
   it('owned配列が無いファイルは拒否する', () => {
     expect(() => parseBackup(JSON.stringify({ foo: 1 }))).toThrow()
   })
