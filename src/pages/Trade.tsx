@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
+import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from '../lib/trade'
+import { downloadJSON } from '../lib/backup'
 
 interface TradeItem {
   photoId: string
@@ -41,18 +43,22 @@ export default function TradePage() {
   const { catalog, allSets, photosOf, countOf, wanted } = useAppData()
   const [sheet, setSheet] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
+  const [match, setMatch] = useState<{ name: string; overlap: Overlap } | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
-  const { give, want } = useMemo(() => {
+  const { give, want, info, giveSet } = useMemo(() => {
     const give: TradeItem[] = []
     const want: TradeItem[] = []
+    const info = new Map<string, { setName: string; label: string }>()
     for (const s of allSets) {
       for (const p of photosOf(s)) {
+        info.set(p.id, { setName: s.name, label: p.label })
         const c = countOf(p.id)
         if (c >= 2) give.push({ photoId: p.id, setName: s.name, label: p.label, qty: c - 1 })
         if (wanted.has(p.id)) want.push({ photoId: p.id, setName: s.name, label: p.label, qty: 1 })
       }
     }
-    return { give, want }
+    return { give, want, info, giveSet: new Set(give.map((g) => g.photoId)) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSets, photosOf, countOf, wanted])
 
@@ -70,6 +76,35 @@ export default function TradePage() {
     }
   }
 
+  // ---- 相手との突き合わせ（ローカルなファイル交換・サーバ不要） ----
+  const exportFile = () => {
+    const exp = buildTradeExport(
+      catalog.member.id,
+      catalog.member.name,
+      give.map((g) => ({ photoId: g.photoId, qty: g.qty })),
+      want.map((w) => w.photoId),
+    )
+    downloadJSON(`nogi-trade-${catalog.member.id}.json`, exp)
+    showToast('共有ファイルを書き出しました')
+  }
+  const onImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const parsed = parseTradeExport(await file.text())
+      const overlap = computeOverlap(giveSet, wanted, parsed.give, parsed.want)
+      setMatch({ name: parsed.memberName, overlap })
+      if (overlap.canGet.length === 0 && overlap.canGive.length === 0) showToast('重なりはありませんでした')
+    } catch (err) {
+      showToast(`読み込み失敗: ${err instanceof Error ? err.message : String(err)}`)
+    }
+  }
+  const nameOf = (photoId: string) => {
+    const i = info.get(photoId)
+    return i ? `${i.setName}／${i.label}` : photoId
+  }
+
   return (
     <>
       <Header title="トレード" subtitle="譲れるダブりと、特に欲しいもの" back />
@@ -81,6 +116,66 @@ export default function TradePage() {
         >
           求/譲リストを作る（X貼り付け用）
         </button>
+
+        {/* 相手との突き合わせ（ファイル交換） */}
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={exportFile}
+            disabled={give.length === 0 && want.length === 0}
+            className="h-10 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-[13px] disabled:opacity-40 active:scale-[0.99] transition"
+          >
+            共有ファイルを書き出す
+          </button>
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="h-10 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-[13px] active:scale-[0.99] transition"
+          >
+            相手のファイルを取り込む
+          </button>
+        </div>
+        <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e) => void onImportFile(e)} />
+
+        {/* 突き合わせ結果 */}
+        {match && (
+          <section className="rounded-2xl bg-violet-50 border border-violet-200 p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[14px] font-bold text-violet-700">{match.name} さんとのトレード</p>
+              <button onClick={() => setMatch(null)} aria-label="閉じる" className="text-violet-400 text-lg leading-none p-1 -m-1">
+                ✕
+              </button>
+            </div>
+            <div>
+              <p className="text-[12px] font-bold text-emerald-600 pb-1">もらえる（相手が譲・自分が求）{match.overlap.canGet.length}件</p>
+              {match.overlap.canGet.length === 0 ? (
+                <p className="text-[12px] text-slate-400">なし</p>
+              ) : (
+                <ul className="space-y-0.5">
+                  {match.overlap.canGet.map((it) => (
+                    <li key={it.photoId} className="text-[12px] text-slate-700">
+                      ・{nameOf(it.photoId)}
+                      {it.qty > 1 ? `（相手は${it.qty}枚譲れる）` : ''}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div>
+              <p className="text-[12px] font-bold text-pink-600 pb-1">渡せる（相手が求・自分が譲）{match.overlap.canGive.length}件</p>
+              {match.overlap.canGive.length === 0 ? (
+                <p className="text-[12px] text-slate-400">なし</p>
+              ) : (
+                <ul className="space-y-0.5">
+                  {match.overlap.canGive.map((id) => (
+                    <li key={id} className="text-[12px] text-slate-700">
+                      ・{nameOf(id)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </section>
+        )}
+
         <TradeSection
           title="譲れる（ダブり）"
           n={give.length}
