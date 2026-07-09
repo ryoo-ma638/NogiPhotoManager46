@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { AppDataProvider } from './lib/appData'
 import { useHashRoute } from './lib/router'
+import { Tutorial } from './components/Tutorial'
 import { BooksIcon, ChartIcon, GearIcon } from './components/icons'
 import Home from './pages/Home'
 import BinderPage from './pages/Binder'
@@ -17,9 +19,33 @@ export default function App() {
   )
 }
 
+const TUTORIAL_KEY = 'nogi_tutorial_v1'
+
 function Shell() {
   const route = useHashRoute()
   const seg = route.split('/').filter(Boolean)
+
+  // 初回起動で1回だけ使い方を出す。設定の「使い方を見る」からも open-tutorial で再表示
+  const [showTutorial, setShowTutorial] = useState(() => {
+    try {
+      return !localStorage.getItem(TUTORIAL_KEY)
+    } catch {
+      return false
+    }
+  })
+  useEffect(() => {
+    const open = () => setShowTutorial(true)
+    window.addEventListener('open-tutorial', open)
+    return () => window.removeEventListener('open-tutorial', open)
+  }, [])
+  const closeTutorial = () => {
+    try {
+      localStorage.setItem(TUTORIAL_KEY, '1')
+    } catch {
+      /* localStorage不可でも続行 */
+    }
+    setShowTutorial(false)
+  }
 
   let page: React.ReactNode
   let tab: 'collection' | 'stats' | 'settings' = 'collection'
@@ -39,6 +65,7 @@ function Shell() {
     <div className="min-h-dvh bg-slate-50 text-slate-900 pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
       {page}
       <TabBar active={tab} />
+      {showTutorial && <Tutorial onClose={closeTutorial} />}
     </div>
   )
 }

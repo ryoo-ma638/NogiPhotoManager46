@@ -118,6 +118,15 @@ export default function SettingsPage() {
           </div>
         </Section>
 
+        <Section title="ヘルプ">
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-tutorial'))}
+            className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors"
+          >
+            使い方を見る
+          </button>
+        </Section>
+
         <p className="text-center text-[11px] text-slate-300 pt-2">NogiPhotoManager46 v0.1</p>
       </div>
 
