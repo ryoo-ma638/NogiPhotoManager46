@@ -18,7 +18,7 @@ export interface ParsedBackup {
 export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet[]): BackupFile {
   return {
     app: 'NogiPhotoManager46',
-    version: 2,
+    version: 3,
     member,
     exportedAt: new Date().toISOString(),
     owned,
@@ -55,9 +55,10 @@ export function parseBackup(text: string): ParsedBackup {
   const owned = obj.owned.map((item: unknown): OwnedRow => {
     if (typeof item === 'string') return { photoId: item, ownedDate: null }
     if (item && typeof item === 'object' && 'photoId' in item) {
-      const o = item as { photoId: unknown; ownedDate?: unknown }
+      const o = item as { photoId: unknown; ownedDate?: unknown; count?: unknown }
       if (typeof o.photoId !== 'string') throw new Error('photoId が不正です')
-      return { photoId: o.photoId, ownedDate: typeof o.ownedDate === 'string' ? o.ownedDate : null }
+      const count = typeof o.count === 'number' && o.count > 0 ? Math.floor(o.count) : undefined
+      return { photoId: o.photoId, ownedDate: typeof o.ownedDate === 'string' ? o.ownedDate : null, ...(count ? { count } : {}) }
     }
     throw new Error('所有データの形式が不正です')
   })

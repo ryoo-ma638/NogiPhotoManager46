@@ -2,9 +2,11 @@ import Dexie, { type Table } from 'dexie'
 import type { UserSet } from '../types'
 
 // 所有データ（この端末にのみ保存。カタログとは完全分離）
+// 行の存在＝所有。count=所持枚数（省略時は1枚として扱う＝旧データ互換）。
 export interface OwnedRow {
   photoId: string
   ownedDate: string | null
+  count?: number
 }
 
 // 添付画像（縮小済みJPEG。フル画像とサムネの2サイズ）
@@ -32,6 +34,17 @@ export const db = new NogiDB()
 export async function setOwned(photoId: string, owned: boolean): Promise<void> {
   if (owned) await db.owned.put({ photoId, ownedDate: new Date().toISOString() })
   else await db.owned.delete(photoId)
+}
+
+/** 所持枚数を設定（0以下は未所有＝行削除）。トレードのダブり管理用。ownedDateは既存を保つ */
+export async function setCount(photoId: string, count: number): Promise<void> {
+  const c = Math.max(0, Math.floor(count))
+  if (c <= 0) {
+    await db.owned.delete(photoId)
+  } else {
+    const existing = await db.owned.get(photoId)
+    await db.owned.put({ photoId, ownedDate: existing?.ownedDate ?? new Date().toISOString(), count: c })
+  }
 }
 
 /** 複数枚を一括で所有/未所有にする（「すべて所有」用） */

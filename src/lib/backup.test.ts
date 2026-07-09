@@ -40,6 +40,21 @@ describe('parseBackup', () => {
     expect(parsed.userSets[0]).toEqual(userSet)
   })
 
+  it('所持枚数(count)を書き出し→読み込みで保持する（トレードのダブり）', () => {
+    const backup = buildBackup(
+      'yumiki_nao',
+      [
+        { photoId: 'yumiki_nao:s0001:yori', ownedDate: null, count: 3 },
+        { photoId: 'yumiki_nao:s0001:chu', ownedDate: null },
+      ],
+      [],
+    )
+    const parsed = parseBackup(JSON.stringify(backup))
+    expect(parsed.owned.find((o) => o.photoId.endsWith(':yori'))!.count).toBe(3)
+    // count省略は1枚扱い（復元後にcountを持たない＝アプリ側で1として解釈）
+    expect(parsed.owned.find((o) => o.photoId.endsWith(':chu'))!.count).toBeUndefined()
+  })
+
   it('owned配列が無いファイルは拒否する', () => {
     expect(() => parseBackup(JSON.stringify({ foo: 1 }))).toThrow()
   })

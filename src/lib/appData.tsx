@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CatalogFile, CatalogSet, Photo, UserSet } from '../types'
 import { loadCatalog, photosForSet } from './catalog'
-import { allUserSets, deleteUserSetRow, imageIdSet, ownedIdSet, putUserSet, replaceAllUserSets, setManyOwned, setOwned } from './db'
+import { allOwnedRows, allUserSets, deleteUserSetRow, imageIdSet, putUserSet, replaceAllUserSets, setCount as dbSetCount, setManyOwned, setOwned } from './db'
 import type { OwnedRow } from './db'
 import { replaceAllOwned } from './db'
 import { attachImageFile, invalidateImageURLs, removeImageFile } from './images'
@@ -17,6 +17,9 @@ interface AppData {
   allSets: CatalogSet[]
   userSets: UserSet[]
   owned: Set<string>
+  /** 所持枚数（トレードのダブり用）。owned=count≥1 */
+  countOf: (photoId: string) => number
+  setCount: (photoId: string, count: number) => void
   toggle: (photoId: string) => void
   setMany: (photoIds: string[], value: boolean) => void
   photosOf: (set: CatalogSet) => Photo[]
@@ -45,15 +48,17 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [catalog, setCatalog] = useState<CatalogFile | null>(null)
   const [userSets, setUserSets] = useState<UserSet[]>([])
   const [owned, setOwnedState] = useState<Set<string>>(new Set())
+  const [counts, setCountsState] = useState<Map<string, number>>(new Map())
   const [imageIds, setImageIds] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void (async () => {
       try {
-        const [cat, ids, users, imgs] = await Promise.all([loadCatalog(), ownedIdSet(), allUserSets(), imageIdSet()])
+        const [cat, rows, users, imgs] = await Promise.all([loadCatalog(), allOwnedRows(), allUserSets(), imageIdSet()])
         setCatalog(cat)
-        setOwnedState(ids)
+        setOwnedState(new Set(rows.map((r) => r.photoId)))
+        setCountsState(new Map(rows.map((r) => [r.photoId, r.count ?? 1])))
         setUserSets(users)
         setImageIds(imgs)
       } catch (e) {
@@ -129,6 +134,25 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  const countOf = (photoId: string) => counts.get(photoId) ?? (owned.has(photoId) ? 1 : 0)
+
+  const setCount = (photoId: string, n: number) => {
+    const c = Math.max(0, Math.floor(n))
+    void dbSetCount(photoId, c)
+    setOwnedState((prev) => {
+      const s = new Set(prev)
+      if (c > 0) s.add(photoId)
+      else s.delete(photoId)
+      return s
+    })
+    setCountsState((prev) => {
+      const m = new Map(prev)
+      if (c > 0) m.set(photoId, c)
+      else m.delete(photoId)
+      return m
+    })
+  }
+
   const toggle = (photoId: string) => {
     const next = !owned.has(photoId)
     void setOwned(photoId, next)
@@ -137,6 +161,12 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       if (next) s.add(photoId)
       else s.delete(photoId)
       return s
+    })
+    setCountsState((prev) => {
+      const m = new Map(prev)
+      if (next) m.set(photoId, 1)
+      else m.delete(photoId)
+      return m
     })
   }
 
@@ -150,6 +180,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       }
       return s
     })
+    setCountsState((prev) => {
+      const m = new Map(prev)
+      for (const id of photoIds) {
+        if (value) m.set(id, 1)
+        else m.delete(id)
+      }
+      return m
+    })
   }
 
   const data: AppData = {
@@ -157,6 +195,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     allSets,
     userSets,
     owned,
+    countOf,
+    setCount,
     toggle,
     setMany,
     photosOf: (set) => photosMap.get(set.id) ?? [],
@@ -181,6 +221,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         for (const pid of photoIds) s.delete(pid)
         return s
       })
+      setCountsState((prev) => {
+        const m = new Map(prev)
+        for (const pid of photoIds) m.delete(pid)
+        return m
+      })
       setImageIds((prev) => {
         const s = new Set(prev)
         for (const pid of photoIds) {
@@ -193,7 +238,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     restoreAll: async (ownedRows, users) => {
       await replaceAllOwned(ownedRows)
       await replaceAllUserSets(users)
-      setOwnedState(await ownedIdSet())
+      const rows = await allOwnedRows()
+      setOwnedState(new Set(rows.map((r) => r.photoId)))
+      setCountsState(new Map(rows.map((r) => [r.photoId, r.count ?? 1])))
       setUserSets(await allUserSets())
     },
     imageIds,

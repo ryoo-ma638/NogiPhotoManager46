@@ -17,7 +17,7 @@ const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: 
 }
 
 export default function SetDetailPage({ setId }: { setId: string }) {
-  const { catalog, setById, userSetById, photosOf, owned, toggle, setMany, updateUserSet, deleteUserSet, imageIds, attachImage, removeImage } =
+  const { catalog, setById, userSetById, photosOf, owned, countOf, setCount, toggle, setMany, updateUserSet, deleteUserSet, imageIds, attachImage, removeImage } =
     useAppData()
   const [confirm, setConfirm] = useState<'own-all' | 'disown-all' | null>(null)
   const [showEdit, setShowEdit] = useState(false)
@@ -110,6 +110,8 @@ export default function SetDetailPage({ setId }: { setId: string }) {
               key={p.id}
               photo={p}
               isOwned={owned.has(p.id)}
+              count={countOf(p.id)}
+              onSetCount={(n) => setCount(p.id, n)}
               hasImage={imageIds.has(p.id)}
               imgVersion={imgVersion}
               onToggle={() => toggle(p.id)}
@@ -222,6 +224,8 @@ export default function SetDetailPage({ setId }: { setId: string }) {
 function PoseCard({
   photo,
   isOwned,
+  count,
+  onSetCount,
   hasImage,
   imgVersion,
   onToggle,
@@ -230,6 +234,8 @@ function PoseCard({
 }: {
   photo: Photo
   isOwned: boolean
+  count: number
+  onSetCount: (n: number) => void
   hasImage: boolean
   imgVersion: number
   onToggle: () => void
@@ -237,6 +243,7 @@ function PoseCard({
   onAttach: () => void
 }) {
   const style = RARITY_STYLE[photo.rarity]
+  const dup = count >= 2 // ダブり（譲れる）
   return (
     <div
       role="button"
@@ -258,6 +265,37 @@ function PoseCard({
         }`}
       >
         {hasImage ? <ThumbImg photoId={photo.id} version={imgVersion} className="absolute inset-0 w-full h-full object-cover" /> : <PhotoIcon className="w-8 h-8" />}
+        {/* 所持枚数の −/+（所有時のみ）。2枚以上＝ダブり（譲れる） */}
+        {isOwned && (
+          <div
+            className="absolute inset-x-0 bottom-0 flex items-center justify-between px-1 py-0.5 bg-black/45 backdrop-blur-[1px]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onSetCount(count - 1)
+              }}
+              aria-label={`${photo.label}の枚数を減らす`}
+              className="w-6 h-6 rounded-md text-white text-[15px] leading-none active:bg-white/20"
+            >
+              −
+            </button>
+            <span className={`text-[12px] font-bold tabular-nums ${dup ? 'text-amber-300' : 'text-white'}`}>
+              {count}枚{dup ? '・ダブり' : ''}
+            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onSetCount(count + 1)
+              }}
+              aria-label={`${photo.label}の枚数を増やす`}
+              className="w-6 h-6 rounded-md text-white text-[15px] leading-none active:bg-white/20"
+            >
+              ＋
+            </button>
+          </div>
+        )}
       </div>
       {/* 所有チェック（常にトグル専用の独立ボタン） */}
       <button
