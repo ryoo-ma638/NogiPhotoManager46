@@ -4,12 +4,13 @@ import { useScrollRestore } from '../lib/router'
 import type { Rarity } from '../types'
 
 export default function StatsPage() {
-  const { catalog, allSets, statOf, photosOf, owned } = useAppData()
+  const { catalog, allSets, statOf, photosOf, owned, countOf, wanted } = useAppData()
   useScrollRestore('stats')
 
   let ownedTotal = 0
   let total = 0
   let completeSets = 0
+  let spareTotal = 0 // 譲れる枚数（各写真の count-1 の合計）
   const byBinder = catalog.binders.map((b) => ({ binder: b, owned: 0, total: 0 }))
   const byYear = new Map<number | null, { owned: number; total: number }>()
   const byRarity: Record<Rarity, { owned: number; total: number }> = {
@@ -36,6 +37,8 @@ export default function StatsPage() {
     for (const p of photosOf(s)) {
       byRarity[p.rarity].total++
       if (owned.has(p.id)) byRarity[p.rarity].owned++
+      const c = countOf(p.id)
+      if (c >= 2) spareTotal += c - 1
     }
   }
 
@@ -62,6 +65,21 @@ export default function StatsPage() {
               <span className="text-slate-400">コンプ</span> <b className="text-slate-800 text-base">{completeSets}</b>
               <span className="text-slate-400"> / {allSets.length} セット</span>
             </p>
+          </div>
+        </section>
+
+        {/* トレード */}
+        <section className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
+          <h2 className="text-[13px] font-bold text-slate-500 mb-2.5">トレード</h2>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-xl bg-emerald-50 p-3 text-center">
+              <div className="text-2xl font-extrabold text-emerald-600 leading-none tabular-nums">{spareTotal}</div>
+              <div className="text-[11px] text-emerald-700 mt-1">譲れるダブり（枚）</div>
+            </div>
+            <div className="rounded-xl bg-pink-50 p-3 text-center">
+              <div className="text-2xl font-extrabold text-pink-600 leading-none tabular-nums">{wanted.size}</div>
+              <div className="text-[11px] text-pink-700 mt-1">特に欲しい（件）</div>
+            </div>
           </div>
         </section>
 

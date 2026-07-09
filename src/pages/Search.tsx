@@ -10,11 +10,28 @@ function norm(s: string): string {
   return s.normalize('NFKC').toLowerCase()
 }
 
+function ToggleChip({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 h-9 px-3 rounded-full text-[13px] font-medium transition-colors ${
+        on ? 'bg-violet-600 text-white' : 'bg-slate-100 text-slate-500'
+      }`}
+    >
+      <span className={`w-2 h-2 rounded-full ${on ? 'bg-white' : 'bg-slate-300'}`} />
+      {label}
+    </button>
+  )
+}
+
 export default function SearchPage() {
-  const { catalog, allSets, statOf, photosOf, imageIds } = useAppData()
+  const { catalog, allSets, statOf, photosOf, imageIds, countOf, wanted } = useAppData()
   const [q, setQ] = useState('')
   const [unownedOnly, setUnownedOnly] = useState(false)
+  const [dupOnly, setDupOnly] = useState(false)
+  const [wantOnly, setWantOnly] = useState(false)
   const [kindFilter, setKindFilter] = useState<Kind | null>(null)
+  const [sortBy, setSortBy] = useState<'catalog' | 'owned' | 'name' | 'year'>('catalog')
 
   const binderName = useMemo(() => {
     const m = new Map<string, string>()
@@ -25,22 +42,32 @@ export default function SearchPage() {
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
 
   const query = norm(q.trim())
-  const active = query.length > 0 || unownedOnly || kindFilter !== null
+  const active = query.length > 0 || unownedOnly || dupOnly || wantOnly || kindFilter !== null
 
   const results = useMemo(() => {
     if (!active) return []
-    return allSets
-      .filter((s) => {
-        if (query && !norm(`${s.name} ${s.note ?? ''}`).includes(query)) return false
-        if (kindFilter && kindOf(s, sealedBinders.has(s.binderId)) !== kindFilter) return false
-        if (unownedOnly) {
-          const st = statOf(s.id)
-          if (st.total > 0 && st.owned === st.total) return false
-        }
-        return true
-      })
-      .sort((a, b) => a.sortIndex - b.sortIndex)
-  }, [active, query, unownedOnly, kindFilter, allSets, statOf, sealedBinders])
+    const filtered = allSets.filter((s) => {
+      if (query && !norm(`${s.name} ${s.note ?? ''}`).includes(query)) return false
+      if (kindFilter && kindOf(s, sealedBinders.has(s.binderId)) !== kindFilter) return false
+      if (unownedOnly) {
+        const st = statOf(s.id)
+        if (st.total > 0 && st.owned === st.total) return false
+      }
+      if (dupOnly && !photosOf(s).some((p) => countOf(p.id) >= 2)) return false
+      if (wantOnly && !photosOf(s).some((p) => wanted.has(p.id))) return false
+      return true
+    })
+    const rate = (s: (typeof allSets)[number]) => {
+      const st = statOf(s.id)
+      return st.total > 0 ? st.owned / st.total : 0
+    }
+    return filtered.sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name, 'ja')
+      if (sortBy === 'year') return (b.year ?? 0) - (a.year ?? 0) || a.sortIndex - b.sortIndex
+      if (sortBy === 'owned') return rate(b) - rate(a) || a.sortIndex - b.sortIndex
+      return a.sortIndex - b.sortIndex
+    })
+  }, [active, query, unownedOnly, dupOnly, wantOnly, kindFilter, sortBy, allSets, statOf, photosOf, countOf, wanted, sealedBinders])
 
   return (
     <>
@@ -59,16 +86,12 @@ export default function SearchPage() {
           />
         </div>
 
-        {/* 未所有だけ */}
-        <button
-          onClick={() => setUnownedOnly((v) => !v)}
-          className={`mt-3 inline-flex items-center gap-2 h-9 px-3 rounded-full text-[13px] font-medium transition-colors ${
-            unownedOnly ? 'bg-violet-600 text-white' : 'bg-slate-100 text-slate-500'
-          }`}
-        >
-          <span className={`w-2 h-2 rounded-full ${unownedOnly ? 'bg-white' : 'bg-slate-300'}`} />
-          未所有だけ
-        </button>
+        {/* 絞り込み（未所有・ダブり・特に欲しい） */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <ToggleChip label="未所有だけ" on={unownedOnly} onClick={() => setUnownedOnly((v) => !v)} />
+          <ToggleChip label="ダブりあり" on={dupOnly} onClick={() => setDupOnly((v) => !v)} />
+          <ToggleChip label="特に欲しいあり" on={wantOnly} onClick={() => setWantOnly((v) => !v)} />
+        </div>
 
         {/* 種類で絞り込み */}
         <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 -mx-4 px-4 [-webkit-overflow-scrolling:touch]">
@@ -90,7 +113,7 @@ export default function SearchPage() {
           {!active && (
             <div className="py-20 text-center text-slate-400 space-y-2">
               <SearchIcon className="w-10 h-10 mx-auto text-slate-300" />
-              <p className="text-[13px]">セット名を入力するか「未所有だけ」で絞り込み</p>
+              <p className="text-[13px]">セット名を入力するか、絞り込み（未所有・ダブり・特に欲しい）で探す</p>
             </div>
           )}
 
@@ -103,7 +126,20 @@ export default function SearchPage() {
 
           {results.length > 0 && (
             <>
-              <p className="text-[12px] text-slate-400 mb-2">{results.length}件</p>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-[12px] text-slate-400">{results.length}件</p>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                  className="h-8 rounded-lg bg-white border border-slate-200 px-2 text-[12px] text-slate-600 outline-none"
+                  aria-label="並び替え"
+                >
+                  <option value="catalog">カタログ順</option>
+                  <option value="owned">所有率が高い順</option>
+                  <option value="name">名前順</option>
+                  <option value="year">新しい年順</option>
+                </select>
+              </div>
               <div className="rounded-2xl bg-white border border-slate-100 shadow-sm divide-y divide-slate-100 overflow-hidden">
                 {results.map((s) => {
                   const st = statOf(s.id)
