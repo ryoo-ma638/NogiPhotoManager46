@@ -3,6 +3,7 @@ import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
+import { getNickname, setNickname } from '../lib/prefs'
 
 export default function SettingsPage() {
   const { catalog, owned, userSets, imageIds, restoreAll } = useAppData()
@@ -10,6 +11,8 @@ export default function SettingsPage() {
   const [storage, setStorage] = useState<{ usage: number; quota: number } | null>(null)
   const [pending, setPending] = useState<ParsedBackup | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  const [nick, setNick] = useState(() => getNickname())
+  const [exportChoice, setExportChoice] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -29,9 +32,10 @@ export default function SettingsPage() {
     setPersisted(ok ?? false)
   }
 
-  const exportBackup = async () => {
+  const doExport = async (unique: boolean) => {
     const [rows, wants] = await Promise.all([allOwnedRows(), allWanted()])
-    downloadJSON(backupFilename(catalog.member.id), buildBackup(catalog.member.id, rows, userSets, wants))
+    downloadJSON(backupFilename(nick, unique), buildBackup(catalog.member.id, rows, userSets, wants, nick))
+    setExportChoice(false)
     showToast(`所有${rows.length}枚・手動セット${userSets.length}件を書き出しました`)
   }
 
@@ -65,6 +69,20 @@ export default function SettingsPage() {
     <>
       <Header title="設定" />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
+        <Section title="あなた" footer="書き出したファイル（バックアップ・トレード共有）に名前が入り、いつ・誰のものか分かります。トレードで相手に伝わります。">
+          <div className="px-4 py-3">
+            <input
+              value={nick}
+              onChange={(e) => {
+                setNick(e.target.value)
+                setNickname(e.target.value)
+              }}
+              placeholder="ニックネーム（例: りょうま）"
+              className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3 text-[15px] outline-none focus:border-violet-400"
+            />
+          </div>
+        </Section>
+
         <Section title="データ">
           <Row label="カタログ" value={`${catalog.member.name}（v${catalog.catalogVersion}）`} />
           <Row label="セット数" value={`${catalog.sets.length} 件${userSets.length > 0 ? ` ＋手動${userSets.length}` : ''}`} />
@@ -81,7 +99,7 @@ export default function SettingsPage() {
         >
           <div className="px-4 py-3 space-y-2">
             <button
-              onClick={() => void exportBackup()}
+              onClick={() => setExportChoice(true)}
               className="w-full h-11 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-[0.98] transition-transform"
             >
               書き出し（バックアップ）
@@ -129,6 +147,37 @@ export default function SettingsPage() {
 
         <p className="text-center text-[11px] text-slate-300 pt-2">NogiPhotoManager46 v0.1</p>
       </div>
+
+      {exportChoice && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 animate-fade" onClick={() => setExportChoice(false)}>
+          <div
+            className="w-full max-w-lg m-3 mb-[calc(0.75rem+env(safe-area-inset-bottom))] rounded-2xl bg-white p-4 shadow-xl animate-pop"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[15px] font-bold text-slate-700 text-center">バックアップを保存</p>
+            <p className="mt-1 text-[12px] text-slate-400 text-center leading-relaxed">
+              「上書き保存」は同じ名前で保存します。iPhoneでは「置き換えますか？」と聞かれ、前のファイルに上書きできます。
+            </p>
+            <div className="mt-3 space-y-2">
+              <button
+                onClick={() => void doExport(true)}
+                className="w-full h-12 rounded-xl bg-violet-600 text-white font-bold active:scale-[0.98] transition-transform"
+              >
+                新規保存（日時つき・別ファイル）
+              </button>
+              <button
+                onClick={() => void doExport(false)}
+                className="w-full h-12 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium active:scale-[0.98] transition-transform"
+              >
+                上書き保存（同じ名前）
+              </button>
+              <button onClick={() => setExportChoice(false)} className="w-full h-10 text-slate-400 text-[13px] font-medium">
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {pending && (
         <ConfirmSheet

@@ -1,10 +1,12 @@
 import type { OwnedRow, WantedRow } from './db'
 import type { Rarity, UserSet } from '../types'
+import { safeName } from './prefs'
 
 export interface BackupFile {
   app: string
   version: number
   member: string
+  owner?: string // 持ち主（ニックネーム）
   exportedAt: string
   owned: OwnedRow[]
   userSets?: UserSet[]
@@ -17,11 +19,12 @@ export interface ParsedBackup {
   wanted: WantedRow[]
 }
 
-export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet[], wanted: WantedRow[] = []): BackupFile {
+export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet[], wanted: WantedRow[] = [], owner = ''): BackupFile {
   return {
     app: 'NogiPhotoManager46',
     version: 3,
     member,
+    owner: owner || undefined,
     exportedAt: new Date().toISOString(),
     owned,
     userSets,
@@ -105,8 +108,11 @@ export function parseBackup(text: string): ParsedBackup {
   return { owned, userSets, wanted }
 }
 
-export function backupFilename(member: string): string {
+/** バックアップのファイル名。unique=false は「上書き用」の固定名、true は日時つきの新規名 */
+export function backupFilename(name: string, unique = true): string {
+  const base = safeName(name)
+  if (!unique) return `nogi-backup-${base}.json`
   const d = new Date()
   const p = (n: number) => String(n).padStart(2, '0')
-  return `nogi-backup-${member}-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.json`
+  return `nogi-backup-${base}-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.json`
 }

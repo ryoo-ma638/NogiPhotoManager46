@@ -2,12 +2,17 @@ import { describe, expect, it } from 'vitest'
 import { buildTradeExport, computeOverlap, parseTradeExport } from './trade'
 
 describe('trade 共有ファイル', () => {
-  it('書き出し→読み込みで譲(枚数)・求を保持する', () => {
-    const exp = buildTradeExport('yumiki_nao', '弓木奈於', [{ photoId: 'yumiki_nao:s0043:yori', qty: 2 }], ['yumiki_nao:s0043:chu'])
+  it('書き出し→読み込みで持ち主(ニックネーム)・譲(枚数)・求を保持する', () => {
+    const exp = buildTradeExport('yumiki_nao', 'りょうま', [{ photoId: 'yumiki_nao:s0043:yori', qty: 2 }], ['yumiki_nao:s0043:chu'])
     const parsed = parseTradeExport(JSON.stringify(exp))
-    expect(parsed.memberName).toBe('弓木奈於')
+    expect(parsed.ownerName).toBe('りょうま')
     expect(parsed.give.get('yumiki_nao:s0043:yori')).toBe(2)
     expect(parsed.want.has('yumiki_nao:s0043:chu')).toBe(true)
+  })
+
+  it('旧形式(memberName)の持ち主も読める', () => {
+    const old = { app: 'NogiPhotoManager46', kind: 'trade', member: 'yumiki_nao', memberName: '旧太郎', exportedAt: '', give: [], want: [] }
+    expect(parseTradeExport(JSON.stringify(old)).ownerName).toBe('旧太郎')
   })
 
   it('トレード形式でないファイルは拒否する', () => {

@@ -4,6 +4,7 @@ import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
 import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from '../lib/trade'
 import { downloadJSON } from '../lib/backup'
+import { getNickname, safeName } from '../lib/prefs'
 
 interface TradeItem {
   photoId: string
@@ -78,14 +79,18 @@ export default function TradePage() {
 
   // ---- 相手との突き合わせ（ローカルなファイル交換・サーバ不要） ----
   const exportFile = () => {
+    const nick = getNickname() || '名無し'
     const exp = buildTradeExport(
       catalog.member.id,
-      catalog.member.name,
+      nick,
       give.map((g) => ({ photoId: g.photoId, qty: g.qty })),
       want.map((w) => w.photoId),
     )
-    downloadJSON(`nogi-trade-${catalog.member.id}.json`, exp)
-    showToast('共有ファイルを書き出しました')
+    const d = new Date()
+    const p = (n: number) => String(n).padStart(2, '0')
+    const date = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`
+    downloadJSON(`nogi-trade-${safeName(nick)}-${date}.json`, exp)
+    showToast(getNickname() ? '共有ファイルを書き出しました' : '設定でニックネームを付けると相手に名前が伝わります')
   }
   const onImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -94,7 +99,7 @@ export default function TradePage() {
     try {
       const parsed = parseTradeExport(await file.text())
       const overlap = computeOverlap(giveSet, wanted, parsed.give, parsed.want)
-      setMatch({ name: parsed.memberName, overlap })
+      setMatch({ name: parsed.ownerName, overlap })
       if (overlap.canGet.length === 0 && overlap.canGive.length === 0) showToast('重なりはありませんでした')
     } catch (err) {
       showToast(`読み込み失敗: ${err instanceof Error ? err.message : String(err)}`)
