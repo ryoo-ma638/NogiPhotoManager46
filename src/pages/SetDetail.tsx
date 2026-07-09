@@ -6,7 +6,7 @@ import { EditSetSheet } from '../components/UserSetSheets'
 import { PhotoViewer, ThumbImg } from '../components/images'
 import { getImageRow } from '../lib/db'
 import { rotateImage } from '../lib/images'
-import { goBack } from '../lib/router'
+import { goBack, navigate } from '../lib/router'
 import type { Photo, Rarity } from '../types'
 
 const RARITY_STYLE: Record<Rarity, { tile: string; badge?: string; badgeLabel?: string }> = {
@@ -24,6 +24,7 @@ export default function SetDetailPage({ setId }: { setId: string }) {
   const [viewer, setViewer] = useState<Photo | null>(null)
   const [imgVersion, setImgVersion] = useState(0)
   const [toast, setToast] = useState<string | null>(null)
+  const [showWantHelp, setShowWantHelp] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const attachTarget = useRef<string | null>(null)
 
@@ -40,6 +41,25 @@ export default function SetDetailPage({ setId }: { setId: string }) {
   const showToast = (msg: string) => {
     setToast(msg)
     window.setTimeout(() => setToast(null), 2400)
+  }
+
+  // ♡（特に欲しい）: 設定/解除でトーストを出し、初回だけ機能を説明する
+  const onHeart = (photoId: string) => {
+    const wasWanted = wanted.has(photoId)
+    toggleWanted(photoId)
+    if (!wasWanted) {
+      showToast('「特に欲しい」に設定しました')
+      try {
+        if (!localStorage.getItem('nogi_want_explained')) {
+          localStorage.setItem('nogi_want_explained', '1')
+          setShowWantHelp(true)
+        }
+      } catch {
+        /* localStorage不可でも続行 */
+      }
+    } else {
+      showToast('「特に欲しい」を外しました')
+    }
   }
 
   const pickImageFor = (photoId: string) => {
@@ -113,7 +133,7 @@ export default function SetDetailPage({ setId }: { setId: string }) {
               count={countOf(p.id)}
               onSetCount={(n) => setCount(p.id, n)}
               isWanted={wanted.has(p.id)}
-              onToggleWanted={() => toggleWanted(p.id)}
+              onToggleWanted={() => onHeart(p.id)}
               hasImage={imageIds.has(p.id)}
               imgVersion={imgVersion}
               onToggle={() => toggle(p.id)}
@@ -214,8 +234,37 @@ export default function SetDetailPage({ setId }: { setId: string }) {
         />
       )}
 
+      {/* 初回ハート時: 「特に欲しい」の説明 */}
+      {showWantHelp && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 animate-fade p-5" onClick={() => setShowWantHelp(false)}>
+          <div className="w-full max-w-xs rounded-3xl bg-white p-5 shadow-2xl animate-pop" onClick={(e) => e.stopPropagation()}>
+            <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-100 to-rose-100">
+              <span className="text-[52px] leading-none" aria-hidden>💗</span>
+            </div>
+            <h2 className="mt-4 text-center text-[16px] font-bold text-slate-800">「特に欲しい」に設定しました</h2>
+            <p className="mt-1.5 text-center text-[13px] text-slate-500 leading-relaxed">
+              ♡は「求（特に欲しい）」の印です。トレードの求リストに使われ、トレード画面でまとめて見られます。
+            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <button onClick={() => setShowWantHelp(false)} className="h-11 px-3 rounded-xl text-slate-400 font-medium text-[13px]">
+                閉じる
+              </button>
+              <button
+                onClick={() => {
+                  setShowWantHelp(false)
+                  navigate('/trade')
+                }}
+                className="flex-1 h-11 rounded-xl bg-violet-600 text-white font-bold active:scale-[0.98] transition-transform"
+              >
+                トレードを見る
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {toast && (
-        <div className="fixed inset-x-0 bottom-[calc(8rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 pointer-events-none">
+        <div className="fixed inset-x-0 bottom-[calc(8rem+env(safe-area-inset-bottom))] z-[70] flex justify-center px-4 pointer-events-none">
           <div className="animate-pop rounded-full bg-slate-900/90 text-white text-[13px] font-medium px-4 py-2 shadow-lg">{toast}</div>
         </div>
       )}
