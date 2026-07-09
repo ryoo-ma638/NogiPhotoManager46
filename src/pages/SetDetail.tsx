@@ -271,6 +271,10 @@ function PoseCard({
         }`}
       >
         {hasImage ? <ThumbImg photoId={photo.id} version={imgVersion} className="absolute inset-0 w-full h-full object-cover" /> : <PhotoIcon className="w-8 h-8" />}
+        {/* ダブり（2枚以上＝譲れる）バッジ */}
+        {dup && (
+          <span className="absolute top-1 left-1 rounded bg-amber-400 text-white text-[9px] font-extrabold px-1 py-px shadow">ダブり</span>
+        )}
         {/* 特に欲しい（求）: 未所有のときだけ。ハートで印を付ける */}
         {!isOwned && (
           <button
@@ -300,8 +304,8 @@ function PoseCard({
             >
               −
             </button>
-            <span className={`text-[12px] font-bold tabular-nums ${dup ? 'text-amber-300' : 'text-white'}`}>
-              {count}枚{dup ? '・ダブり' : ''}
+            <span className={`text-[12px] font-bold tabular-nums whitespace-nowrap ${dup ? 'text-amber-300' : 'text-white'}`}>
+              {count}枚
             </span>
             <button
               onClick={(e) => {

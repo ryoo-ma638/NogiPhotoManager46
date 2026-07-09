@@ -1,27 +1,12 @@
 import { useState } from 'react'
 
-// 初回起動で1回出す使い方ガイド（設定からも見返せる）。1画面1メッセージで短く。
+// 初回起動で1回出す使い方ガイド（設定からも見返せる）。画面中央・イラスト付き・1画面1メッセージで短く。
 const STEPS = [
-  {
-    emoji: '🌸',
-    title: 'ようこそ',
-    body: 'このアプリは、弓木奈於の生写真を「持ってる／持ってない」で記録するコレクション管理アプリです。',
-  },
-  {
-    emoji: '✅',
-    title: '記録する',
-    body: 'コレクション → バインダー → 年 → セットと開いて、持っている写真をタップで○にするだけ。セット下部の「すべて所有にする」も便利です。',
-  },
-  {
-    emoji: '📷',
-    title: 'まとめて取り込む',
-    body: '「取込」から、カメラで連続撮影 or 写真アプリから選ぶと、印字やポーズをAIが読んで自動で振り分け。まとめて保存できます。',
-  },
-  {
-    emoji: '💾',
-    title: 'バックアップだけは忘れずに',
-    body: '○×のデータはこの端末の中だけに保存されます。設定 →「書き出し」でときどき保存を。アプリを消すと戻せません。',
-  },
+  { emoji: '🌸', bg: 'from-violet-100 to-fuchsia-100', title: 'ようこそ', body: '弓木奈於の生写真を「持ってる・持ってない」で記録するアプリです。' },
+  { emoji: '✅', bg: 'from-emerald-100 to-teal-100', title: '記録する', body: 'セットを開いて、持っている写真をタップで○。下の −/＋ で枚数も。' },
+  { emoji: '📷', bg: 'from-sky-100 to-blue-100', title: 'まとめて取り込む', body: '「取込」でカメラや写真から、AIが自動で振り分けます。' },
+  { emoji: '🔁', bg: 'from-pink-100 to-rose-100', title: 'トレード', body: 'ダブりと「特に欲しい」を管理。求/譲リストも作れます。' },
+  { emoji: '💾', bg: 'from-amber-100 to-orange-100', title: 'バックアップ', body: 'データは端末の中だけ。設定→書き出しでときどき保存を。' },
 ]
 
 export function Tutorial({ onClose }: { onClose: () => void }) {
@@ -30,28 +15,27 @@ export function Tutorial({ onClose }: { onClose: () => void }) {
   const last = i === STEPS.length - 1
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 animate-fade" onClick={onClose}>
-      <div
-        className="w-full max-w-lg m-3 mb-[calc(0.75rem+env(safe-area-inset-bottom))] rounded-2xl bg-white p-5 shadow-xl animate-pop"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="text-center px-2">
-          <div className="text-5xl mb-3" aria-hidden>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 animate-fade p-5" onClick={onClose}>
+      <div className="w-full max-w-xs rounded-3xl bg-white p-5 shadow-2xl animate-pop" onClick={(e) => e.stopPropagation()}>
+        {/* イラスト */}
+        <div className={`flex h-28 items-center justify-center rounded-2xl bg-gradient-to-br ${step.bg}`}>
+          <span className="text-[56px] leading-none" aria-hidden>
             {step.emoji}
-          </div>
-          <h2 className="text-[17px] font-bold text-slate-800">{step.title}</h2>
-          <p className="mt-2 text-[14px] text-slate-500 leading-relaxed">{step.body}</p>
+          </span>
         </div>
 
+        <h2 className="mt-4 text-center text-[17px] font-bold text-slate-800">{step.title}</h2>
+        <p className="mt-1.5 text-center text-[13px] text-slate-500 leading-relaxed">{step.body}</p>
+
         {/* 進捗ドット */}
-        <div className="flex justify-center gap-1.5 mt-5">
+        <div className="mt-4 flex justify-center gap-1.5">
           {STEPS.map((_, k) => (
             <span key={k} className={`h-1.5 rounded-full transition-all ${k === i ? 'w-5 bg-violet-500' : 'w-1.5 bg-slate-200'}`} />
           ))}
         </div>
 
         {/* 操作 */}
-        <div className="mt-5 flex items-center gap-2">
+        <div className="mt-4 flex items-center gap-2">
           {last ? (
             <button
               onClick={onClose}
@@ -61,7 +45,7 @@ export function Tutorial({ onClose }: { onClose: () => void }) {
             </button>
           ) : (
             <>
-              <button onClick={onClose} className="h-11 px-4 rounded-xl text-slate-400 font-medium text-[14px]">
+              <button onClick={onClose} className="h-11 px-3 rounded-xl text-slate-400 font-medium text-[13px]">
                 スキップ
               </button>
               <button
