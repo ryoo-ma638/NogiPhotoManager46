@@ -113,7 +113,7 @@ export default function SearchPage() {
           {!active && (
             <div className="py-20 text-center text-slate-400 space-y-2">
               <SearchIcon className="w-10 h-10 mx-auto text-slate-300" />
-              <p className="text-[13px]">セット名を入力するか、絞り込み（未所有・ダブり・特に欲しい）で探す</p>
+              <p className="text-[13px]">セット名で検索、または絞り込みで探す</p>
             </div>
           )}
 

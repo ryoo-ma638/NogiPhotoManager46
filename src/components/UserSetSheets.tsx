@@ -123,7 +123,7 @@ export function AddSetSheet({
           <input className={inputCls} value={note} onChange={(e) => setNote(e.target.value)} placeholder="例: ○○で購入" />
         </Field>
 
-        <p className="text-[11px] text-slate-400">手動で追加したセットはカタログ更新の影響を受けません。枠は後から自由に増減・改名できます。</p>
+        <p className="text-[11px] text-slate-400">追加したセットはカタログ更新の影響を受けません。枠は後から増減・改名できます。</p>
 
         <button
           disabled={!name.trim()}

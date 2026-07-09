@@ -73,7 +73,7 @@ export default function TradePage() {
       await navigator.clipboard.writeText(text)
       showToast('コピーしました')
     } catch {
-      showToast('コピーできませんでした。下の文を長押しで選んでコピーしてください')
+      showToast('コピー失敗。文を長押しで選んでください')
     }
   }
 
@@ -90,7 +90,7 @@ export default function TradePage() {
     const p = (n: number) => String(n).padStart(2, '0')
     const date = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`
     downloadJSON(`nogi-trade-${safeName(nick)}-${date}.json`, exp)
-    showToast(getNickname() ? '共有ファイルを書き出しました' : '設定でニックネームを付けると相手に名前が伝わります')
+    showToast(getNickname() ? '共有ファイルを書き出しました' : '設定でニックネームを付けると相手に伝わります')
   }
   const onImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -119,7 +119,7 @@ export default function TradePage() {
           disabled={give.length === 0 && want.length === 0}
           className="w-full h-12 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 disabled:opacity-40 active:scale-[0.99] transition"
         >
-          求/譲リストを作る（X貼り付け用）
+          求/譲リストを作る
         </button>
 
         {/* 相手との突き合わせ（ファイル交換） */}
@@ -150,7 +150,7 @@ export default function TradePage() {
               </button>
             </div>
             <div>
-              <p className="text-[12px] font-bold text-emerald-600 pb-1">もらえる（相手が譲・自分が求）{match.overlap.canGet.length}件</p>
+              <p className="text-[12px] font-bold text-emerald-600 pb-1">もらえる {match.overlap.canGet.length}件</p>
               {match.overlap.canGet.length === 0 ? (
                 <p className="text-[12px] text-slate-400">なし</p>
               ) : (
@@ -165,7 +165,7 @@ export default function TradePage() {
               )}
             </div>
             <div>
-              <p className="text-[12px] font-bold text-pink-600 pb-1">渡せる（相手が求・自分が譲）{match.overlap.canGive.length}件</p>
+              <p className="text-[12px] font-bold text-pink-600 pb-1">渡せる {match.overlap.canGive.length}件</p>
               {match.overlap.canGive.length === 0 ? (
                 <p className="text-[12px] text-slate-400">なし</p>
               ) : (
@@ -185,14 +185,14 @@ export default function TradePage() {
           title="譲れる（ダブり）"
           n={give.length}
           chipClass="bg-emerald-50 text-emerald-700"
-          empty="ダブり（2枚以上持っている写真）はまだありません。セット詳細で写真の枚数を ＋ してください。"
+          empty="ダブりはまだありません。セット詳細で枚数を＋すると表示されます。"
           groups={group(give)}
         />
         <TradeSection
           title="求（特に欲しい）"
           n={want.length}
           chipClass="bg-pink-50 text-pink-600"
-          empty="「特に欲しい」はまだありません。未所有の写真の♡で印を付けられます。"
+          empty="未所有の写真の♡を押すと、ここに追加されます。"
           groups={group(want)}
         />
       </div>
@@ -201,7 +201,7 @@ export default function TradePage() {
         <SheetShell title="求/譲リスト" onClose={() => setSheet(false)}>
           <div className="space-y-3 pb-2">
             <p className="text-[12px] text-slate-400 leading-relaxed">
-              このままXなどに貼り付けられます。求は「特に欲しい」だけ載せています（全所有は出しません）。
+              このままXに貼り付けOK。求は「特に欲しい」だけ載せます。
             </p>
             <textarea
               readOnly

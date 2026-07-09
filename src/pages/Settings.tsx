@@ -36,7 +36,7 @@ export default function SettingsPage() {
     const [rows, wants] = await Promise.all([allOwnedRows(), allWanted()])
     downloadJSON(backupFilename(nick, unique), buildBackup(catalog.member.id, rows, userSets, wants, nick))
     setExportChoice(false)
-    showToast(`所有${rows.length}枚・手動セット${userSets.length}件を書き出しました`)
+    showToast(`${rows.length}枚を書き出しました`)
   }
 
   const onFilePicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,7 @@ export default function SettingsPage() {
     <>
       <Header title="設定" />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
-        <Section title="あなた" footer="書き出したファイル（バックアップ・トレード共有）に名前が入り、いつ・誰のものか分かります。トレードで相手に伝わります。">
+        <Section title="あなた" footer="書き出したファイルに名前が入り、トレード相手にも伝わります。">
           <div className="px-4 py-3">
             <input
               value={nick}
@@ -95,7 +95,7 @@ export default function SettingsPage() {
 
         <Section
           title="バックアップ"
-          footer="所有データはこの端末の中にだけ保存されます。ホーム画面からアプリを削除するとデータも消えるため、ときどき書き出して保存しておくと安心です。※添付画像は容量が大きいためバックアップJSONには含まれません。"
+          footer="データは端末内だけに保存。アプリを削除すると消えるので、ときどき書き出しを。※添付画像は含まれません。"
         >
           <div className="px-4 py-3 space-y-2">
             <button
@@ -119,7 +119,7 @@ export default function SettingsPage() {
           footer={
             persisted
               ? 'ブラウザによる自動削除から保護されています。'
-              : '端末の空き容量が減った際にブラウザがデータを消さないよう、保護を有効にできます。'
+              : '空き容量が減ったときの自動削除を防ぎます。'
           }
         >
           <div className="px-4 py-3">
@@ -156,20 +156,20 @@ export default function SettingsPage() {
           >
             <p className="text-[15px] font-bold text-slate-700 text-center">バックアップを保存</p>
             <p className="mt-1 text-[12px] text-slate-400 text-center leading-relaxed">
-              「上書き保存」は同じ名前で保存します。iPhoneでは「置き換えますか？」と聞かれ、前のファイルに上書きできます。
+              「上書き保存」は同じ名前で保存。iPhoneでは確認後に上書きできます。
             </p>
             <div className="mt-3 space-y-2">
               <button
                 onClick={() => void doExport(true)}
                 className="w-full h-12 rounded-xl bg-violet-600 text-white font-bold active:scale-[0.98] transition-transform"
               >
-                新規保存（日時つき・別ファイル）
+                新規保存（日時つき）
               </button>
               <button
                 onClick={() => void doExport(false)}
                 className="w-full h-12 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium active:scale-[0.98] transition-transform"
               >
-                上書き保存（同じ名前）
+                上書き保存
               </button>
               <button onClick={() => setExportChoice(false)} className="w-full h-10 text-slate-400 text-[13px] font-medium">
                 キャンセル

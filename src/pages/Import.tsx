@@ -246,7 +246,7 @@ export default function ImportPage() {
       }
     }
     setBusy(false)
-    showToast(`${n}枚を保存しました（画像＋所有○）`)
+    showToast(`${n}枚を保存しました`)
   }
 
   const pickerItem = pickerFor ? items.find((i) => i.id === pickerFor.itemId) : null
@@ -322,7 +322,7 @@ export default function ImportPage() {
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
         {apiMissing && (
           <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">
-            自動判定は準備中です（認識APIキー未設定）。今は手動で「セット」と「枠」を選んで保存できます。
+            自動判定は準備中です。手動でセットと枠を選んで保存できます。
           </div>
         )}
 
@@ -456,7 +456,7 @@ export default function ImportPage() {
                     onClick={() => setOtherFor(it.id)}
                     className="w-full h-8 rounded-lg text-[12px] font-medium bg-fuchsia-50 border border-fuchsia-200 text-fuchsia-600 active:bg-fuchsia-100 transition-colors"
                   >
-                    「その他」として登録（ミニ生写真・スタ誕など）
+                    「その他」として登録
                   </button>
                 )}
               </div>
@@ -478,7 +478,7 @@ export default function ImportPage() {
               disabled={busy}
               className="w-full h-12 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 disabled:opacity-50 active:scale-[0.98] transition"
             >
-              {ready.length}枚を保存（画像＋所有○）
+              {ready.length}枚を保存
             </button>
           </div>
         </div>
@@ -578,7 +578,7 @@ function OtherRegisterSheet({
     <SheetShell title="「その他」として登録" onClose={onClose}>
       <div className="space-y-4 pb-2">
         <p className="text-[12px] text-slate-400 leading-relaxed">
-          年度別・封入以外の写真（ライブBOXのミニ生写真、乃木坂スター誕生！など）は「その他」に入れます。ポーズの区別なし（①②③…の連番）で登録されます。
+          年度別・封入以外（ミニ生写真、スタ誕など）はここへ。連番①②③…で登録します。
         </p>
 
         {otherSets.length > 0 && (
@@ -702,7 +702,7 @@ function SetPicker({
         </div>
       </div>
       {broadened && (
-        <p className="pb-1.5 text-[12px] text-violet-600">この絞り込みに無いので、全セットから「{q.trim()}」を含むものを表示中</p>
+        <p className="pb-1.5 text-[12px] text-violet-600">絞り込みに該当なし。全セットから「{q.trim()}」を表示中</p>
       )}
       <div className="divide-y divide-slate-100 pb-2">
         {results.map((s) => (

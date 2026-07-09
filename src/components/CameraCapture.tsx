@@ -4,7 +4,7 @@ const MAX_SHOTS = 30 // 一度の撮影で扱う上限（取込側と同じ）
 
 function cameraErrorMessage(e: unknown): string {
   const name = (e as { name?: string })?.name
-  if (name === 'NotAllowedError' || name === 'SecurityError') return 'カメラの使用が許可されていません。設定でこのサイト（アプリ）のカメラを許可してください。'
+  if (name === 'NotAllowedError' || name === 'SecurityError') return 'カメラが許可されていません。設定で許可してください。'
   if (name === 'NotFoundError' || name === 'OverconstrainedError') return 'カメラが見つかりませんでした。'
   return 'カメラを起動できませんでした。'
 }
@@ -36,7 +36,7 @@ export function CameraCapture({
     let cancelled = false
     void (async () => {
       if (!navigator.mediaDevices?.getUserMedia) {
-        setError('この端末・ブラウザではカメラを使えません。「写真から選ぶ」をお使いください。')
+        setError('カメラを使えません。「写真から選ぶ」をお使いください。')
         return
       }
       try {

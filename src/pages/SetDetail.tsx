@@ -243,7 +243,7 @@ export default function SetDetailPage({ setId }: { setId: string }) {
             </div>
             <h2 className="mt-4 text-center text-[16px] font-bold text-slate-800">「特に欲しい」に設定しました</h2>
             <p className="mt-1.5 text-center text-[13px] text-slate-500 leading-relaxed">
-              ♡は「求（特に欲しい）」の印です。トレードの求リストに使われ、トレード画面でまとめて見られます。
+              ♡は「求（特に欲しい）」の印。トレードの求リストにまとまります。
             </p>
             <div className="mt-4 flex items-center gap-2">
               <button onClick={() => setShowWantHelp(false)} className="h-11 px-3 rounded-xl text-slate-400 font-medium text-[13px]">
