@@ -4,6 +4,7 @@ import { ConfirmSheet, Header } from '../components/ui'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 import { getNickname, setNickname } from '../lib/prefs'
+import { isOwner, lockOwner, unlockOwner } from '../lib/limit'
 
 export default function SettingsPage() {
   const { catalog, owned, userSets, imageIds, restoreAll } = useAppData()
@@ -13,7 +14,21 @@ export default function SettingsPage() {
   const [toast, setToast] = useState<string | null>(null)
   const [nick, setNick] = useState(() => getNickname())
   const [exportChoice, setExportChoice] = useState(false)
+  const [owner, setOwner] = useState(() => isOwner())
+  const [pw, setPw] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+
+  const unlock = async () => {
+    if (!pw.trim()) return
+    const ok = await unlockOwner(pw.trim())
+    if (ok) {
+      setOwner(true)
+      setPw('')
+      showToast('解除しました（使い放題）')
+    } else {
+      showToast('パスワードが違います')
+    }
+  }
 
   useEffect(() => {
     void navigator.storage?.persisted?.().then(setPersisted)
@@ -134,6 +149,44 @@ export default function SettingsPage() {
               </button>
             )}
           </div>
+        </Section>
+
+        <Section
+          title="オーナー"
+          footer={owner ? undefined : `他の人は1日${30}回まで自動判定できます。オーナーはパスワードで使い放題に。`}
+        >
+          {owner ? (
+            <div className="px-4 py-3 flex items-center justify-between">
+              <span className="text-[14px] font-medium text-emerald-600">✓ 解除済み（使い放題）</span>
+              <button
+                onClick={() => {
+                  lockOwner()
+                  setOwner(false)
+                  showToast('制限を戻しました')
+                }}
+                className="text-[13px] text-slate-400 font-medium"
+              >
+                戻す
+              </button>
+            </div>
+          ) : (
+            <div className="px-4 py-3 flex gap-2">
+              <input
+                type="password"
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+                placeholder="パスワード"
+                className="flex-1 h-11 rounded-xl bg-white border border-slate-200 px-3 text-[15px] outline-none focus:border-violet-400"
+              />
+              <button
+                onClick={() => void unlock()}
+                disabled={!pw.trim()}
+                className="shrink-0 h-11 px-4 rounded-xl bg-violet-600 text-white font-bold text-[14px] disabled:opacity-40"
+              >
+                解除
+              </button>
+            </div>
+          )}
         </Section>
 
         <Section title="ヘルプ">

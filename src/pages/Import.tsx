@@ -8,6 +8,7 @@ import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/ima
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { matchCaption, slotForPose, normalizeForSearch } from '../lib/match'
 import { kindOf } from '../lib/kinds'
+import { canAnalyze, consumeAnalysis, isOwner, remainingToday, DAILY_LIMIT, RECOMMENDED_PER_IMAGE } from '../lib/limit'
 import type { Binder, CatalogSet } from '../types'
 
 // 自動確定に必要な最低確信度
@@ -51,6 +52,8 @@ export default function ImportPage() {
   const [preview, setPreview] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
   const [showCamera, setShowCamera] = useState(false)
+  const [left, setLeft] = useState(remainingToday())
+  const owner = isOwner()
   const fileRef = useRef<HTMLInputElement>(null)
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
 
@@ -161,7 +164,20 @@ export default function ImportPage() {
   const analyze = async (it: ImportItem) => {
     update(it.id, { status: 'analyzing' })
     try {
+      // 本日のAI判定が上限（非オーナー）なら、AIにかけず手動モードにする
+      if (!canAnalyze()) {
+        const file = await ensurePortrait(it.file)
+        let url = it.url
+        if (file !== it.file) {
+          URL.revokeObjectURL(it.url)
+          url = URL.createObjectURL(file)
+        }
+        update(it.id, { status: 'done', file, url })
+        return
+      }
       const { full } = await processImage(it.file)
+      consumeAnalysis()
+      setLeft(remainingToday())
       let photos: RecognizedPhoto[]
       try {
         photos = await recognizeImage(full)
@@ -326,6 +342,12 @@ export default function ImportPage() {
           </div>
         )}
 
+        {!owner && left <= 0 && (
+          <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">
+            本日の自動判定は上限（{DAILY_LIMIT}回）です。手動で選んで保存できます。設定でパスワードを入れると解除できます。
+          </div>
+        )}
+
         <button
           onClick={() => setShowCamera(true)}
           className="w-full h-24 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 flex flex-col items-center justify-center gap-1 active:scale-[0.99] transition"
@@ -341,6 +363,12 @@ export default function ImportPage() {
           写真から選ぶ（複数OK・最大30枚）
         </button>
         <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
+
+        {!owner && (
+          <p className="text-[11px] text-slate-400 leading-relaxed">
+            本日の自動判定 残り{Math.max(0, left)}回。1枚の画像に最大{RECOMMENDED_PER_IMAGE}枚まで並べて撮ると、少ない回数でたくさん取り込めます。
+          </p>
+        )}
 
         {pending.length > 0 && (
           <p className="text-[12px] text-slate-400">
