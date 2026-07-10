@@ -4,8 +4,10 @@ import { CheckCircle, ChevronRight, SealCheck } from '../components/icons'
 import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
 import { AddSetSheet } from '../components/UserSetSheets'
+import { AddOtherItemSheet } from '../components/AddOtherItemSheet'
 import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
-import type { CatalogSet, Template } from '../types'
+import { circled } from '../lib/labels'
+import type { CatalogSet, Template, UserSet } from '../types'
 
 type Filter = 'all' | 'incomplete' | 'complete'
 
@@ -17,10 +19,16 @@ const TEMPLATE_BADGE: Partial<Record<Template, { label: string; cls: string }>> 
 }
 
 export default function BinderPage({ binderId }: { binderId: string }) {
-  const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet, imageIds } = useAppData()
+  const { catalog, allSets, statOf, photosOf, owned, toggle, addUserSet, updateUserSet, attachImage, userSetById, imageIds } = useAppData()
   const [filter, setFilter] = useState<Filter>('all')
   const [kindFilter, setKindFilter] = useState<Kind | null>(null)
   const [showAdd, setShowAdd] = useState(false)
+  const [showAddOther, setShowAddOther] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
+  const showToast = (m: string) => {
+    setToast(m)
+    window.setTimeout(() => setToast(null), 2000)
+  }
   useScrollRestore(`binder:${binderId}`)
 
   const binder = catalog.binders.find((b) => b.id === binderId)
@@ -68,6 +76,49 @@ export default function BinderPage({ binderId }: { binderId: string }) {
   const o = sets.reduce((n, s) => n + statOf(s.id).owned, 0)
   const t = sets.reduce((n, s) => n + statOf(s.id).total, 0)
 
+  // 「その他」へ未分類の写真を1枚追加: 既定セット「未分類」に連番枠(①②③)で足し、画像添付＋所有化。
+  const HOLDING_NAME = '未分類'
+  const addOtherItem = async (file: Blob, name: string) => {
+    const label = name.trim()
+    try {
+      const holding = allSets.find((s) => s.binderId === 'b-other' && s.user && s.name === HOLDING_NAME)
+      let setId: string
+      let slot: string
+      if (holding) {
+        const u = userSetById.get(holding.id)
+        if (!u) return
+        const used = new Set(u.photos.map((p) => p.slot))
+        let n = 1
+        while (used.has(`c${n}`)) n++
+        slot = `c${n}`
+        await updateUserSet({ ...u, photos: [...u.photos, { slot, label: label || circled(u.photos.length + 1), rarity: 'other' }] }, [])
+        setId = holding.id
+      } else {
+        setId = `user-${crypto.randomUUID().slice(0, 8)}`
+        slot = 'c1'
+        const row: UserSet = {
+          id: setId,
+          binderId: 'b-other',
+          year: null,
+          name: HOLDING_NAME,
+          template: 'single1',
+          note: null,
+          sortIndex: (sets.length > 0 ? Math.max(...sets.map((s) => s.sortIndex)) : 0) + 10,
+          photos: [{ slot, label: label || circled(1), rarity: 'other' }],
+          createdAt: new Date().toISOString(),
+        }
+        await addUserSet(row)
+      }
+      const photoId = `${catalog.member.id}:${setId}:${slot}`
+      await attachImage(photoId, file)
+      if (!owned.has(photoId)) toggle(photoId)
+      showToast(label ? `「${label}」をその他に追加しました` : 'その他に追加しました')
+    } catch (err) {
+      showToast(`追加に失敗: ${err instanceof Error ? err.message : String(err)}`)
+      throw err // シートを開いたまま（やり直せる）
+    }
+  }
+
   return (
     <>
       <Header
@@ -85,6 +136,15 @@ export default function BinderPage({ binderId }: { binderId: string }) {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-4">
+        {/* その他: 未分類の写真をすぐ追加できる目立つ入口 */}
+        {binder.id === 'b-other' && (
+          <button
+            onClick={() => setShowAddOther(true)}
+            className="w-full mb-3 h-12 rounded-2xl bg-fuchsia-500 text-white font-bold text-[15px] shadow-sm shadow-fuchsia-200 flex items-center justify-center gap-1.5 active:scale-[0.99] transition"
+          >
+            <span className="text-xl leading-none">＋</span> 未分類の写真を追加
+          </button>
+        )}
         {/* 種類チップ */}
         {availableKinds.length > 1 && (
           <div className="flex gap-1.5 overflow-x-auto pb-2 -mx-4 px-4 [-webkit-overflow-scrolling:touch]">
@@ -157,6 +217,13 @@ export default function BinderPage({ binderId }: { binderId: string }) {
           </section>
         ))}
       </div>
+
+      {showAddOther && <AddOtherItemSheet onAdd={addOtherItem} onClose={() => setShowAddOther(false)} />}
+      {toast && (
+        <div className="fixed inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 pointer-events-none">
+          <div className="rounded-full bg-slate-900/90 text-white text-[13px] font-medium px-4 py-2 shadow-lg">{toast}</div>
+        </div>
+      )}
     </>
   )
 }

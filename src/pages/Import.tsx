@@ -9,6 +9,7 @@ import { CameraIcon, CheckCircle } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { classifyPhoto } from '../lib/classify'
+import { circled } from '../lib/labels'
 import { canAnalyze, consumeAnalysis, isOwner, remainingToday, DAILY_LIMIT, RECOMMENDED_PER_IMAGE } from '../lib/limit'
 import type { CatalogSet } from '../types'
 
@@ -26,10 +27,6 @@ interface ImportItem {
   candidates: string[] | null // セット候補（複数該当時。「セットを選ぶ」の初期リスト）
   error: string | null
 }
-
-// 「その他」の枠ラベル（種類なし＝連番）
-const CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
-const circled = (n: number) => CIRCLED[n - 1] ?? `${n}`
 
 /** 検出枠が「生写真1枚」らしい大きさ・比率か（端の切れ端・極端に細い/小さい検出を除外） */
 function isCardLikeBox(box: [number, number, number, number]): boolean {
