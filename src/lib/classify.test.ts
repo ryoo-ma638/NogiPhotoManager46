@@ -20,8 +20,12 @@ const rec = (over: Partial<RecognizedPhoto>): RecognizedPhoto => ({
   captionConfidence: 0.9,
   pose: 'unknown',
   poseConfidence: 0.9,
+  rarity: 'normal',
   ...over,
 })
+
+// レア枠(r1)＋SR枠(sr1)を持つセットの枠構成
+const rarePhotos = () => [{ slot: 'yori' }, { slot: 'chu' }, { slot: 'hiki' }, { slot: 'r1' }, { slot: 'sr1' }]
 
 const NO_SEALED = new Set<string>()
 const allSets = [set('a', '2022.May-Ⅱ-フェイクファー'), set('c', '2022.May-Ⅲ-フロントボタントップス')]
@@ -67,5 +71,47 @@ describe('classifyPhoto', () => {
     expect(c.setId).toBe('a')
     expect(c.slot).toBeNull()
     expect(c.auto).toBe(false)
+  })
+
+  it('レア(R)は R枠を先入れするが自動確定はしない', () => {
+    const c = classifyPhoto(rec({ caption: '2022.May-Ⅱ', rarity: 'R', pose: 'yori' }), {
+      allSets,
+      sealedBinders: NO_SEALED,
+      photosOf: rarePhotos,
+    })
+    expect(c.setId).toBe('a')
+    expect(c.slot).toBe('r1')
+    expect(c.auto).toBe(false)
+    expect(c.rarity).toBe('R')
+  })
+
+  it('レア(SR)は SR①枠を先入れ（要確認）', () => {
+    const c = classifyPhoto(rec({ caption: '2022.May-Ⅱ', rarity: 'SR', pose: 'hiki' }), {
+      allSets,
+      sealedBinders: NO_SEALED,
+      photosOf: rarePhotos,
+    })
+    expect(c.slot).toBe('sr1')
+    expect(c.auto).toBe(false)
+  })
+
+  it('通常写真はレア枠を無視して普通ポーズ枠に自動割当', () => {
+    const c = classifyPhoto(rec({ caption: '2022.May-Ⅱ', rarity: 'normal', pose: 'yori' }), {
+      allSets,
+      sealedBinders: NO_SEALED,
+      photosOf: rarePhotos,
+    })
+    expect(c.slot).toBe('yori')
+    expect(c.auto).toBe(true)
+  })
+
+  it('レア判定でも対象セットにR/SR枠が無ければポーズ基準へフォールバック', () => {
+    const c = classifyPhoto(rec({ caption: '2022.May-Ⅱ', rarity: 'R', pose: 'yori' }), {
+      allSets,
+      sealedBinders: NO_SEALED,
+      photosOf: () => [{ slot: 'yori' }, { slot: 'chu' }, { slot: 'hiki' }],
+    })
+    expect(c.slot).toBe('yori')
+    expect(c.auto).toBe(true)
   })
 })

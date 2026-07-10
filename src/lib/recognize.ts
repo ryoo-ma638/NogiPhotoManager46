@@ -7,6 +7,7 @@ export interface RecognizedPhoto {
   captionConfidence: number
   pose: string // 'yori' | 'chu' | 'hiki' | 'suwari-yori' | 'suwari-hiki' | 'unknown'
   poseConfidence: number
+  rarity: 'normal' | 'R' | 'SR' // レア判定: 手書き風＋キラキラ＝R/SR（下が白=R・虹色=SR）、活字＝normal
 }
 
 function blobToBase64(blob: Blob): Promise<string> {

@@ -25,6 +25,7 @@ interface ImportItem {
   auto: boolean // 自動判定できたか
   sequenced: boolean // 一番上のセット選択から連番(ABCD/ヨリチュウヒキ)で自動割当された
   candidates: string[] | null // セット候補（複数該当時。「セットを選ぶ」の初期リスト）
+  rarity: 'normal' | 'R' | 'SR' // AIのレア判定（R/SRは枠を要確認で先入れ）
   error: string | null
 }
 
@@ -81,6 +82,7 @@ export default function ImportPage() {
     auto: false,
     sequenced: false,
     candidates: null,
+    rarity: 'normal',
     error: null,
   })
 
@@ -369,6 +371,7 @@ export default function ImportPage() {
                   )}
                   {it.status === 'done' && !it.auto && it.sequenced && <span className="text-violet-600 font-bold">連番で割当（変更可）</span>}
                   {it.status === 'done' && !it.setId && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
+                  {it.status === 'done' && it.rarity !== 'normal' && <span className="text-sky-600 font-bold">★{it.rarity}候補・枠を確認</span>}
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
                   {it.caption && <CaptionLine text={it.caption} />}
                 </div>
