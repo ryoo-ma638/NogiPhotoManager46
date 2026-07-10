@@ -21,6 +21,9 @@ dist-ssr/
 !.vscode/extensions.json
 .idea/
 
+# ブラウザ動作確認の一時成果物（Playwright）
+.playwright-mcp/
+
 # 個人の所有データ（Publicリポジトリには公開しない）
 *.ownership.json
 catalog-source*.txt
