@@ -4,6 +4,7 @@ import { SealCheck } from '../components/icons'
 import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
 import { PoseCard } from '../components/PoseCard'
+import { CatalogMatchMover } from '../components/CatalogMatchMover'
 import { PhotoViewer } from '../components/images'
 import { getImageRow } from '../lib/db'
 import { rotateImage } from '../lib/images'
@@ -99,6 +100,8 @@ export default function SetDetailPage({ setId }: { setId: string }) {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-36">
+        {/* その他の仮置き項目が同名でカタログにあれば、本セットへ移す導線 */}
+        <CatalogMatchMover set={set} />
         {/* 進捗ヘッダー */}
         <section className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4">
           <div className="flex items-center justify-between">

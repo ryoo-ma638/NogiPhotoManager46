@@ -6,7 +6,7 @@ import { navigate, useScrollRestore } from '../lib/router'
 import { AddSetSheet } from '../components/UserSetSheets'
 import { AddOtherItemSheet } from '../components/AddOtherItemSheet'
 import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
-import { circled } from '../lib/labels'
+import { circled, normName } from '../lib/labels'
 import type { CatalogSet, Template, UserSet } from '../types'
 
 type Filter = 'all' | 'incomplete' | 'complete'
@@ -77,7 +77,6 @@ export default function BinderPage({ binderId }: { binderId: string }) {
   const t = sets.reduce((n, s) => n + statOf(s.id).total, 0)
 
   // 同名の項目（既存セット名 or その他の枠ラベル）があればその名前を返す（重複防止の警告用）
-  const normName = (s: string) => s.normalize('NFKC').toLowerCase().replace(/\s+/g, '')
   const findDuplicateName = (name: string): string | null => {
     const n = normName(name)
     if (!n) return null
