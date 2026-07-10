@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { CameraIcon, ChevronRight, SealCheck, SearchIcon, SwapIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
 import { navigate, useScrollRestore } from '../lib/router'
+import { daysSinceBackup, shouldRemindBackup, snoozeBackupReminder } from '../lib/prefs'
 
 /** バインダーIDから年ラベル（'20–'21 / 封入）を作る */
 function yearChip(binderId: string): string {
@@ -32,6 +34,12 @@ export default function Home() {
   const total = perBinder.reduce((n, b) => n + b.total, 0)
   const completeSets = perBinder.reduce((n, b) => n + b.completeSets, 0)
   const percent = pct(owned, total)
+
+  // バックアップ催促（しばらく書き出していないとき）。閉じると数日は出さない。
+  // owned は非同期で埋まるので毎レンダー導出（localStorage参照は軽い）。
+  const [backupDismissed, setBackupDismissed] = useState(false)
+  const remindBackup = !backupDismissed && shouldRemindBackup(owned)
+  const backupDays = daysSinceBackup()
 
   return (
     <>
@@ -65,6 +73,33 @@ export default function Home() {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">
+        {/* バックアップ催促（データは端末内だけ＝消える前に書き出しを促す） */}
+        {remindBackup && (
+          <div className="rounded-2xl bg-amber-50 border border-amber-200 px-3.5 py-3 flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-bold text-amber-800">
+                {backupDays === null ? 'バックアップがまだです' : `前回のバックアップから${backupDays}日`}
+              </p>
+              <p className="text-[11px] text-amber-600 leading-relaxed">データは端末内だけ。書き出しておくと安心です。</p>
+            </div>
+            <button
+              onClick={() => navigate('/settings')}
+              className="shrink-0 h-8 px-3 rounded-lg bg-amber-500 text-white text-[12px] font-bold active:bg-amber-600 transition-colors"
+            >
+              書き出す
+            </button>
+            <button
+              onClick={() => {
+                snoozeBackupReminder()
+                setBackupDismissed(true)
+              }}
+              aria-label="あとで"
+              className="shrink-0 w-8 h-8 rounded-lg text-amber-400 text-lg active:bg-amber-100"
+            >
+              ✕
+            </button>
+          </div>
+        )}
         {/* ヒーロー：総コンプ率 */}
         <section className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-600 to-fuchsia-500 text-white p-5 shadow-lg shadow-violet-200">
           <div className="flex items-center gap-5">

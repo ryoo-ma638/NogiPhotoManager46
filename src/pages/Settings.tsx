@@ -3,7 +3,7 @@ import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
-import { getNickname, setNickname } from '../lib/prefs'
+import { getNickname, setNickname, markBackupDone } from '../lib/prefs'
 import { isOwner, lockOwner, unlockOwner } from '../lib/limit'
 
 export default function SettingsPage() {
@@ -50,6 +50,7 @@ export default function SettingsPage() {
   const doExport = async (unique: boolean) => {
     const [rows, wants] = await Promise.all([allOwnedRows(), allWanted()])
     downloadJSON(backupFilename(nick, unique), buildBackup(catalog.member.id, rows, userSets, wants, nick))
+    markBackupDone() // 催促のリセット
     setExportChoice(false)
     showToast(`${rows.length}枚を書き出しました`)
   }

@@ -1,5 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { getNickname, setNickname, safeName, getSearchPrefs, setSearchPrefs } from './prefs'
+import {
+  getNickname,
+  setNickname,
+  safeName,
+  getSearchPrefs,
+  setSearchPrefs,
+  markBackupDone,
+  daysSinceBackup,
+  snoozeBackupReminder,
+  shouldRemindBackup,
+} from './prefs'
 
 // node環境なので localStorage を最小の擬似実装で差し込む（jsdomは入れない）
 function makeStorage() {
@@ -93,5 +103,57 @@ describe('searchPrefs', () => {
   it('壊れたJSONでも既定値を返す', () => {
     localStorage.setItem('nogi_search_prefs', '{ not json')
     expect(getSearchPrefs().sortBy).toBe('catalog')
+  })
+})
+
+describe('backupReminder', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 6, 10, 12, 0, 0)) // 2026-07-10
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('一度も書き出していなければ経過日数は null', () => {
+    expect(daysSinceBackup()).toBeNull()
+  })
+
+  it('書き出し直後は0日、日数は正しく進む', () => {
+    markBackupDone()
+    expect(daysSinceBackup()).toBe(0)
+    vi.setSystemTime(new Date(2026, 6, 25, 12, 0, 0)) // 15日後
+    expect(daysSinceBackup()).toBe(15)
+  })
+
+  it('守るデータ（所有）が無ければ促さない', () => {
+    expect(shouldRemindBackup(0)).toBe(false)
+  })
+
+  it('未書き出し＋所有ありなら促す', () => {
+    expect(shouldRemindBackup(10)).toBe(true)
+  })
+
+  it('書き出し直後は促さず、14日以上で促す', () => {
+    markBackupDone()
+    expect(shouldRemindBackup(10)).toBe(false)
+    vi.setSystemTime(new Date(2026, 6, 24, 12, 0, 0)) // ちょうど14日後
+    expect(shouldRemindBackup(10)).toBe(true)
+  })
+
+  it('後回しにすると数日は促さず、期限が切れたらまた促す', () => {
+    markBackupDone()
+    vi.setSystemTime(new Date(2026, 6, 25, 12, 0, 0)) // 15日後＝要催促
+    expect(shouldRemindBackup(10)).toBe(true)
+    snoozeBackupReminder()
+    expect(shouldRemindBackup(10)).toBe(false) // 直後は出さない
+    vi.setSystemTime(new Date(2026, 7, 2, 12, 0, 0)) // snoozeから8日後
+    expect(shouldRemindBackup(10)).toBe(true)
+  })
+
+  it('書き出すと後回し状態は解除される', () => {
+    snoozeBackupReminder()
+    markBackupDone() // 書き出した＝催促リセット
+    expect(shouldRemindBackup(10)).toBe(false)
+    vi.setSystemTime(new Date(2026, 6, 25, 12, 0, 0)) // 15日後
+    expect(shouldRemindBackup(10)).toBe(true) // snoozeは消えているので普通に催促
   })
 })

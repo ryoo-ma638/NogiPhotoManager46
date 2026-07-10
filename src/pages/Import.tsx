@@ -314,8 +314,11 @@ export default function ImportPage() {
         )}
 
         {!owner && left <= 0 && (
-          <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">
-            本日の自動判定は上限（{DAILY_LIMIT}回）です。手動で選んで保存できます。設定でパスワードを入れると解除できます。
+          <div className="rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-3 space-y-1">
+            <p className="text-[13px] font-bold text-amber-800">本日の自動判定は上限（{DAILY_LIMIT}回）。ここからは手動モードです</p>
+            <p className="text-[12px] text-amber-700 leading-relaxed">
+              写真を選ぶ → 各カードで「セットを選ぶ」→「枠を選ぶ」で振り分けて保存できます。明日また自動で使えます。設定でパスワードを入れると今すぐ解除できます。
+            </p>
           </div>
         )}
 
@@ -335,9 +338,9 @@ export default function ImportPage() {
         </button>
         <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
 
-        {!owner && (
+        {!owner && left > 0 && (
           <p className="text-[11px] text-slate-400 leading-relaxed">
-            本日の自動判定 残り{Math.max(0, left)}回。1枚の画像に最大{RECOMMENDED_PER_IMAGE}枚まで並べて撮ると、少ない回数でたくさん取り込めます。
+            本日の自動判定 残り{left}回。1枚の画像に最大{RECOMMENDED_PER_IMAGE}枚まで並べて撮ると、少ない回数でたくさん取り込めます。
           </p>
         )}
 
