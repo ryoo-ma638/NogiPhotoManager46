@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { getNickname, setNickname, safeName } from './prefs'
+import { getNickname, setNickname, safeName, getSearchPrefs, setSearchPrefs } from './prefs'
 
 // node環境なので localStorage を最小の擬似実装で差し込む（jsdomは入れない）
 function makeStorage() {
@@ -62,5 +62,36 @@ describe('safeName', () => {
 
   it('通常の名前はそのまま残す', () => {
     expect(safeName('りょうま')).toBe('りょうま')
+  })
+})
+
+describe('searchPrefs', () => {
+  it('未設定なら既定値', () => {
+    expect(getSearchPrefs()).toEqual({ unownedOnly: false, dupOnly: false, wantOnly: false, kindFilter: null, sortBy: 'catalog' })
+  })
+
+  it('保存した内容を読み戻せる', () => {
+    const p = { unownedOnly: true, dupOnly: false, wantOnly: true, kindFilter: 'yori', sortBy: 'owned' as const }
+    setSearchPrefs(p)
+    expect(getSearchPrefs()).toEqual(p)
+  })
+
+  it('欠けたキーは既定で補う（前方互換）', () => {
+    localStorage.setItem('nogi_search_prefs', JSON.stringify({ dupOnly: true }))
+    const p = getSearchPrefs()
+    expect(p.dupOnly).toBe(true)
+    expect(p.unownedOnly).toBe(false)
+    expect(p.sortBy).toBe('catalog')
+    expect(p.kindFilter).toBeNull()
+  })
+
+  it('未知の並び替え値は catalog に丸める', () => {
+    localStorage.setItem('nogi_search_prefs', JSON.stringify({ sortBy: 'bogus' }))
+    expect(getSearchPrefs().sortBy).toBe('catalog')
+  })
+
+  it('壊れたJSONでも既定値を返す', () => {
+    localStorage.setItem('nogi_search_prefs', '{ not json')
+    expect(getSearchPrefs().sortBy).toBe('catalog')
   })
 })

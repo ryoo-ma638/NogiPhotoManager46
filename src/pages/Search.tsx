@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { ChevronRight, SealCheck, SearchIcon } from '../components/icons'
 import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate } from '../lib/router'
 import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
+import { getSearchPrefs, setSearchPrefs, type SortBy } from '../lib/prefs'
 
 // カナ/かな・全角半角・大文字小文字をある程度吸収して比較
 function norm(s: string): string {
@@ -26,12 +27,18 @@ function ToggleChip({ label, on, onClick }: { label: string; on: boolean; onClic
 
 export default function SearchPage() {
   const { catalog, allSets, statOf, photosOf, imageIds, countOf, wanted } = useAppData()
-  const [q, setQ] = useState('')
-  const [unownedOnly, setUnownedOnly] = useState(false)
-  const [dupOnly, setDupOnly] = useState(false)
-  const [wantOnly, setWantOnly] = useState(false)
-  const [kindFilter, setKindFilter] = useState<Kind | null>(null)
-  const [sortBy, setSortBy] = useState<'catalog' | 'owned' | 'name' | 'year'>('catalog')
+  const [q, setQ] = useState('') // 検索文字は毎回まっさらでよいので保存しない
+  const saved = useMemo(() => getSearchPrefs(), []) // 起動時に一度だけ読む
+  const [unownedOnly, setUnownedOnly] = useState(saved.unownedOnly)
+  const [dupOnly, setDupOnly] = useState(saved.dupOnly)
+  const [wantOnly, setWantOnly] = useState(saved.wantOnly)
+  const [kindFilter, setKindFilter] = useState<Kind | null>(saved.kindFilter as Kind | null)
+  const [sortBy, setSortBy] = useState<SortBy>(saved.sortBy)
+
+  // 絞り込み・並び替えは変えるたびに保存（検索文字は含めない）
+  useEffect(() => {
+    setSearchPrefs({ unownedOnly, dupOnly, wantOnly, kindFilter, sortBy })
+  }, [unownedOnly, dupOnly, wantOnly, kindFilter, sortBy])
 
   const binderName = useMemo(() => {
     const m = new Map<string, string>()
