@@ -25,6 +25,20 @@ function ToggleChip({ label, on, onClick }: { label: string; on: boolean; onClic
   )
 }
 
+/** 種類の単一選択チップ（カード内でトグルと同じ配色に統一） */
+function KindChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors ${
+        active ? 'bg-violet-600 text-white' : 'bg-slate-100 text-slate-500'
+      }`}
+    >
+      {label}
+    </button>
+  )
+}
+
 export default function SearchPage() {
   const { catalog, allSets, statOf, photosOf, imageIds, countOf, wanted } = useAppData()
   const [q, setQ] = useState('') // 検索文字は毎回まっさらでよいので保存しない
@@ -93,26 +107,37 @@ export default function SearchPage() {
           />
         </div>
 
-        {/* 絞り込み（未所有・ダブり・特に欲しい） */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          <ToggleChip label="未所有だけ" on={unownedOnly} onClick={() => setUnownedOnly((v) => !v)} />
-          <ToggleChip label="ダブりあり" on={dupOnly} onClick={() => setDupOnly((v) => !v)} />
-          <ToggleChip label="特に欲しいあり" on={wantOnly} onClick={() => setWantOnly((v) => !v)} />
-        </div>
-
-        {/* 種類で絞り込み */}
-        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 -mx-4 px-4 [-webkit-overflow-scrolling:touch]">
-          {KIND_LABELS.map((k) => (
-            <button
-              key={k.id}
-              onClick={() => setKindFilter(kindFilter === k.id ? null : k.id)}
-              className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium whitespace-nowrap transition-colors ${
-                kindFilter === k.id ? 'bg-violet-600 text-white' : 'bg-white border border-slate-200 text-slate-500'
-              }`}
+        {/* 絞り込み・種類・並び替えを1カードに集約 */}
+        <div className="mt-3 rounded-2xl bg-white border border-slate-200 shadow-sm p-3 space-y-2.5">
+          <p className="text-[11px] font-bold text-slate-400">絞り込み</p>
+          <div className="flex flex-wrap gap-2">
+            <ToggleChip label="未所有" on={unownedOnly} onClick={() => setUnownedOnly((v) => !v)} />
+            <ToggleChip label="ダブり" on={dupOnly} onClick={() => setDupOnly((v) => !v)} />
+            <ToggleChip label="特に欲しい" on={wantOnly} onClick={() => setWantOnly((v) => !v)} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="shrink-0 text-[11px] font-bold text-slate-400">種類</span>
+            <div className="min-w-0 flex-1 flex gap-1.5 overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch]">
+              <KindChip label="すべて" active={kindFilter === null} onClick={() => setKindFilter(null)} />
+              {KIND_LABELS.map((k) => (
+                <KindChip key={k.id} label={k.label} active={kindFilter === k.id} onClick={() => setKindFilter(kindFilter === k.id ? null : k.id)} />
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="shrink-0 text-[11px] font-bold text-slate-400">並び</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="flex-1 h-9 rounded-lg bg-slate-50 border border-slate-200 px-2.5 text-[13px] text-slate-600 outline-none focus:border-violet-400"
+              aria-label="並び替え"
             >
-              {k.label}
-            </button>
-          ))}
+              <option value="catalog">カタログ順</option>
+              <option value="owned">所有率が高い順</option>
+              <option value="name">名前順</option>
+              <option value="year">新しい年順</option>
+            </select>
+          </div>
         </div>
 
         {/* 結果 */}
@@ -133,20 +158,7 @@ export default function SearchPage() {
 
           {results.length > 0 && (
             <>
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-[12px] text-slate-400">{results.length}件</p>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                  className="h-8 rounded-lg bg-white border border-slate-200 px-2 text-[12px] text-slate-600 outline-none"
-                  aria-label="並び替え"
-                >
-                  <option value="catalog">カタログ順</option>
-                  <option value="owned">所有率が高い順</option>
-                  <option value="name">名前順</option>
-                  <option value="year">新しい年順</option>
-                </select>
-              </div>
+              <p className="text-[12px] text-slate-400 mb-2">{results.length}件</p>
               <div className="rounded-2xl bg-white border border-slate-100 shadow-sm divide-y divide-slate-100 overflow-hidden">
                 {results.map((s) => {
                   const st = statOf(s.id)
