@@ -76,6 +76,19 @@ export default function BinderPage({ binderId }: { binderId: string }) {
   const o = sets.reduce((n, s) => n + statOf(s.id).owned, 0)
   const t = sets.reduce((n, s) => n + statOf(s.id).total, 0)
 
+  // 同名の項目（既存セット名 or その他の枠ラベル）があればその名前を返す（重複防止の警告用）
+  const normName = (s: string) => s.normalize('NFKC').toLowerCase().replace(/\s+/g, '')
+  const findDuplicateName = (name: string): string | null => {
+    const n = normName(name)
+    if (!n) return null
+    for (const s of allSets) if (normName(s.name) === n) return s.name
+    for (const s of allSets) {
+      if (s.binderId !== 'b-other' || !s.user) continue
+      for (const p of photosOf(s)) if (normName(p.label) === n) return p.label
+    }
+    return null
+  }
+
   // 「その他」へ未分類の写真を1枚追加: 既定セット「未分類」に連番枠(①②③)で足し、画像添付＋所有化。
   const HOLDING_NAME = '未分類'
   const addOtherItem = async (file: Blob, name: string) => {
@@ -218,7 +231,9 @@ export default function BinderPage({ binderId }: { binderId: string }) {
         ))}
       </div>
 
-      {showAddOther && <AddOtherItemSheet onAdd={addOtherItem} onClose={() => setShowAddOther(false)} />}
+      {showAddOther && (
+        <AddOtherItemSheet onAdd={addOtherItem} checkDuplicate={findDuplicateName} onClose={() => setShowAddOther(false)} />
+      )}
       {toast && (
         <div className="fixed inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 pointer-events-none">
           <div className="rounded-full bg-slate-900/90 text-white text-[13px] font-medium px-4 py-2 shadow-lg">{toast}</div>

@@ -8,16 +8,22 @@ import { CameraIcon } from './icons'
  */
 export function AddOtherItemSheet({
   onAdd,
+  checkDuplicate,
   onClose,
 }: {
   onAdd: (file: Blob, name: string) => Promise<void>
+  checkDuplicate: (name: string) => string | null // 同名があればその名前を返す
   onClose: () => void
 }) {
   const [file, setFile] = useState<Blob | null>(null)
   const [url, setUrl] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
+  const [warnedName, setWarnedName] = useState<string | null>(null) // 重複警告を出した相手の名前
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const dup = name.trim() ? checkDuplicate(name.trim()) : null
+  const needConfirm = dup !== null && warnedName !== dup
 
   const pick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
@@ -30,6 +36,10 @@ export function AddOtherItemSheet({
 
   const submit = async () => {
     if (!file || busy) return
+    if (needConfirm) {
+      setWarnedName(dup) // 初回は警告のみ。もう一度押すと追加
+      return
+    }
     setBusy(true)
     try {
       await onAdd(file, name)
@@ -70,16 +80,21 @@ export function AddOtherItemSheet({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="例: 2026.June-制服"
-            className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3 text-[15px] outline-none focus:border-fuchsia-400"
+            className={`w-full h-11 rounded-xl bg-white border px-3 text-[15px] outline-none ${
+              dup ? 'border-amber-400 focus:border-amber-500' : 'border-slate-200 focus:border-fuchsia-400'
+            }`}
           />
+          {dup && <p className="pt-1.5 text-[12px] text-amber-600">「{dup}」が既にあります。重複して追加しますか？</p>}
         </div>
 
         <button
           disabled={!file || busy}
           onClick={submit}
-          className="w-full h-12 rounded-xl bg-fuchsia-500 text-white font-bold text-[15px] disabled:opacity-40 active:bg-fuchsia-600 transition-colors"
+          className={`w-full h-12 rounded-xl text-white font-bold text-[15px] disabled:opacity-40 transition-colors ${
+            needConfirm ? 'bg-amber-500 active:bg-amber-600' : 'bg-fuchsia-500 active:bg-fuchsia-600'
+          }`}
         >
-          {busy ? '追加中…' : 'その他に追加'}
+          {busy ? '追加中…' : needConfirm ? '重複を承知で追加' : 'その他に追加'}
         </button>
       </div>
     </SheetShell>
