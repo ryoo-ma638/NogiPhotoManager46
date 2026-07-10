@@ -370,7 +370,7 @@ export default function ImportPage() {
                   {it.status === 'done' && !it.auto && it.sequenced && <span className="text-violet-600 font-bold">連番で割当（変更可）</span>}
                   {it.status === 'done' && !it.setId && !it.error && <span className="text-amber-600 font-bold">⚠ 要確認</span>}
                   {it.error && <span className="text-red-500 font-medium truncate">⚠ {it.error}</span>}
-                  {it.caption && <span className="text-slate-400 line-clamp-2 break-all">印字: {it.caption}</span>}
+                  {it.caption && <CaptionLine text={it.caption} />}
                 </div>
                 {/* セット選択: 候補があれば先頭候補を「タップで確定」＋隣に「他の候補」。無ければ「セットを選ぶ」 */}
                 {(() => {
@@ -555,6 +555,22 @@ export default function ImportPage() {
         </div>
       )}
     </>
+  )
+}
+
+/** 印字OCRの生テキスト。既定は畳んでおき、タップで開閉（判定の手がかりが要るときだけ見る）。 */
+function CaptionLine({ text }: { text: string }) {
+  const [open, setOpen] = useState(false)
+  if (!open)
+    return (
+      <button onClick={() => setOpen(true)} className="text-slate-300 underline decoration-dotted underline-offset-2">
+        印字を見る
+      </button>
+    )
+  return (
+    <button onClick={() => setOpen(false)} className="text-slate-400 text-left break-all line-clamp-3">
+      印字: {text}
+    </button>
   )
 }
 
