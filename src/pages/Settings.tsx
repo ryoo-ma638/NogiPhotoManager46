@@ -3,11 +3,12 @@ import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
-import { getNickname, setNickname, markBackupDone } from '../lib/prefs'
+import { exportImagesZip, importImagesZip, downloadBlob } from '../lib/imageBackup'
+import { getNickname, setNickname, safeName, markBackupDone } from '../lib/prefs'
 import { isOwner, lockOwner, unlockOwner } from '../lib/limit'
 
 export default function SettingsPage() {
-  const { catalog, owned, userSets, imageIds, restoreAll } = useAppData()
+  const { catalog, owned, userSets, imageIds, restoreAll, attachImage } = useAppData()
   const [persisted, setPersisted] = useState<boolean | null>(null)
   const [storage, setStorage] = useState<{ usage: number; quota: number } | null>(null)
   const [pending, setPending] = useState<ParsedBackup | null>(null)
@@ -17,6 +18,8 @@ export default function SettingsPage() {
   const [owner, setOwner] = useState(() => isOwner())
   const [pw, setPw] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+  const imgZipRef = useRef<HTMLInputElement>(null)
+  const [imgBusy, setImgBusy] = useState<'export' | 'import' | null>(null)
 
   const unlock = async () => {
     if (!pw.trim()) return
@@ -53,6 +56,41 @@ export default function SettingsPage() {
     markBackupDone() // 催促のリセット
     setExportChoice(false)
     showToast(`${rows.length}枚を書き出しました`)
+  }
+
+  // 添付画像だけをZIPで書き出し／読み込み（○×のJSONとは別建て・大きいので任意）
+  const imagesZipName = () => {
+    const d = new Date()
+    const p = (n: number) => String(n).padStart(2, '0')
+    return `nogi-images-${safeName(nick)}-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.zip`
+  }
+  const doExportImages = async () => {
+    if (imgBusy) return
+    setImgBusy('export')
+    try {
+      const { blob, count } = await exportImagesZip(catalog.member.id)
+      if (count === 0) return showToast('書き出す画像がありません')
+      downloadBlob(imagesZipName(), blob)
+      showToast(`画像${count}枚を書き出しました`)
+    } catch (err) {
+      showToast(`画像の書き出しに失敗: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setImgBusy(null)
+    }
+  }
+  const onImageZipPicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || imgBusy) return
+    setImgBusy('import')
+    try {
+      const n = await importImagesZip(file, attachImage)
+      showToast(`画像${n}枚を復元しました`)
+    } catch (err) {
+      showToast(`画像の読み込みに失敗: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setImgBusy(null)
+    }
   }
 
   const onFilePicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +149,7 @@ export default function SettingsPage() {
 
         <Section
           title="バックアップ"
-          footer="データは端末内だけに保存。アプリを削除すると消えるので、ときどき書き出しを。※添付画像は含まれません。"
+          footer="端末内だけに保存されるので、ときどき書き出しを。○×データは軽いJSON、添付画像は大きいので別のZIPに分けています。"
         >
           <div className="px-4 py-3 space-y-2">
             <button
@@ -127,6 +165,27 @@ export default function SettingsPage() {
               読み込み（復元）
             </button>
             <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e) => void onFilePicked(e)} />
+
+            <div className="pt-2 mt-1 border-t border-slate-100">
+              <p className="text-[11px] text-slate-400 pb-1.5">添付画像（{imageIds.size}枚・別ファイル）。復元は先にJSONを読み込んでから。</p>
+              <div className="space-y-2">
+                <button
+                  onClick={() => void doExportImages()}
+                  disabled={imgBusy !== null}
+                  className="w-full h-11 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium text-[14px] disabled:opacity-50 active:scale-[0.98] transition-transform"
+                >
+                  {imgBusy === 'export' ? '書き出し中…' : '画像をまとめて書き出す（ZIP）'}
+                </button>
+                <button
+                  onClick={() => imgZipRef.current?.click()}
+                  disabled={imgBusy !== null}
+                  className="w-full h-11 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium text-[14px] disabled:opacity-50 active:scale-[0.98] transition-transform"
+                >
+                  {imgBusy === 'import' ? '読み込み中…' : '画像ZIPを読み込む'}
+                </button>
+                <input ref={imgZipRef} type="file" accept=".zip,application/zip" className="hidden" onChange={(e) => void onImageZipPicked(e)} />
+              </div>
+            </div>
           </div>
         </Section>
 
