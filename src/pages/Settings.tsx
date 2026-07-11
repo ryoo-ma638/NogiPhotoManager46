@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
+import { ScreenGuide, resetScreenGuides } from '../components/ScreenGuide'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 import { exportImagesZip, importImagesZip, downloadBlob } from '../lib/imageBackup'
@@ -122,6 +123,16 @@ export default function SettingsPage() {
   return (
     <>
       <Header title="設定" />
+      <ScreenGuide
+        guideKey="settings"
+        title="設定でできること"
+        points={[
+          { icon: '💾', label: 'バックアップ', desc: '所有データ（JSON）と画像（ZIP）を書き出し/復元。ときどき保存を。' },
+          { icon: '🛡️', label: 'データ保護', desc: 'ブラウザの自動削除から守ります（有効化がおすすめ）。' },
+          { icon: '🔑', label: 'オーナー解除', desc: 'パスワードでAI判定を無制限にできます。' },
+          { icon: '❓', label: '使い方', desc: '「使い方を見る」で最初の説明を、下のボタンで各画面のガイドを再表示できます。' },
+        ]}
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
         <Section title="あなた" footer="書き出したファイルに名前が入り、トレード相手にも伝わります。">
           <div className="px-4 py-3">
@@ -252,9 +263,18 @@ export default function SettingsPage() {
         <Section title="ヘルプ">
           <button
             onClick={() => window.dispatchEvent(new Event('open-tutorial'))}
-            className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors"
+            className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors border-b border-slate-100"
           >
             使い方を見る
+          </button>
+          <button
+            onClick={() => {
+              resetScreenGuides()
+              showToast('各画面のガイドを次に開いたとき、もう一度表示します')
+            }}
+            className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors"
+          >
+            各画面のガイドをもう一度見る
           </button>
         </Section>
 

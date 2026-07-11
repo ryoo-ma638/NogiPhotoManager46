@@ -5,6 +5,7 @@ import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
 import { PoseCard } from '../components/PoseCard'
 import { CatalogMatchMover } from '../components/CatalogMatchMover'
+import { ScreenGuide } from '../components/ScreenGuide'
 import { PhotoViewer } from '../components/images'
 import { getImageRow } from '../lib/db'
 import { rotateImage } from '../lib/images'
@@ -100,6 +101,16 @@ export default function SetDetailPage({ setId }: { setId: string }) {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-36">
+        <ScreenGuide
+          guideKey="setdetail"
+          title="写真の記録のしかた"
+          points={[
+            { icon: '✓', label: '持ってる/持ってない', desc: '写真をタップで○（持っている）に。もう一度タップで戻せます。' },
+            { icon: '±', label: '枚数', desc: '所有中は写真の下の −/＋ で枚数を数えられます（2枚以上＝ダブり）。' },
+            { icon: '♡', label: '特に欲しい', desc: '未所有の写真の♡で印。トレードの「求」に出ます。' },
+            { icon: '📷', label: '画像を添付', desc: 'カメラのマークで実物写真を添付できます（自動で所有に）。' },
+          ]}
+        />
         {/* その他の仮置き項目が同名でカタログにあれば、本セットへ移す導線 */}
         <CatalogMatchMover set={set} />
         {/* 進捗ヘッダー */}

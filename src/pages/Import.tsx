@@ -5,6 +5,7 @@ import { SheetShell } from '../components/UserSetSheets'
 import { CameraCapture } from '../components/CameraCapture'
 import { SetPicker } from '../components/ImportSetPicker'
 import { OtherRegisterSheet } from '../components/ImportOtherSheet'
+import { ScreenGuide } from '../components/ScreenGuide'
 import { CameraIcon, CheckCircle } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
@@ -305,6 +306,16 @@ export default function ImportPage() {
   return (
     <>
       <Header title="一括取込" subtitle="写真から自動判定して振り分け" back />
+      <ScreenGuide
+        guideKey="import"
+        title="まとめて取り込む"
+        points={[
+          { icon: '📷', label: 'カメラで撮る', desc: '連続で撮ると、撮った端からAIが解析します。' },
+          { icon: '🖼️', label: '写真から選ぶ', desc: '保存済みの写真を複数選べます（1枚に最大6枚並べてもOK）。' },
+          { icon: '🤖', label: '自動で振り分け', desc: 'セットと枠をAIが判定。★R/SR候補は枠が正しいか確認を。' },
+          { icon: '💾', label: '保存', desc: '内容を確認して保存。AI判定は1日30回（オーナーは無制限）。' },
+        ]}
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
         {apiMissing && (
           <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">

@@ -5,6 +5,7 @@ import { SheetShell } from '../components/UserSetSheets'
 import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from '../lib/trade'
 import { downloadJSON } from '../lib/backup'
 import { getNickname, safeName } from '../lib/prefs'
+import { ScreenGuide } from '../components/ScreenGuide'
 
 interface TradeItem {
   photoId: string
@@ -113,6 +114,16 @@ export default function TradePage() {
   return (
     <>
       <Header title="トレード" subtitle="譲れるダブりと、特に欲しいもの" back />
+      <ScreenGuide
+        guideKey="trade"
+        title="トレードの使い方"
+        points={[
+          { icon: '🔁', label: '譲れる', desc: '2枚以上持っている写真（ダブり）が出ます。' },
+          { icon: '♡', label: '求', desc: '「特に欲しい」に印を付けた写真が出ます。' },
+          { icon: '📝', label: 'リストを作る', desc: 'X（旧Twitter）貼り付け用の求/譲テキストを作れます。' },
+          { icon: '🤝', label: '突き合わせ', desc: '相手と共有ファイルを交換すると、もらえる/渡せるが分かります。' },
+        ]}
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-5">
         <button
           onClick={() => setSheet(true)}
