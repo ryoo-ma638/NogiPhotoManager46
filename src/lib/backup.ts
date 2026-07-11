@@ -32,9 +32,14 @@ export function buildBackup(member: string, owned: OwnedRow[], userSets: UserSet
   }
 }
 
+/** JSONデータをBlob化（ダウンロードと共有シートで共用） */
+export function jsonBlob(data: unknown): Blob {
+  return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+}
+
 /** JSONをファイルとしてダウンロードさせる */
 export function downloadJSON(filename: string, data: unknown): void {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const blob = jsonBlob(data)
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url

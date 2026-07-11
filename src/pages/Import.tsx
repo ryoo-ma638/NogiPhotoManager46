@@ -12,6 +12,8 @@ import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { classifyPhoto } from '../lib/classify'
 import { circled } from '../lib/labels'
 import { canAnalyze, consumeAnalysis, isOwner, remainingToday, DAILY_LIMIT, RECOMMENDED_PER_IMAGE } from '../lib/limit'
+import { cascadeDecision } from '../lib/cascade'
+import { navigate } from '../lib/router'
 import type { CatalogSet } from '../types'
 
 interface ImportItem {
@@ -221,6 +223,19 @@ export default function ImportPage() {
   const ready = pending.filter((it) => it.setId && it.slot)
   const apiMissing = pending.some((it) => it.error?.includes('未設定'))
 
+  // 保存済みをセット別にまとめる（保存後に開いて振り分けを確かめる導線用）
+  const savedGroups = (() => {
+    const m = new Map<string, { setId: string; name: string; count: number }>()
+    for (const it of items) {
+      if (it.status !== 'saved' || !it.setId) continue
+      const g = m.get(it.setId)
+      if (g) g.count++
+      else m.set(it.setId, { setId: it.setId, name: setById.get(it.setId)?.name ?? 'セット', count: 1 })
+    }
+    return [...m.values()]
+  })()
+  const savedCount = savedGroups.reduce((n, g) => n + g.count, 0)
+
   const saveAll = async () => {
     if (savingRef.current) return
     // 同じ枠(photoId)に2枚以上割り当てられていないか（後の1枚が前の画像を上書きして消す事故を防ぐ）
@@ -280,8 +295,10 @@ export default function ImportPage() {
       let s = 1
       for (let j = idx + 1; j < next.length && s < slots.length; j++) {
         const item = next[j]!
-        if (item.status === 'saved') continue
-        if (item.setId && item.setId !== set.id) break // 別セットが割当済み＝連番が途切れるので止める
+        // 空欄と同一セットだけ連番で埋める。候補ありの未確定・別セットは巻き込まず止める
+        const decision = cascadeDecision(item, set.id)
+        if (decision === 'skip') continue // 保存済みは飛ばす（枠は消費しない）
+        if (decision === 'stop') break
         next[j] = { ...item, setId: set.id, slot: slots[s]!, auto: false, sequenced: true, candidates: null }
         s++
       }
@@ -339,7 +356,7 @@ export default function ImportPage() {
           { icon: '📷', label: 'カメラで撮る', desc: '連続で撮ると、撮った端からAIが解析します。' },
           { icon: '🖼️', label: '写真から選ぶ', desc: '保存済みの写真を複数選べます（1枚に最大6枚並べてもOK）。' },
           { icon: '🤖', label: '自動で振り分け', desc: 'セットと枠をAIが判定。★R/SR候補は枠が正しいか確認を。' },
-          { icon: '💾', label: '保存', desc: '内容を確認して保存。AI判定は1日30回（オーナーは無制限）。' },
+          { icon: '💾', label: '保存', desc: `内容を確認して保存。AI判定は1日${DAILY_LIMIT}回（オーナーは無制限）。` },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
@@ -503,8 +520,25 @@ export default function ImportPage() {
           )
         })}
 
-        {items.some((i) => i.status === 'saved') && (
-          <p className="text-[12px] text-emerald-600 font-medium">✓ 保存済み {items.filter((i) => i.status === 'saved').length}枚</p>
+        {savedGroups.length > 0 && (
+          <div className="rounded-2xl bg-emerald-50 border border-emerald-200 shadow-sm p-3 space-y-2">
+            <div className="flex items-center gap-1.5 text-[13px] font-bold text-emerald-700">
+              <CheckCircle className="w-4 h-4" filled /> 保存しました（{savedCount}枚）
+            </div>
+            <p className="text-[11px] text-emerald-600 leading-relaxed">タップでセットを開いて、振り分けが合っているか確かめられます。</p>
+            <div className="space-y-1.5">
+              {savedGroups.map((g) => (
+                <button
+                  key={g.setId}
+                  onClick={() => navigate(`/s/${g.setId}`)}
+                  className="w-full h-11 rounded-xl bg-white border border-emerald-200 px-3 flex items-center justify-between gap-2 text-left active:bg-emerald-50 transition-colors"
+                >
+                  <span className="min-w-0 truncate text-[13px] font-medium text-slate-700">{g.name}</span>
+                  <span className="shrink-0 text-[12px] font-bold text-emerald-600">{g.count}枚 ›</span>
+                </button>
+              ))}
+            </div>
+          </div>
         )}
       </div>
 

@@ -3,7 +3,8 @@ import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
 import { SheetShell } from '../components/UserSetSheets'
 import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from '../lib/trade'
-import { downloadJSON } from '../lib/backup'
+import { downloadJSON, jsonBlob } from '../lib/backup'
+import { canShareFile, canShareText, shareFile, shareText } from '../lib/share'
 import { getNickname, safeName } from '../lib/prefs'
 import { ScreenGuide } from '../components/ScreenGuide'
 
@@ -70,6 +71,11 @@ export default function TradePage() {
     window.setTimeout(() => setToast(null), 2600)
   }
   const copy = async () => {
+    // iPhone等は共有シートを優先（Xなどに直接渡せる）。使えない環境だけ従来のコピー
+    if (canShareText()) {
+      await shareText(text)
+      return
+    }
     try {
       await navigator.clipboard.writeText(text)
       showToast('コピーしました')
@@ -79,7 +85,7 @@ export default function TradePage() {
   }
 
   // ---- 相手との突き合わせ（ローカルなファイル交換・サーバ不要） ----
-  const exportFile = () => {
+  const exportFile = async () => {
     const nick = getNickname() || '名無し'
     const exp = buildTradeExport(
       catalog.member.id,
@@ -90,8 +96,16 @@ export default function TradePage() {
     const d = new Date()
     const p = (n: number) => String(n).padStart(2, '0')
     const date = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`
-    downloadJSON(`nogi-trade-${safeName(nick)}-${date}.json`, exp)
-    showToast(getNickname() ? '共有ファイルを書き出しました' : '設定でニックネームを付けると相手に伝わります')
+    const name = `nogi-trade-${safeName(nick)}-${date}.json`
+    const msg = getNickname() ? '共有ファイルを書き出しました' : '設定でニックネームを付けると相手に伝わります'
+    const blob = jsonBlob(exp)
+    // iPhone等は共有シートで相手に直接送れる。使えない環境だけ従来のダウンロード（キャンセルは何もしない）
+    if (canShareFile(name, blob)) {
+      if (await shareFile(name, blob)) showToast(msg)
+      return
+    }
+    downloadJSON(name, exp)
+    showToast(msg)
   }
   const onImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -136,7 +150,7 @@ export default function TradePage() {
         {/* 相手との突き合わせ（ファイル交換） */}
         <div className="grid grid-cols-2 gap-2">
           <button
-            onClick={exportFile}
+            onClick={() => void exportFile()}
             disabled={give.length === 0 && want.length === 0}
             className="h-10 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-[13px] disabled:opacity-40 active:scale-[0.99] transition"
           >

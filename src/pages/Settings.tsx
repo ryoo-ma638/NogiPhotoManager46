@@ -3,8 +3,9 @@ import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
 import { ScreenGuide, resetScreenGuides } from '../components/ScreenGuide'
 import { allOwnedRows, allWanted } from '../lib/db'
-import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
+import { backupFilename, buildBackup, downloadJSON, jsonBlob, parseBackup, type ParsedBackup } from '../lib/backup'
 import { exportImagesZip, importImagesZip, downloadBlob } from '../lib/imageBackup'
+import { canShareFile, shareFile } from '../lib/share'
 import { getNickname, setNickname, safeName, markBackupDone } from '../lib/prefs'
 import { DAILY_LIMIT, isOwner, lockOwner, unlockOwner } from '../lib/limit'
 
@@ -53,10 +54,21 @@ export default function SettingsPage() {
 
   const doExport = async (unique: boolean) => {
     const [rows, wants] = await Promise.all([allOwnedRows(), allWanted()])
-    downloadJSON(backupFilename(nick, unique), buildBackup(catalog.member.id, rows, userSets, wants, nick))
-    markBackupDone() // 催促のリセット
+    const name = backupFilename(nick, unique)
+    const data = buildBackup(catalog.member.id, rows, userSets, wants, nick)
     setExportChoice(false)
-    showToast(`${rows.length}枚を書き出しました`)
+    const done = () => {
+      markBackupDone() // 催促のリセット
+      showToast(`${rows.length}枚を書き出しました`)
+    }
+    // iPhone等は共有シートで「ファイルに保存」等ができる。使えない環境だけ従来のダウンロード
+    const blob = jsonBlob(data)
+    if (canShareFile(name, blob)) {
+      if (await shareFile(name, blob)) done() // 成功時だけ記録。キャンセルはバックアップ済みにしない
+      return
+    }
+    downloadJSON(name, data)
+    done()
   }
 
   // 添付画像だけをZIPで書き出し／読み込み（○×のJSONとは別建て・大きいので任意）
@@ -71,7 +83,13 @@ export default function SettingsPage() {
     try {
       const { blob, count } = await exportImagesZip(catalog.member.id)
       if (count === 0) return showToast('書き出す画像がありません')
-      downloadBlob(imagesZipName(), blob)
+      const name = imagesZipName()
+      // iPhone等は共有シートで保存/送信できる。使えない環境だけ従来のダウンロード
+      if (canShareFile(name, blob)) {
+        if (await shareFile(name, blob)) showToast(`画像${count}枚を書き出しました`)
+        return
+      }
+      downloadBlob(name, blob)
       showToast(`画像${count}枚を書き出しました`)
     } catch (err) {
       showToast(`画像の書き出しに失敗: ${err instanceof Error ? err.message : String(err)}`)
