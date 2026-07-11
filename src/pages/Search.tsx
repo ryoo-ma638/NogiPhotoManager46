@@ -65,6 +65,14 @@ export default function SearchPage() {
 
   const query = norm(q.trim())
   const active = query.length > 0 || unownedOnly || dupOnly || wantOnly || kindFilter !== null
+  // 絞り込み（検索文字を除く）が1つでもONか。ONのときだけ「すべて解除」を出す。並びは維持。
+  const anyFilter = unownedOnly || dupOnly || wantOnly || kindFilter !== null
+  const clearFilters = () => {
+    setUnownedOnly(false)
+    setDupOnly(false)
+    setWantOnly(false)
+    setKindFilter(null)
+  }
 
   const results = useMemo(() => {
     if (!active) return []
@@ -119,7 +127,14 @@ export default function SearchPage() {
 
         {/* 絞り込み・種類・並び替えを1カードに集約 */}
         <div className="mt-3 rounded-2xl bg-white border border-slate-200 shadow-sm p-3 space-y-2.5">
-          <p className="text-[11px] font-bold text-slate-400">絞り込み</p>
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] font-bold text-slate-400">絞り込み</p>
+            {anyFilter && (
+              <button onClick={clearFilters} className="text-[11px] font-medium text-violet-600 active:opacity-60 transition-opacity">
+                すべて解除
+              </button>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
             <ToggleChip label="未所有" on={unownedOnly} onClick={() => setUnownedOnly((v) => !v)} />
             <ToggleChip label="ダブり" on={dupOnly} onClick={() => setDupOnly((v) => !v)} />

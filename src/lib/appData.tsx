@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CatalogFile, CatalogSet, Photo, UserSet } from '../types'
 import { loadCatalog, photosForSet } from './catalog'
-import { allOwnedRows, allUserSets, deleteUserSetRow, imageIdSet, putUserSet, replaceAllUserSets, setCount as dbSetCount, setManyOwned, setOwned } from './db'
+import { allOwnedRows, allUserSets, deletePhotosData, deleteUserSetRow, imageIdSet, putUserSet, replaceAllUserSets, setCount as dbSetCount, setManyOwned, setOwned } from './db'
 import { replaceAllWanted, setWanted as dbSetWanted, wantedIdSet } from './db'
 import type { OwnedRow, WantedRow } from './db'
 import { replaceAllOwned } from './db'
@@ -213,6 +213,36 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  // 枠が消えるときの後始末（所有・枚数・画像・♡の記録とURLキャッシュをまとめて掃除）。
+  // 枠削除（updateUserSet）とセット削除（deleteUserSet）で共通に使う。
+  const purgePhotoState = (photoIds: string[]) => {
+    if (photoIds.length === 0) return
+    const ids = new Set(photoIds)
+    setOwnedState((prev) => {
+      const s = new Set(prev)
+      for (const id of ids) s.delete(id)
+      return s
+    })
+    setCountsState((prev) => {
+      const m = new Map(prev)
+      for (const id of ids) m.delete(id)
+      return m
+    })
+    setWantedState((prev) => {
+      const s = new Set(prev)
+      for (const id of ids) s.delete(id)
+      return s
+    })
+    setImageIds((prev) => {
+      const s = new Set(prev)
+      for (const id of ids) {
+        s.delete(id)
+        invalidateImageURLs(id)
+      }
+      return s
+    })
+  }
+
   const data: AppData = {
     catalog,
     allSets,
@@ -234,31 +264,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     },
     updateUserSet: async (row, removedPhotoIds) => {
       await putUserSet(row)
-      if (removedPhotoIds.length > 0) setMany(removedPhotoIds, false)
+      // 消えた枠は所有だけでなく画像・♡も残さず掃除する（セット削除と同じ後始末）
+      if (removedPhotoIds.length > 0) {
+        await deletePhotosData(removedPhotoIds)
+        purgePhotoState(removedPhotoIds)
+      }
       setUserSets((prev) => prev.map((u) => (u.id === row.id ? row : u)))
     },
     deleteUserSet: async (id) => {
       const photoIds = (photosMap.get(id) ?? []).map((p) => p.id)
       await deleteUserSetRow(id, photoIds)
       setUserSets((prev) => prev.filter((u) => u.id !== id))
-      setOwnedState((prev) => {
-        const s = new Set(prev)
-        for (const pid of photoIds) s.delete(pid)
-        return s
-      })
-      setCountsState((prev) => {
-        const m = new Map(prev)
-        for (const pid of photoIds) m.delete(pid)
-        return m
-      })
-      setImageIds((prev) => {
-        const s = new Set(prev)
-        for (const pid of photoIds) {
-          s.delete(pid)
-          invalidateImageURLs(pid)
-        }
-        return s
-      })
+      purgePhotoState(photoIds)
     },
     restoreAll: async (ownedRows, users, wantedRows) => {
       await replaceAllOwned(ownedRows)
@@ -269,6 +286,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       setCountsState(new Map(rows.map((r) => [r.photoId, r.count ?? 1])))
       setWantedState(await wantedIdSet())
       setUserSets(await allUserSets())
+      // 復元でセット構成が変わると画像の対応も変わりうるので、実DBから取り直して合わせる
+      setImageIds(await imageIdSet())
     },
     imageIds,
     attachImage: async (photoId, file) => {

@@ -21,6 +21,7 @@ export function AddOtherItemSheet({
   const [busy, setBusy] = useState(false)
   const [warnedName, setWarnedName] = useState<string | null>(null) // 重複警告を出した相手の名前
   const inputRef = useRef<HTMLInputElement>(null)
+  const submittingRef = useRef(false) // 連打での二重追加を同期的に止める
 
   const dup = name.trim() ? checkDuplicate(name.trim()) : null
   const needConfirm = dup !== null && warnedName !== dup
@@ -35,17 +36,19 @@ export function AddOtherItemSheet({
   }
 
   const submit = async () => {
-    if (!file || busy) return
+    if (!file || submittingRef.current) return
     if (needConfirm) {
       setWarnedName(dup) // 初回は警告のみ。もう一度押すと追加
       return
     }
+    submittingRef.current = true
     setBusy(true)
     try {
       await onAdd(file, name)
       if (url) URL.revokeObjectURL(url)
       onClose()
     } finally {
+      submittingRef.current = false
       setBusy(false)
     }
   }

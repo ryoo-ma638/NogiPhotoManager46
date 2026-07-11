@@ -6,10 +6,10 @@ import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, parseBackup, type ParsedBackup } from '../lib/backup'
 import { exportImagesZip, importImagesZip, downloadBlob } from '../lib/imageBackup'
 import { getNickname, setNickname, safeName, markBackupDone } from '../lib/prefs'
-import { isOwner, lockOwner, unlockOwner } from '../lib/limit'
+import { DAILY_LIMIT, isOwner, lockOwner, unlockOwner } from '../lib/limit'
 
 export default function SettingsPage() {
-  const { catalog, owned, userSets, imageIds, restoreAll, attachImage } = useAppData()
+  const { catalog, allSets, photosOf, owned, userSets, imageIds, restoreAll, attachImage } = useAppData()
   const [persisted, setPersisted] = useState<boolean | null>(null)
   const [storage, setStorage] = useState<{ usage: number; quota: number } | null>(null)
   const [pending, setPending] = useState<ParsedBackup | null>(null)
@@ -85,8 +85,11 @@ export default function SettingsPage() {
     if (!file || imgBusy) return
     setImgBusy('import')
     try {
-      const n = await importImagesZip(file, attachImage)
-      showToast(`画像${n}枚を復元しました`)
+      // カタログ＋手動セットに実在する枠だけ復元する（消えた枠の孤児画像は飛ばす）
+      const validIds = new Set<string>()
+      for (const s of allSets) for (const p of photosOf(s)) validIds.add(p.id)
+      const { restored, skipped } = await importImagesZip(file, attachImage, validIds)
+      showToast(skipped > 0 ? `画像${restored}枚を復元（${skipped}枚は該当枠なしで除外）` : `画像${restored}枚を復元しました`)
     } catch (err) {
       showToast(`画像の読み込みに失敗: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
@@ -224,7 +227,7 @@ export default function SettingsPage() {
 
         <Section
           title="オーナー"
-          footer={owner ? undefined : `他の人は1日${30}回まで自動判定できます。オーナーはパスワードで使い放題に。`}
+          footer={owner ? undefined : `他の人は1日${DAILY_LIMIT}回まで自動判定できます。オーナーはパスワードで使い放題に。`}
         >
           {owner ? (
             <div className="px-4 py-3 flex items-center justify-between">
@@ -314,7 +317,7 @@ export default function SettingsPage() {
 
       {pending && (
         <ConfirmSheet
-          message={`バックアップから 所有${pending.owned.length}枚${pending.userSets.length > 0 ? `・手動セット${pending.userSets.length}件` : ''} を復元します。\n現在の所有記録（${owned.size}枚）は置き換わります。`}
+          message={`バックアップから 所有${pending.owned.length}枚${pending.userSets.length > 0 ? `・手動セット${pending.userSets.length}件` : ''} を復元します。\n現在の所有記録（${owned.size}枚）は置き換わります。\n手動セット・♡（特に欲しい）も、このファイルの内容に置き換わります。`}
           confirmLabel="復元する"
           onConfirm={() => void applyImport()}
           onCancel={() => setPending(null)}

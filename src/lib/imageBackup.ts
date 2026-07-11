@@ -45,21 +45,32 @@ export async function exportImagesZip(member: string): Promise<{ blob: Blob; cou
 
 /**
  * 画像ZIPを読み込み、各fullを再添付する。attach は appData.attachImage を渡す想定
- * （processImageでサムネ再生成＋imageIds更新まで面倒を見る）。戻り値=復元枚数。
+ * （processImageでサムネ再生成＋imageIds更新まで面倒を見る）。
+ * validIds を渡すと、そこに無いphotoId（消えた枠等）は孤児画像として飛ばす。
+ * 戻り値: restored=復元枚数, skipped=該当枠なしで飛ばした枚数。
  */
-export async function importImagesZip(file: Blob, attach: (photoId: string, blob: Blob) => Promise<void>): Promise<number> {
+export async function importImagesZip(
+  file: Blob,
+  attach: (photoId: string, blob: Blob) => Promise<void>,
+  validIds?: Set<string>,
+): Promise<{ restored: number; skipped: number }> {
   const bytes = new Uint8Array(await file.arrayBuffer())
   const entries = await new Promise<Record<string, Uint8Array>>((resolve, reject) => {
     unzip(bytes, (err, data) => (err ? reject(err) : resolve(data)))
   })
   let restored = 0
+  let skipped = 0
   for (const [name, data] of Object.entries(entries)) {
     const photoId = fromName(name)
     if (!photoId || data.length === 0) continue
+    if (validIds && !validIds.has(photoId)) {
+      skipped++ // カタログにも手動セットにも無い枠＝孤児画像。復元しない
+      continue
+    }
     await attach(photoId, new Blob([data as BlobPart], { type: 'image/jpeg' }))
     restored++
   }
-  return restored
+  return { restored, skipped }
 }
 
 /** Blobを名前付きでダウンロード保存。 */

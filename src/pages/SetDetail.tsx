@@ -227,15 +227,17 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           message={
             confirm === 'own-all'
               ? `「${set.name}」の${photos.length}枚すべてを\n所有にしますか？`
-              : `「${set.name}」の${photos.length}枚すべてを\n未所有に戻しますか？`
+              : `「${set.name}」の${photos.length}枚すべてを\n未所有に戻しますか？\n枚数（ダブり）も消えます。`
           }
           confirmLabel={confirm === 'own-all' ? 'すべて所有' : 'すべて未所有'}
           danger={confirm === 'disown-all'}
           onConfirm={() => {
+            const isOwnAll = confirm === 'own-all'
             setMany(
               photos.map((p) => p.id),
-              confirm === 'own-all',
+              isOwnAll,
             )
+            if (!isOwnAll) showToast('すべて未所有に戻しました')
             setConfirm(null)
           }}
           onCancel={() => setConfirm(null)}

@@ -21,6 +21,7 @@ describe('kindOf', () => {
     expect(kindOf(base('ミニ生写真テスト'), false)).toBe('mini')
     expect(kindOf(base('紅白衣装', 'rareSet8'), false)).toBe('rare8')
     expect(kindOf(base('コーデ'), false)).toBe('normal')
+    expect(kindOf(base('スキッツ特典2種', 'pair2'), false)).toBe('normal')
     expect(kindOf(base('何か'), true)).toBe('sealed')
   })
 })

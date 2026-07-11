@@ -52,6 +52,7 @@ export default function ImportPage() {
   const [left, setLeft] = useState(remainingToday())
   const owner = isOwner()
   const fileRef = useRef<HTMLInputElement>(null)
+  const savingRef = useRef(false) // 連打での二重保存を同期的に止める
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
 
   // ページを離れるときにプレビューURLを解放
@@ -115,6 +116,7 @@ export default function ImportPage() {
   // ファイル選択（複数）→ まとめてキューへ
   const onFiles = (files: FileList | null) => {
     if (!files || files.length === 0) return
+    if (files.length > 30) showToast('30枚まで取り込みます（超過分は除外）')
     enqueue([...files].slice(0, 30).map((f) => makeItem(f)))
   }
 
@@ -147,8 +149,6 @@ export default function ImportPage() {
         return
       }
       const { full } = await processImage(it.file)
-      consumeAnalysis()
-      setLeft(remainingToday())
       let photos: RecognizedPhoto[]
       try {
         photos = await recognizeImage(full)
@@ -157,6 +157,9 @@ export default function ImportPage() {
         await new Promise((r) => setTimeout(r, 5000))
         photos = await recognizeImage(full)
       }
+      // 認識に成功したぶんだけ回数を消費する（失敗時は消費しない）
+      consumeAnalysis()
+      setLeft(remainingToday())
 
       // 複数検出のとき、端で見切れた小片・生写真の比率でない検出を除外
       // （隣の写真の切れ端が別カードとして混ざるのを防ぐ）。実カードが残る場合だけ適用。
@@ -219,20 +222,43 @@ export default function ImportPage() {
   const apiMissing = pending.some((it) => it.error?.includes('未設定'))
 
   const saveAll = async () => {
-    setBusy(true)
-    let n = 0
+    if (savingRef.current) return
+    // 同じ枠(photoId)に2枚以上割り当てられていないか（後の1枚が前の画像を上書きして消す事故を防ぐ）
+    const seen = new Set<string>()
+    let dupItem: ImportItem | null = null
     for (const it of ready) {
       const photoId = `${catalog.member.id}:${it.setId}:${it.slot}`
-      try {
-        await attachImage(photoId, it.file)
-        if (!owned.has(photoId)) toggle(photoId)
-        update(it.id, { status: 'saved' })
-        n++
-      } catch (e) {
-        update(it.id, { error: e instanceof Error ? e.message : String(e) })
+      if (seen.has(photoId)) {
+        dupItem = it
+        break
       }
+      seen.add(photoId)
     }
-    setBusy(false)
+    if (dupItem) {
+      const dupSet = dupItem.setId ? setById.get(dupItem.setId) : null
+      const label = dupSet && dupItem.slot ? photosOf(dupSet).find((p) => p.slot === dupItem!.slot)?.label : null
+      showToast(`同じ枠に2枚あります（${dupSet?.name ?? ''}${label ? ` ${label}` : ''}）。枠を分けてください`)
+      return
+    }
+    savingRef.current = true
+    setBusy(true)
+    let n = 0
+    try {
+      for (const it of ready) {
+        const photoId = `${catalog.member.id}:${it.setId}:${it.slot}`
+        try {
+          await attachImage(photoId, it.file)
+          if (!owned.has(photoId)) toggle(photoId)
+          update(it.id, { status: 'saved' })
+          n++
+        } catch (e) {
+          update(it.id, { error: e instanceof Error ? e.message : String(e) })
+        }
+      }
+    } finally {
+      savingRef.current = false
+      setBusy(false)
+    }
     showToast(`${n}枚を保存しました`)
   }
 

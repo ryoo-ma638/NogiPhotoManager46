@@ -3,7 +3,13 @@ import { TEMPLATES } from './templates'
 
 /** セットの写真枠を展開する（明示photosがあればそれを優先、なければテンプレから） */
 export function photosForSet(memberId: string, set: CatalogSet): Photo[] {
-  const slots = set.photos ?? TEMPLATES[set.template]
+  // Partial 経由で引くと、カタログが未知テンプレを使った場合に undefined を拾える
+  const slots = set.photos ?? (TEMPLATES as Partial<typeof TEMPLATES>)[set.template]
+  if (!slots) {
+    // 未知のテンプレ（新テンプレがカタログ先行で入った等）。全画面クラッシュを防ぐため空枠にする
+    console.warn(`未知のテンプレート「${set.template}」（セット ${set.id}）`)
+    return []
+  }
   return slots.map((s) => ({
     id: `${memberId}:${set.id}:${s.slot}`,
     slot: s.slot,

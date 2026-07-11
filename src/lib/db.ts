@@ -120,14 +120,25 @@ export async function putUserSet(row: UserSet): Promise<void> {
   await db.userSets.put(row)
 }
 
-/** セット削除（所有記録・画像も一緒に消す） */
+/** セット削除（所有記録・画像・♡も一緒に消す） */
 export async function deleteUserSetRow(id: string, photoIds: string[]): Promise<void> {
-  await db.transaction('rw', db.userSets, db.owned, db.images, async () => {
+  await db.transaction('rw', db.userSets, db.owned, db.images, db.wanted, async () => {
     await db.userSets.delete(id)
     if (photoIds.length > 0) {
       await db.owned.bulkDelete(photoIds)
       await db.images.bulkDelete(photoIds)
+      await db.wanted.bulkDelete(photoIds)
     }
+  })
+}
+
+/** 写真枠が消えるときの後始末（所有・画像・♡の行をまとめて削除）。枠削除・セット削除で共通。 */
+export async function deletePhotosData(photoIds: string[]): Promise<void> {
+  if (photoIds.length === 0) return
+  await db.transaction('rw', db.owned, db.images, db.wanted, async () => {
+    await db.owned.bulkDelete(photoIds)
+    await db.images.bulkDelete(photoIds)
+    await db.wanted.bulkDelete(photoIds)
   })
 }
 

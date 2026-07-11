@@ -31,4 +31,9 @@ export const TEMPLATES: Record<Template, SlotDef[]> = {
   ],
   event6: ['①', '②', '③', '④', '⑤', '⑥'].map((l, i) => ({ slot: `p${i + 1}`, label: l, rarity: 'normal' as Rarity })),
   single1: [{ slot: 'p1', label: '①', rarity: 'normal' }],
+  // 2種特典（主に「その他」の連番①②）。convert_catalog.py の pair2 と一致させる
+  pair2: [
+    { slot: 'p1', label: '①', rarity: 'normal' },
+    { slot: 'p2', label: '②', rarity: 'normal' },
+  ],
 }

@@ -13,7 +13,7 @@ function yearChip(binderId: string): string {
 }
 
 export default function Home() {
-  const { catalog, allSets, statOf } = useAppData()
+  const { catalog, allSets, statOf, userSets, imageIds } = useAppData()
   useScrollRestore('home')
 
   // バインダー別・全体の集計
@@ -73,6 +73,21 @@ export default function Home() {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">
+        {/* まだ何も無いとき: 前の端末からの復元を案内（所有0なら催促バナーは元々出ない＝排他） */}
+        {owned === 0 && userSets.length === 0 && (
+          <div className="rounded-2xl bg-sky-50 border border-sky-200 px-3.5 py-3 flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-bold text-sky-800">まだデータがありません</p>
+              <p className="text-[11px] text-sky-600 leading-relaxed">前のデータがあるなら、設定→読み込み（復元）で戻せます。</p>
+            </div>
+            <button
+              onClick={() => navigate('/settings')}
+              className="shrink-0 h-8 px-3 rounded-lg bg-sky-500 text-white text-[12px] font-bold active:bg-sky-600 transition-colors"
+            >
+              設定へ
+            </button>
+          </div>
+        )}
         {/* バックアップ催促（データは端末内だけ＝消える前に書き出しを促す） */}
         {remindBackup && (
           <div className="rounded-2xl bg-amber-50 border border-amber-200 px-3.5 py-3 flex items-center gap-3">
@@ -80,7 +95,9 @@ export default function Home() {
               <p className="text-[13px] font-bold text-amber-800">
                 {backupDays === null ? 'バックアップがまだです' : `前回のバックアップから${backupDays}日`}
               </p>
-              <p className="text-[11px] text-amber-600 leading-relaxed">データは端末内だけ。書き出しておくと安心です。</p>
+              <p className="text-[11px] text-amber-600 leading-relaxed">
+                データは端末内だけ。書き出しておくと安心です。{imageIds.size > 0 && `添付画像（${imageIds.size}枚）は別ZIPでの書き出しが必要です。`}
+              </p>
             </div>
             <button
               onClick={() => navigate('/settings')}

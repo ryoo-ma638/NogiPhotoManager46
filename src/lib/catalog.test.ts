@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { photosForSet } from './catalog'
 import { TEMPLATES } from './templates'
 import type { CatalogSet, Template } from '../types'
@@ -22,6 +22,7 @@ describe('photosForSet', () => {
       rareSet8: 8,
       event6: 6,
       single1: 1,
+      pair2: 2,
     }
     for (const [template, count] of Object.entries(counts) as [Template, number][]) {
       expect(photosForSet('yumiki_nao', makeSet(template))).toHaveLength(count)
@@ -44,6 +45,19 @@ describe('photosForSet', () => {
       const ids = slots.map((s) => s.slot)
       expect(new Set(ids).size).toBe(ids.length)
     }
+  })
+
+  it('pair2 は①②の2枚', () => {
+    const photos = photosForSet('yumiki_nao', makeSet('pair2'))
+    expect(photos.map((p) => p.label)).toEqual(['①', '②'])
+  })
+
+  it('未知テンプレはクラッシュせず空配列（フォールバック）', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const set = { ...makeSet('standard3'), template: 'unknownTmpl' as Template }
+    expect(photosForSet('yumiki_nao', set)).toEqual([])
+    expect(warn).toHaveBeenCalled()
+    warn.mockRestore()
   })
 })
 
