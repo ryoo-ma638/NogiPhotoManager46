@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // 画面ごとの初回ガイド。初めてその画面を開いたとき「ここで何ができるか」を1回だけ出す。
 // 見たかどうかは localStorage nogi_guide_<key> に記録。設定からまとめてリセットできる。
@@ -41,13 +41,20 @@ export function ScreenGuide({
   title,
   intro,
   points,
+  enabled = true,
 }: {
   guideKey: string
   title: string
   intro?: string
   points: GuidePoint[]
+  /** false の間は出さない。後から true になったら1回だけ開く（ホームは初回チュートリアルの後に出す用） */
+  enabled?: boolean
 }) {
-  const [open, setOpen] = useState(() => !seen(guideKey))
+  const [open, setOpen] = useState(() => enabled && !seen(guideKey))
+  // enabled が後から true になったとき（チュートリアルを見終えた後など）に1回だけ開く
+  useEffect(() => {
+    if (enabled && !seen(guideKey)) setOpen(true)
+  }, [enabled, guideKey])
   if (!open) return null
   const close = () => {
     markSeen(guideKey)

@@ -152,10 +152,10 @@ export default function BinderPage({ binderId }: { binderId: string }) {
         guideKey="binder"
         title="セット一覧の使い方"
         points={[
-          { icon: '📂', label: 'セットを開く', desc: 'セットをタップすると、中の写真（ポーズ枠）が開きます。' },
-          { icon: '✓', label: '進捗', desc: '各セットに所有枚数が出ます。全部そろうとコンプ。' },
-          { icon: '＋', label: '手動で追加', desc: '右上の＋で、カタログに無いセットを自分で追加できます。' },
-          { icon: '🗂️', label: 'その他バインダー', desc: 'まだカタログに無い写真は「＋未分類の写真を追加」で仮置きできます。' },
+          { icon: '📂', label: 'セットを開く', desc: 'タップで中の写真（ポーズ枠）を開く。' },
+          { icon: '✓', label: '進捗', desc: '所有枚数が出て、全部そろうとコンプ。' },
+          { icon: '＋', label: '手動で追加', desc: '右上の＋で、一覧に無いセットを追加。' },
+          { icon: '🗂️', label: 'その他バインダー', desc: '判別できない写真は「＋未分類の写真を追加」へ。' },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-4">

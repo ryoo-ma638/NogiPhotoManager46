@@ -2,8 +2,18 @@ import { useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { CameraIcon, ChevronRight, SealCheck, SearchIcon, SwapIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
+import { ScreenGuide } from '../components/ScreenGuide'
 import { navigate, useScrollRestore } from '../lib/router'
 import { daysSinceBackup, shouldRemindBackup, snoozeBackupReminder } from '../lib/prefs'
+
+/** 初回チュートリアルを見終えたか。ホームガイドはこの後に出す（初回起動の二重表示を避ける） */
+function tutorialSeen(): boolean {
+  try {
+    return !!localStorage.getItem('nogi_tutorial_v1')
+  } catch {
+    return true
+  }
+}
 
 /** バインダーIDから年ラベル（'20–'21 / 封入）を作る */
 function yearChip(binderId: string): string {
@@ -71,6 +81,17 @@ export default function Home() {
             </button>
           </span>
         }
+      />
+      <ScreenGuide
+        guideKey="home"
+        title="ホーム画面の使い方"
+        enabled={tutorialSeen()}
+        points={[
+          { icon: '📷', label: '取込', desc: '写真からまとめて登録。' },
+          { icon: '🔁', label: 'トレード', desc: 'ダブりと欲しいを交換。' },
+          { icon: '🔍', label: '検索', desc: 'セットを名前や条件で探す。' },
+          { icon: '📚', label: 'タブ', desc: '下からコレクション・統計・設定へ。' },
+        ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">
         {/* まだ何も無いとき: 前の端末からの復元を案内（所有0なら催促バナーは元々出ない＝排他） */}

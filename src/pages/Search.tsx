@@ -106,9 +106,9 @@ export default function SearchPage() {
         guideKey="search"
         title="検索の使い方"
         points={[
-          { icon: '🔍', label: '名前で探す', desc: 'セット名やメモで検索できます。' },
-          { icon: '🎯', label: '絞り込み', desc: '未所有・ダブり・特に欲しい・種類で絞れます。' },
-          { icon: '↕️', label: '並び替え', desc: 'カタログ順・所有率・名前・年で並べ替え。設定は次も残ります。' },
+          { icon: '🔍', label: '名前で探す', desc: 'セット名やメモで検索。' },
+          { icon: '🎯', label: '絞り込み', desc: '未所有・ダブり・欲しい・種類で絞る。' },
+          { icon: '↕️', label: '並び替え', desc: '並び順・所有率・名前・年で並べ替え。' },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-6">

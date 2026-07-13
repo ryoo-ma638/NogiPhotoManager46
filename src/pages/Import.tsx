@@ -10,11 +10,11 @@ import { CameraIcon, CheckCircle } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { classifyPhoto } from '../lib/classify'
-import { circled } from '../lib/labels'
+import { nextNumberFrame, POSE_FRAMES } from '../lib/frames'
 import { canAnalyze, consumeAnalysis, isOwner, remainingToday, DAILY_LIMIT, RECOMMENDED_PER_IMAGE } from '../lib/limit'
 import { cascadeDecision } from '../lib/cascade'
 import { navigate } from '../lib/router'
-import type { CatalogSet } from '../types'
+import type { CatalogSet, UserSet, UserSetPhoto } from '../types'
 
 interface ImportItem {
   id: string
@@ -326,18 +326,34 @@ export default function ImportPage() {
     if (s.user) {
       const u = userSetById.get(s.id)
       if (!u) return
-      const used = new Set(u.photos.map((p) => p.slot))
-      let n = 1
-      while (used.has(`c${n}`)) n++
-      const slot = `c${n}`
-      await updateUserSet({ ...u, photos: [...u.photos, { slot, label: circled(u.photos.length + 1), rarity: 'other' }] }, [])
-      update(itemId, { setId: s.id, slot, auto: false })
+      const frame = nextNumberFrame(u.photos)
+      await updateUserSet({ ...u, photos: [...u.photos, frame] }, [])
+      update(itemId, { setId: s.id, slot: frame.slot, auto: false })
     } else {
       // カタログ由来（枠固定）は最初の枠に割り当て
       const ph = photosOf(s)
       update(itemId, { setId: s.id, slot: ph[0]?.slot ?? null, auto: false })
     }
     setOtherFor(null)
+  }
+
+  // ---- 枠選択シートから「その他」セットへ枠を足す（手動セット限定・所有/画像は触らない） ----
+
+  /** 番号枠（次の未使用 c{n}）を足して、今の項目に割り当てて閉じる */
+  const addNumberFrame = async (u: UserSet, itemId: string) => {
+    const frame = nextNumberFrame(u.photos)
+    await updateUserSet({ ...u, photos: [...u.photos, frame] }, [])
+    update(itemId, { slot: frame.slot, auto: false, sequenced: false })
+    setPickerFor(null)
+  }
+
+  /** ポーズ枠を足して割り当て。同じ slot が既にあれば足さず既存枠を選ぶだけ（重複防止） */
+  const addPoseFrame = async (u: UserSet, itemId: string, pose: UserSetPhoto) => {
+    if (!u.photos.some((p) => p.slot === pose.slot)) {
+      await updateUserSet({ ...u, photos: [...u.photos, { ...pose }] }, [])
+    }
+    update(itemId, { slot: pose.slot, auto: false, sequenced: false })
+    setPickerFor(null)
   }
 
   /** 新しいその他セットを作って割り当て（種類なし＝①の1枠から始まり、追加のたびに枠が増える） */
@@ -365,10 +381,10 @@ export default function ImportPage() {
         guideKey="import"
         title="まとめて取り込む"
         points={[
-          { icon: '📷', label: 'カメラで撮る', desc: '連続で撮ると、撮った端からAIが解析します。' },
-          { icon: '🖼️', label: '写真から選ぶ', desc: '保存済みの写真を複数選べます（1枚に最大6枚並べてもOK）。' },
-          { icon: '🤖', label: '自動で振り分け', desc: 'セットと枠をAIが判定。★R/SR候補は枠が正しいか確認を。' },
-          { icon: '💾', label: '保存', desc: `内容を確認して保存。AI判定は1日${DAILY_LIMIT}回（オーナーは無制限）。` },
+          { icon: '📷', label: 'カメラで撮る', desc: '連続で撮ると、撮った端から解析。' },
+          { icon: '🖼️', label: '写真から選ぶ', desc: '端末の写真をまとめて選択（1枚に6枚まで）。' },
+          { icon: '🤖', label: '自動で振り分け', desc: 'セットと枠を自動で判定。R/SRは枠を確認。' },
+          { icon: '💾', label: '保存', desc: `内容を確認して保存。判定は1日${DAILY_LIMIT}回まで。` },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
@@ -593,32 +609,73 @@ export default function ImportPage() {
           onClose={() => setPickerFor(null)}
         />
       )}
-      {pickerFor && pickerItem && pickerFor.mode === 'slot' && pickerSet && (
-        <SheetShell title={`枠を選ぶ — ${pickerSet.name}`} onClose={() => setPickerFor(null)}>
-          <div className="grid grid-cols-3 gap-2 pb-2">
-            {photosOf(pickerSet).map((p) => {
-              const has = imageIds.has(p.id)
-              const own = owned.has(p.id)
-              return (
+      {pickerFor && pickerItem && pickerFor.mode === 'slot' && pickerSet && (() => {
+        // 同じセットの他の未保存項目が既に使っている枠は選べない（同じ枠に2枚を防ぐ）
+        const takenSlots = new Set(
+          items
+            .filter((it) => it.id !== pickerFor.itemId && it.status !== 'saved' && it.setId === pickerSet.id && it.slot)
+            .map((it) => it.slot!),
+        )
+        // その他（手動セット）だけ枠を自由に足せる。カタログ枠は固定なので対象外
+        const userSet = pickerSet.user ? userSetById.get(pickerSet.id) ?? null : null
+        return (
+          <SheetShell title={`枠を選ぶ — ${pickerSet.name}`} onClose={() => setPickerFor(null)}>
+            <div className="grid grid-cols-3 gap-2">
+              {photosOf(pickerSet).map((p) => {
+                const has = imageIds.has(p.id)
+                const own = owned.has(p.id)
+                const taken = takenSlots.has(p.slot)
+                return (
+                  <button
+                    key={p.id}
+                    disabled={taken}
+                    onClick={() => {
+                      update(pickerFor.itemId, { slot: p.slot, auto: false, sequenced: false })
+                      setPickerFor(null)
+                    }}
+                    className={`h-14 rounded-xl border text-[13px] font-bold flex flex-col items-center justify-center gap-0.5 ${
+                      taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-700 active:bg-violet-50'
+                    }`}
+                  >
+                    {p.label}
+                    <span className="text-[10px] font-normal text-slate-400">
+                      {taken ? '使用中' : `${own ? '所有' : '未所有'}${has ? '・画像あり' : ''}`}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+            {userSet && (
+              <div className="mt-4 pt-3 border-t border-slate-200 space-y-2">
+                <p className="text-[12px] font-bold text-slate-500">枠を追加</p>
                 <button
-                  key={p.id}
-                  onClick={() => {
-                    update(pickerFor.itemId, { slot: p.slot, auto: false, sequenced: false })
-                    setPickerFor(null)
-                  }}
-                  className="h-14 rounded-xl border border-slate-200 bg-white text-[13px] font-bold text-slate-700 flex flex-col items-center justify-center gap-0.5 active:bg-violet-50"
+                  onClick={() => void addNumberFrame(userSet, pickerFor.itemId)}
+                  className="w-full h-10 rounded-xl border border-dashed border-slate-300 bg-white text-slate-600 text-[13px] font-medium active:bg-slate-50"
                 >
-                  {p.label}
-                  <span className="text-[10px] font-normal text-slate-400">
-                    {own ? '所有' : '未所有'}
-                    {has ? '・画像あり' : ''}
-                  </span>
+                  ＋ 番号
                 </button>
-              )
-            })}
-          </div>
-        </SheetShell>
-      )}
+                <div className="flex flex-wrap gap-1.5">
+                  {POSE_FRAMES.map((pose) => {
+                    const taken = takenSlots.has(pose.slot)
+                    return (
+                      <button
+                        key={pose.slot}
+                        disabled={taken}
+                        onClick={() => void addPoseFrame(userSet, pickerFor.itemId, pose)}
+                        className={`h-9 px-3 rounded-full border text-[12px] font-medium ${
+                          taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-600 active:bg-violet-50'
+                        }`}
+                      >
+                        ＋ {pose.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </SheetShell>
+        )
+      })()}
 
       {otherFor && (
         <OtherRegisterSheet

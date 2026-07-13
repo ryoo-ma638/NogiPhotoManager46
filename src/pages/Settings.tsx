@@ -148,10 +148,10 @@ export default function SettingsPage() {
         guideKey="settings"
         title="設定でできること"
         points={[
-          { icon: '💾', label: 'バックアップ', desc: '所有データ（JSON）と画像（ZIP）を書き出し/復元。ときどき保存を。' },
-          { icon: '🛡️', label: 'データ保護', desc: 'ブラウザの自動削除から守ります（有効化がおすすめ）。' },
-          { icon: '🔑', label: 'オーナー解除', desc: 'パスワードでAI判定を無制限にできます。' },
-          { icon: '❓', label: '使い方', desc: '「使い方を見る」で最初の説明を、下のボタンで各画面のガイドを再表示できます。' },
+          { icon: '💾', label: 'バックアップ', desc: '所有データと画像を書き出し・復元。ときどき保存を。' },
+          { icon: '🛡️', label: 'データ保護', desc: 'ブラウザの自動削除から守る（推奨）。' },
+          { icon: '🔑', label: 'オーナー解除', desc: 'パスワードでAI判定を無制限に。' },
+          { icon: '❓', label: '使い方', desc: '最初の説明や各画面のガイドを見返せる。' },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">

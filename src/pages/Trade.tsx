@@ -132,10 +132,10 @@ export default function TradePage() {
         guideKey="trade"
         title="トレードの使い方"
         points={[
-          { icon: '🔁', label: '譲れる', desc: '2枚以上持っている写真（ダブり）が出ます。' },
-          { icon: '♡', label: '求', desc: '「特に欲しい」に印を付けた写真が出ます。' },
-          { icon: '📝', label: 'リストを作る', desc: 'X（旧Twitter）貼り付け用の求/譲テキストを作れます。' },
-          { icon: '🤝', label: '突き合わせ', desc: '相手と共有ファイルを交換すると、もらえる/渡せるが分かります。' },
+          { icon: '🔁', label: '譲れる', desc: '2枚以上持っている写真（ダブり）。' },
+          { icon: '♡', label: '求', desc: '「特に欲しい」に印を付けた写真。' },
+          { icon: '📝', label: 'リストを作る', desc: 'X貼り付け用の求/譲テキストを作成。' },
+          { icon: '🤝', label: '突き合わせ', desc: '共有ファイルを交換し、もらえる/渡せるを確認。' },
         ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-5">

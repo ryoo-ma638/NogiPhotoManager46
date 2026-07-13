@@ -1,5 +1,6 @@
 import { useAppData } from '../lib/appData'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
+import { ScreenGuide } from '../components/ScreenGuide'
 import { useScrollRestore } from '../lib/router'
 import type { Rarity } from '../types'
 
@@ -47,6 +48,16 @@ export default function StatsPage() {
   return (
     <>
       <Header title="統計" subtitle={catalog.member.name} />
+      <ScreenGuide
+        guideKey="stats"
+        title="統計でわかること"
+        points={[
+          { icon: '📊', label: '全体', desc: '総コンプ率と所有・コンプ数。' },
+          { icon: '🔁', label: 'トレード', desc: '譲れるダブりと欲しい件数。' },
+          { icon: '⭐', label: 'レア別', desc: '通常・R・SR別の集め具合。' },
+          { icon: '📅', label: '年別', desc: '年ごとの所有ぐあい。' },
+        ]}
+      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
         {/* 全体 */}
         <section className="rounded-2xl bg-white border border-slate-100 shadow-sm p-5 flex items-center gap-5">
