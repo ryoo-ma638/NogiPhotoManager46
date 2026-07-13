@@ -55,6 +55,8 @@ export default function ImportPage() {
   const owner = isOwner()
   const fileRef = useRef<HTMLInputElement>(null)
   const savingRef = useRef(false) // 連打での二重保存を同期的に止める
+  // 直前の連番割当を元に戻す用（割当まわりのフィールドだけを写真IDごとに退避）
+  const [undoMap, setUndoMap] = useState<Map<string, Pick<ImportItem, 'setId' | 'slot' | 'candidates' | 'sequenced' | 'auto'>> | null>(null)
   const sealedBinders = useMemo(() => new Set(catalog.binders.filter((b) => b.sealed).map((b) => b.id)), [catalog])
 
   // ページを離れるときにプレビューURLを解放
@@ -274,6 +276,7 @@ export default function ImportPage() {
       savingRef.current = false
       setBusy(false)
     }
+    setUndoMap(null) // 保存したら元に戻す対象は無し
     showToast(`${n}枚を保存しました`)
   }
 
@@ -287,6 +290,8 @@ export default function ImportPage() {
    */
   const cascadeAssign = (itemId: string, set: CatalogSet) => {
     const slots = photosOf(set).map((p) => p.slot)
+    // 元に戻す用のスナップショット（この割当の直前の状態）。誤って候補を選んでも1タップで戻せる
+    setUndoMap(new Map(items.map((it) => [it.id, { setId: it.setId, slot: it.slot, candidates: it.candidates, sequenced: it.sequenced, auto: it.auto }])))
     setItems((prev) => {
       const idx = prev.findIndex((i) => i.id === itemId)
       if (idx < 0) return prev
@@ -304,6 +309,13 @@ export default function ImportPage() {
       }
       return next
     })
+  }
+
+  // 直前の連番割当（またはセット確定）を元に戻す。新しく撮った写真はそのまま残す
+  const undoCascade = () => {
+    if (!undoMap) return
+    setItems((prev) => prev.map((it) => (undoMap.has(it.id) ? { ...it, ...undoMap.get(it.id)! } : it)))
+    setUndoMap(null)
   }
 
   // ---- 「その他」への登録（判別不能な写真の受け皿） ----
@@ -402,6 +414,16 @@ export default function ImportPage() {
             {pending.length}枚中 自動判定 {pending.filter((i) => i.auto).length} ／ 保存可能 {ready.length}
             {busy && ' ・解析中…'}
           </p>
+        )}
+
+        {/* 直前の連番割当・セット確定をまとめて取り消す（誤タップの保険） */}
+        {undoMap && (
+          <button
+            onClick={undoCascade}
+            className="w-full h-10 rounded-xl bg-slate-100 text-slate-600 font-medium text-[13px] active:bg-slate-200 transition-colors flex items-center justify-center gap-1.5"
+          >
+            ↩ 直前の割当を元に戻す
+          </button>
         )}
 
         {pending.map((it) => {
