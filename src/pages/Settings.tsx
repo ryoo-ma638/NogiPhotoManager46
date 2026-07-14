@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { ConfirmSheet, Header } from '../components/ui'
-import { ScreenGuide, resetScreenGuides } from '../components/ScreenGuide'
 import { allOwnedRows, allWanted } from '../lib/db'
 import { backupFilename, buildBackup, downloadJSON, jsonBlob, parseBackup, type ParsedBackup } from '../lib/backup'
 import { exportImagesZip, importImagesZip, downloadBlob } from '../lib/imageBackup'
@@ -144,16 +143,6 @@ export default function SettingsPage() {
   return (
     <>
       <Header title="設定" />
-      <ScreenGuide
-        guideKey="settings"
-        title="設定でできること"
-        points={[
-          { icon: '💾', label: 'バックアップ', desc: '所有データと画像を書き出し・復元。ときどき保存を。' },
-          { icon: '🛡️', label: 'データ保護', desc: 'ブラウザの自動削除から守る（推奨）。' },
-          { icon: '🔑', label: 'オーナー解除', desc: 'パスワードでAI判定を無制限に。' },
-          { icon: '❓', label: '使い方', desc: '最初の説明や各画面のガイドを見返せる。' },
-        ]}
-      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-6 space-y-4">
         <Section title="あなた" footer="書き出したファイルに名前が入り、トレード相手にも伝わります。">
           <div className="px-4 py-3">
@@ -186,6 +175,7 @@ export default function SettingsPage() {
           <div className="px-4 py-3 space-y-2">
             <button
               onClick={() => setExportChoice(true)}
+              data-tour="settings-backup"
               className="w-full h-11 rounded-xl bg-violet-600 text-white font-bold text-[14px] active:scale-[0.98] transition-transform"
             >
               書き出し（バックアップ）
@@ -283,19 +273,10 @@ export default function SettingsPage() {
 
         <Section title="ヘルプ">
           <button
-            onClick={() => window.dispatchEvent(new Event('open-tutorial'))}
-            className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors border-b border-slate-100"
-          >
-            使い方を見る
-          </button>
-          <button
-            onClick={() => {
-              resetScreenGuides()
-              showToast('各画面のガイドを次に開いたとき、もう一度表示します')
-            }}
+            onClick={() => window.dispatchEvent(new Event('open-tour'))}
             className="w-full px-4 py-3.5 text-left text-[14px] font-medium text-violet-600 active:bg-slate-50 transition-colors"
           >
-            各画面のガイドをもう一度見る
+            使い方ツアーをもう一度見る
           </button>
         </Section>
 

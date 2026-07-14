@@ -5,7 +5,6 @@ import { FrameAddControls, SheetShell } from '../components/UserSetSheets'
 import { CameraCapture } from '../components/CameraCapture'
 import { SetPicker } from '../components/ImportSetPicker'
 import { OtherRegisterSheet } from '../components/ImportOtherSheet'
-import { ScreenGuide } from '../components/ScreenGuide'
 import { CameraIcon, CheckCircle } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
@@ -389,16 +388,6 @@ export default function ImportPage() {
   return (
     <>
       <Header title="一括取込" subtitle="写真から自動判定して振り分け" back />
-      <ScreenGuide
-        guideKey="import"
-        title="まとめて取り込む"
-        points={[
-          { icon: '📷', label: 'カメラで撮る', desc: '連続で撮ると、撮った端から解析。' },
-          { icon: '🖼️', label: '写真から選ぶ', desc: '端末の写真をまとめて選択（1枚に6枚まで）。' },
-          { icon: '🤖', label: '自動で振り分け', desc: 'セットと枠を自動で判定。R/SRは枠を確認。' },
-          { icon: '💾', label: '保存', desc: `内容を確認して保存。判定は1日${DAILY_LIMIT}回まで。` },
-        ]}
-      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-3">
         {apiMissing && (
           <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-[12px] text-amber-700 leading-relaxed">
@@ -417,6 +406,7 @@ export default function ImportPage() {
 
         <button
           onClick={() => setShowCamera(true)}
+          data-tour="import-camera"
           className="w-full h-24 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 flex flex-col items-center justify-center gap-1 active:scale-[0.99] transition"
         >
           <CameraIcon className="w-6 h-6" />
@@ -425,6 +415,7 @@ export default function ImportPage() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={busy}
+          data-tour="import-select"
           className="w-full h-11 rounded-xl border border-slate-200 bg-white text-slate-600 font-medium text-[14px] disabled:opacity-50 active:scale-[0.99] transition"
         >
           写真から選ぶ（複数OK・最大30枚）

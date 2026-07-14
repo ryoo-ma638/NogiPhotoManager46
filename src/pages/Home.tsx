@@ -2,18 +2,8 @@ import { useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { CameraIcon, ChevronRight, SealCheck, SearchIcon, SwapIcon } from '../components/icons'
 import { Gauge, Header, ProgressBar, pct } from '../components/ui'
-import { ScreenGuide } from '../components/ScreenGuide'
 import { navigate, useScrollRestore } from '../lib/router'
 import { daysSinceBackup, shouldRemindBackup, snoozeBackupReminder } from '../lib/prefs'
-
-/** 初回チュートリアルを見終えたか。ホームガイドはこの後に出す（初回起動の二重表示を避ける） */
-function tutorialSeen(): boolean {
-  try {
-    return !!localStorage.getItem('nogi_tutorial_v1')
-  } catch {
-    return true
-  }
-}
 
 /** バインダーIDから年ラベル（'20–'21 / 封入）を作る */
 function yearChip(binderId: string): string {
@@ -61,6 +51,7 @@ export default function Home() {
             <button
               onClick={() => navigate('/import')}
               aria-label="一括取込"
+              data-tour="home-import"
               className="p-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
             >
               <CameraIcon className="w-6 h-6" />
@@ -68,6 +59,7 @@ export default function Home() {
             <button
               onClick={() => navigate('/trade')}
               aria-label="トレード"
+              data-tour="home-trade"
               className="p-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
             >
               <SwapIcon className="w-6 h-6" />
@@ -75,23 +67,13 @@ export default function Home() {
             <button
               onClick={() => navigate('/search')}
               aria-label="検索"
+              data-tour="home-search"
               className="p-2 -mr-2 rounded-full text-slate-500 active:bg-slate-200/70 transition-colors"
             >
               <SearchIcon />
             </button>
           </span>
         }
-      />
-      <ScreenGuide
-        guideKey="home"
-        title="ホーム画面の使い方"
-        enabled={tutorialSeen()}
-        points={[
-          { icon: '📷', label: '取込', desc: '写真からまとめて登録。' },
-          { icon: '🔁', label: 'トレード', desc: 'ダブりと欲しいを交換。' },
-          { icon: '🔍', label: '検索', desc: 'セットを名前や条件で探す。' },
-          { icon: '📚', label: 'タブ', desc: '下からコレクション・統計・設定へ。' },
-        ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-4 space-y-4">
         {/* まだ何も無いとき: 前の端末からの復元を案内（所有0なら催促バナーは元々出ない＝排他） */}
@@ -139,7 +121,10 @@ export default function Home() {
           </div>
         )}
         {/* ヒーロー：総コンプ率 */}
-        <section className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-600 to-fuchsia-500 text-white p-5 shadow-lg shadow-violet-200">
+        <section
+          data-tour="home-gauge"
+          className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-600 to-fuchsia-500 text-white p-5 shadow-lg shadow-violet-200"
+        >
           <div className="flex items-center gap-5">
             <Gauge value={percent} size={104}>
               <div className="text-center">
@@ -166,13 +151,14 @@ export default function Home() {
 
         {/* バインダー一覧 */}
         <section className="space-y-3 pb-4">
-          {perBinder.map(({ binder, owned: o, total: t, sets, completeSets: cs }) => {
+          {perBinder.map(({ binder, owned: o, total: t, sets, completeSets: cs }, idx) => {
             const p = pct(o, t)
             const complete = t > 0 && o === t
             return (
               <button
                 key={binder.id}
                 onClick={() => navigate(`/b/${binder.id}`)}
+                data-tour={idx === 0 ? 'home-binder' : undefined}
                 className="w-full rounded-2xl bg-white p-4 shadow-sm border border-slate-100 flex items-center gap-4 text-left active:scale-[0.98] transition-transform"
               >
                 {/* 年タイル */}

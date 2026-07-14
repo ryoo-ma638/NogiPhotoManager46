@@ -7,7 +7,6 @@ import { AddSetSheet } from '../components/UserSetSheets'
 import { AddOtherItemSheet } from '../components/AddOtherItemSheet'
 import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
 import { circled, normName } from '../lib/labels'
-import { ScreenGuide } from '../components/ScreenGuide'
 import type { CatalogSet, Template, UserSet } from '../types'
 
 type Filter = 'all' | 'incomplete' | 'complete'
@@ -147,16 +146,6 @@ export default function BinderPage({ binderId }: { binderId: string }) {
             ＋
           </button>
         }
-      />
-      <ScreenGuide
-        guideKey="binder"
-        title="セット一覧の使い方"
-        points={[
-          { icon: '📂', label: 'セットを開く', desc: 'タップで中の写真（ポーズ枠）を開く。' },
-          { icon: '✓', label: '進捗', desc: '所有枚数が出て、全部そろうとコンプ。' },
-          { icon: '＋', label: '手動で追加', desc: '右上の＋で、一覧に無いセットを追加。' },
-          { icon: '🗂️', label: 'その他バインダー', desc: '判別できない写真は「＋未分類の写真を追加」へ。' },
-        ]}
       />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-4">
         {/* その他: 未分類の写真をすぐ追加できる目立つ入口 */}

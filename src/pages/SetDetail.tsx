@@ -5,7 +5,6 @@ import { ConfirmSheet, Header, ProgressBar, pct } from '../components/ui'
 import { EditSetSheet } from '../components/UserSetSheets'
 import { PoseCard } from '../components/PoseCard'
 import { CatalogMatchMover } from '../components/CatalogMatchMover'
-import { ScreenGuide } from '../components/ScreenGuide'
 import { PhotoViewer } from '../components/images'
 import { getImageRow } from '../lib/db'
 import { rotateImage } from '../lib/images'
@@ -101,16 +100,6 @@ export default function SetDetailPage({ setId }: { setId: string }) {
         }
       />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-36">
-        <ScreenGuide
-          guideKey="setdetail"
-          title="写真の記録のしかた"
-          points={[
-            { icon: '✓', label: '持ってる/持ってない', desc: 'タップで○、もう一度で戻す。' },
-            { icon: '±', label: '枚数', desc: '写真の下の −/＋ で調整（2枚以上＝ダブり）。' },
-            { icon: '♡', label: '特に欲しい', desc: '♡で印を付けると、トレードの「求」に出る。' },
-            { icon: '📷', label: '画像を添付', desc: 'カメラのマークで実物写真を添付（自動で○）。' },
-          ]}
-        />
         {/* その他の仮置き項目が同名でカタログにあれば、本セットへ移す導線 */}
         <CatalogMatchMover set={set} />
         {/* 進捗ヘッダー */}
@@ -131,23 +120,24 @@ export default function SetDetailPage({ setId }: { setId: string }) {
           {set.note && <p className="mt-2.5 text-[12px] text-slate-400">メモ: {set.note}</p>}
         </section>
 
-        {/* ポーズグリッド */}
+        {/* ポーズグリッド。先頭カードにツアーのスポットライトを当てる */}
         <section className="mt-4 grid grid-cols-3 gap-3">
-          {photos.map((p) => (
-            <PoseCard
-              key={p.id}
-              photo={p}
-              isOwned={owned.has(p.id)}
-              count={countOf(p.id)}
-              onSetCount={(n) => setCount(p.id, n)}
-              isWanted={wanted.has(p.id)}
-              onToggleWanted={() => onHeart(p.id)}
-              hasImage={imageIds.has(p.id)}
-              imgVersion={imgVersion}
-              onToggle={() => toggle(p.id)}
-              onOpen={() => setViewer(p)}
-              onAttach={() => pickImageFor(p.id)}
-            />
+          {photos.map((p, idx) => (
+            <div key={p.id} data-tour={idx === 0 ? 'set-pose' : undefined}>
+              <PoseCard
+                photo={p}
+                isOwned={owned.has(p.id)}
+                count={countOf(p.id)}
+                onSetCount={(n) => setCount(p.id, n)}
+                isWanted={wanted.has(p.id)}
+                onToggleWanted={() => onHeart(p.id)}
+                hasImage={imageIds.has(p.id)}
+                imgVersion={imgVersion}
+                onToggle={() => toggle(p.id)}
+                onOpen={() => setViewer(p)}
+                onAttach={() => pickImageFor(p.id)}
+              />
+            </div>
           ))}
         </section>
       </div>

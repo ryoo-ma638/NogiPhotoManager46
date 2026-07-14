@@ -6,7 +6,6 @@ import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from
 import { downloadJSON, jsonBlob } from '../lib/backup'
 import { canShareFile, canShareText, shareFile, shareText } from '../lib/share'
 import { getNickname, safeName } from '../lib/prefs'
-import { ScreenGuide } from '../components/ScreenGuide'
 
 interface TradeItem {
   photoId: string
@@ -128,18 +127,9 @@ export default function TradePage() {
   return (
     <>
       <Header title="トレード" subtitle="譲れるダブりと、特に欲しいもの" back />
-      <ScreenGuide
-        guideKey="trade"
-        title="トレードの使い方"
-        points={[
-          { icon: '🔁', label: '譲れる', desc: '2枚以上持っている写真（ダブり）。' },
-          { icon: '♡', label: '求', desc: '「特に欲しい」に印を付けた写真。' },
-          { icon: '📝', label: 'リストを作る', desc: 'X貼り付け用の求/譲テキストを作成。' },
-          { icon: '🤝', label: '突き合わせ', desc: '共有ファイルを交換し、もらえる/渡せるを確認。' },
-        ]}
-      />
       <div className="mx-auto max-w-lg px-4 pt-4 pb-28 space-y-5">
         <button
+          data-tour="trade-list"
           onClick={() => setSheet(true)}
           disabled={give.length === 0 && want.length === 0}
           className="w-full h-12 rounded-2xl bg-violet-600 text-white font-bold shadow-lg shadow-violet-200 disabled:opacity-40 active:scale-[0.99] transition"

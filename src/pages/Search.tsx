@@ -5,7 +5,6 @@ import { Header, ProgressBar, pct } from '../components/ui'
 import { navigate } from '../lib/router'
 import { KIND_LABELS, kindOf, type Kind } from '../lib/kinds'
 import { getSearchPrefs, setSearchPrefs, type SortBy } from '../lib/prefs'
-import { ScreenGuide } from '../components/ScreenGuide'
 
 // カナ/かな・全角半角・大文字小文字をある程度吸収して比較
 function norm(s: string): string {
@@ -102,15 +101,6 @@ export default function SearchPage() {
   return (
     <>
       <Header title="検索" back />
-      <ScreenGuide
-        guideKey="search"
-        title="検索の使い方"
-        points={[
-          { icon: '🔍', label: '名前で探す', desc: 'セット名やメモで検索。' },
-          { icon: '🎯', label: '絞り込み', desc: '未所有・ダブり・欲しい・種類で絞る。' },
-          { icon: '↕️', label: '並び替え', desc: '並び順・所有率・名前・年で並べ替え。' },
-        ]}
-      />
       <div className="mx-auto max-w-lg px-4 pt-3 pb-6">
         {/* 検索入力 */}
         <div className="relative">
