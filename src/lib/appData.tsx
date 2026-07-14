@@ -90,25 +90,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       template: u.template,
       sortIndex: u.sortIndex,
       note: u.note,
+      photos: u.photos,
       user: true,
     }))
     return [...catalog.sets, ...users]
   }, [catalog, userSets])
 
-  // セットごとの写真枠（手動セットは保存済みphotosが正）
+  // セットごとの写真枠（手動セットは保存済みphotosが正）。
+  // 手動セットも photosForSet を通すことで、枠が既定順に整列される（frameSortKey）。
   const photosMap = useMemo(() => {
     const m = new Map<string, Photo[]>()
     if (!catalog) return m
     const memberId = catalog.member.id
-    for (const s of catalog.sets) m.set(s.id, photosForSet(memberId, s))
-    for (const u of userSets) {
-      m.set(
-        u.id,
-        u.photos.map((p) => ({ id: `${memberId}:${u.id}:${p.slot}`, slot: p.slot, label: p.label, rarity: p.rarity })),
-      )
-    }
+    for (const s of allSets) m.set(s.id, photosForSet(memberId, s))
     return m
-  }, [catalog, userSets])
+  }, [allSets, catalog])
 
   const statMap = useMemo(() => {
     const m = new Map<string, SetStat>()

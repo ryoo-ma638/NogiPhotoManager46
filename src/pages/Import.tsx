@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAppData } from '../lib/appData'
 import { Header } from '../components/ui'
-import { SheetShell } from '../components/UserSetSheets'
+import { FrameAddControls, SheetShell } from '../components/UserSetSheets'
 import { CameraCapture } from '../components/CameraCapture'
 import { SetPicker } from '../components/ImportSetPicker'
 import { OtherRegisterSheet } from '../components/ImportOtherSheet'
@@ -10,7 +10,7 @@ import { CameraIcon, CheckCircle } from '../components/icons'
 import { cropImage, ensurePortrait, processImage, rotateImage } from '../lib/images'
 import { recognizeImage, type RecognizedPhoto } from '../lib/recognize'
 import { classifyPhoto } from '../lib/classify'
-import { nextNumberFrame, POSE_FRAMES } from '../lib/frames'
+import { nextFreeSlot, nextNumberFrame } from '../lib/frames'
 import { canAnalyze, consumeAnalysis, isOwner, remainingToday, DAILY_LIMIT, RECOMMENDED_PER_IMAGE } from '../lib/limit'
 import { cascadeDecision } from '../lib/cascade'
 import { navigate } from '../lib/router'
@@ -356,22 +356,34 @@ export default function ImportPage() {
     setPickerFor(null)
   }
 
-  /** 新しいその他セットを作って割り当て（種類なし＝①の1枠から始まり、追加のたびに枠が増える） */
+  /** 自由入力の枠を足して割り当て。入力した言葉をラベルに、slotは free{n}（追加順に下へ並ぶ） */
+  const addFreeFrame = async (u: UserSet, itemId: string, label: string) => {
+    const name = label.trim()
+    if (!name) return
+    const frame: UserSetPhoto = { slot: nextFreeSlot(u.photos), label: name, rarity: 'other' }
+    await updateUserSet({ ...u, photos: [...u.photos, frame] }, [])
+    update(itemId, { slot: frame.slot, auto: false, sequenced: false })
+    setPickerFor(null)
+  }
+
+  /** 新しいその他セットを作って割り当て。枠は作らず（①固定にしない）、続けて枠選択シートで最初の枠を選ぶ */
   const createOtherSet = async (itemId: string, name: string) => {
-    const row = {
+    const row: UserSet = {
       id: `user-${crypto.randomUUID().slice(0, 8)}`,
       binderId: 'b-other',
       year: null,
       name: name.trim(),
-      template: 'single1' as const,
+      template: 'single1', // 作成時テンプレの記録のみ（以後はphotosが正・空でも可）
       note: null,
       sortIndex: (otherSets.length > 0 ? Math.max(...otherSets.map((s) => s.sortIndex)) : 0) + 10,
-      photos: [{ slot: 'p1', label: '①', rarity: 'other' as const }],
+      photos: [],
       createdAt: new Date().toISOString(),
     }
     await addUserSet(row)
-    update(itemId, { setId: row.id, slot: 'p1', auto: false })
+    // 枠は未定のまま、この項目に紐付けて枠選択シートへ（番号/ポーズ/自由から最初の枠を選ぶ）
+    update(itemId, { setId: row.id, slot: null, auto: false })
     setOtherFor(null)
+    setPickerFor({ itemId, mode: 'slot' })
   }
 
   return (
@@ -620,57 +632,43 @@ export default function ImportPage() {
         const userSet = pickerSet.user ? userSetById.get(pickerSet.id) ?? null : null
         return (
           <SheetShell title={`枠を選ぶ — ${pickerSet.name}`} onClose={() => setPickerFor(null)}>
-            <div className="grid grid-cols-3 gap-2">
-              {photosOf(pickerSet).map((p) => {
-                const has = imageIds.has(p.id)
-                const own = owned.has(p.id)
-                const taken = takenSlots.has(p.slot)
-                return (
-                  <button
-                    key={p.id}
-                    disabled={taken}
-                    onClick={() => {
-                      update(pickerFor.itemId, { slot: p.slot, auto: false, sequenced: false })
-                      setPickerFor(null)
-                    }}
-                    className={`h-14 rounded-xl border text-[13px] font-bold flex flex-col items-center justify-center gap-0.5 ${
-                      taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-700 active:bg-violet-50'
-                    }`}
-                  >
-                    {p.label}
-                    <span className="text-[10px] font-normal text-slate-400">
-                      {taken ? '使用中' : `${own ? '所有' : '未所有'}${has ? '・画像あり' : ''}`}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
+            {photosOf(pickerSet).length === 0 ? (
+              <p className="text-[12px] text-slate-400 leading-relaxed">まだ枠がありません。下から最初の枠（番号・ポーズ・自由入力）を選んでください。</p>
+            ) : (
+              <div className="grid grid-cols-3 gap-2">
+                {photosOf(pickerSet).map((p) => {
+                  const has = imageIds.has(p.id)
+                  const own = owned.has(p.id)
+                  const taken = takenSlots.has(p.slot)
+                  return (
+                    <button
+                      key={p.id}
+                      disabled={taken}
+                      onClick={() => {
+                        update(pickerFor.itemId, { slot: p.slot, auto: false, sequenced: false })
+                        setPickerFor(null)
+                      }}
+                      className={`h-14 rounded-xl border text-[13px] font-bold flex flex-col items-center justify-center gap-0.5 ${
+                        taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-700 active:bg-violet-50'
+                      }`}
+                    >
+                      {p.label}
+                      <span className="text-[10px] font-normal text-slate-400">
+                        {taken ? '使用中' : `${own ? '所有' : '未所有'}${has ? '・画像あり' : ''}`}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
             {userSet && (
-              <div className="mt-4 pt-3 border-t border-slate-200 space-y-2">
-                <p className="text-[12px] font-bold text-slate-500">枠を追加</p>
-                <button
-                  onClick={() => void addNumberFrame(userSet, pickerFor.itemId)}
-                  className="w-full h-10 rounded-xl border border-dashed border-slate-300 bg-white text-slate-600 text-[13px] font-medium active:bg-slate-50"
-                >
-                  ＋ 番号
-                </button>
-                <div className="flex flex-wrap gap-1.5">
-                  {POSE_FRAMES.map((pose) => {
-                    const taken = takenSlots.has(pose.slot)
-                    return (
-                      <button
-                        key={pose.slot}
-                        disabled={taken}
-                        onClick={() => void addPoseFrame(userSet, pickerFor.itemId, pose)}
-                        className={`h-9 px-3 rounded-full border text-[12px] font-medium ${
-                          taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-600 active:bg-violet-50'
-                        }`}
-                      >
-                        ＋ {pose.label}
-                      </button>
-                    )
-                  })}
-                </div>
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <FrameAddControls
+                  poseDisabled={(slot) => takenSlots.has(slot)}
+                  onAddNumber={() => void addNumberFrame(userSet, pickerFor.itemId)}
+                  onAddPose={(pose) => void addPoseFrame(userSet, pickerFor.itemId, pose)}
+                  onAddFree={(label) => void addFreeFrame(userSet, pickerFor.itemId, label)}
+                />
               </div>
             )}
           </SheetShell>

@@ -1,5 +1,6 @@
 import type { CatalogFile, CatalogSet, Photo } from '../types'
 import { TEMPLATES } from './templates'
+import { frameSortKey } from './frames'
 
 /** セットの写真枠を展開する（明示photosがあればそれを優先、なければテンプレから） */
 export function photosForSet(memberId: string, set: CatalogSet): Photo[] {
@@ -10,12 +11,15 @@ export function photosForSet(memberId: string, set: CatalogSet): Photo[] {
     console.warn(`未知のテンプレート「${set.template}」（セット ${set.id}）`)
     return []
   }
-  return slots.map((s) => ({
+  const photos = slots.map((s) => ({
     id: `${memberId}:${set.id}:${s.slot}`,
     slot: s.slot,
     label: s.label,
     rarity: s.rarity,
   }))
+  // 手動セット（その他）は枠を後から自由に足すので、保存順でなく既定の枠順で並べ直す。
+  // カタログセットの枠順（物理バインダー順）は変えない。
+  return set.user ? [...photos].sort((a, b) => frameSortKey(a.slot) - frameSortKey(b.slot)) : photos
 }
 
 /** 公開カタログを取得（アプリと同一オリジンの /catalog/ から） */

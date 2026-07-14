@@ -72,3 +72,43 @@ describe('明示photos（MV系5種など）', () => {
     expect(photos[0]!.id).toBe('yumiki_nao:s0001:yori')
   })
 })
+
+describe('手動セット（その他）の枠整列', () => {
+  const other = (photos: { slot: string; label: string }[]): CatalogSet => ({
+    ...makeSet('single1'),
+    id: 'user-abc',
+    binderId: 'b-other',
+    photos: photos.map((p) => ({ ...p, rarity: 'other' as const })),
+    user: true,
+  })
+
+  it('user=true は保存順に関わらず ポーズ→番号→自由 に整列する', () => {
+    const set = other([
+      { slot: 'free1', label: '制服' },
+      { slot: 'c1', label: '②' },
+      { slot: 'hiki', label: 'ヒキ' },
+      { slot: 'yori', label: 'ヨリ' },
+    ])
+    expect(photosForSet('yumiki_nao', set).map((p) => p.slot)).toEqual(['yori', 'hiki', 'c1', 'free1'])
+  })
+
+  it('整列してもslotは重複しない・全枠が残る', () => {
+    const set = other([
+      { slot: 'c2', label: '③' },
+      { slot: 'p1', label: '①' },
+      { slot: 'c1', label: '②' },
+    ])
+    const slots = photosForSet('yumiki_nao', set).map((p) => p.slot)
+    expect(slots).toEqual(['p1', 'c1', 'c2']) // 旧①(p1)先頭のまま①②③
+    expect(new Set(slots).size).toBe(slots.length)
+  })
+
+  it('user でないカタログセットは並べ替えない（明示photos順を保持）', () => {
+    const set = { ...makeSet('five5'), photos: [
+      { slot: 'c1', label: '②', rarity: 'other' as const },
+      { slot: 'yori', label: 'ヨリ', rarity: 'other' as const },
+    ] }
+    // user フラグ無し → 与えた順のまま
+    expect(photosForSet('yumiki_nao', set).map((p) => p.slot)).toEqual(['c1', 'yori'])
+  })
+})

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Binder, Rarity, Template, UserSet, UserSetPhoto } from '../types'
 import { TEMPLATES } from '../lib/templates'
+import { POSE_FRAMES, frameSortKey, nextFreeSlot, nextNumberFrame } from '../lib/frames'
 import { ConfirmSheet } from './ui'
 
 const TEMPLATE_OPTIONS: { value: Template; label: string }[] = [
@@ -151,15 +152,16 @@ export function EditSetSheet({
 }) {
   const [name, setName] = useState(userSet.name)
   const [note, setNote] = useState(userSet.note ?? '')
-  const [photos, setPhotos] = useState<UserSetPhoto[]>(userSet.photos)
+  // 詳細グリッドと同じ既定順（ポーズ→番号→自由）で開く。追加した枠は末尾に付く
+  const [photos, setPhotos] = useState<UserSetPhoto[]>(() => [...userSet.photos].sort((a, b) => frameSortKey(a.slot) - frameSortKey(b.slot)))
   const [confirmDelete, setConfirmDelete] = useState(false)
 
-  const addSlot = () => {
-    const used = new Set(photos.map((p) => p.slot))
-    let n = 1
-    while (used.has(`c${n}`)) n++
-    setPhotos([...photos, { slot: `c${n}`, label: `追加${n}`, rarity: 'normal' }])
+  const addNumber = () => setPhotos([...photos, nextNumberFrame(photos)])
+  const addPose = (pose: UserSetPhoto) => {
+    if (photos.some((p) => p.slot === pose.slot)) return // 同じポーズは二重に足さない
+    setPhotos([...photos, { ...pose }])
   }
+  const addFree = (label: string) => setPhotos([...photos, { slot: nextFreeSlot(photos), label, rarity: 'other' }])
 
   const cycleRarity = (i: number) => {
     setPhotos(photos.map((p, j) => (j === i ? { ...p, rarity: RARITY_CYCLE[(RARITY_CYCLE.indexOf(p.rarity) + 1) % RARITY_CYCLE.length]! } : p)))
@@ -201,9 +203,14 @@ export function EditSetSheet({
                 </div>
               )
             })}
-            <button onClick={addSlot} className="w-full h-10 rounded-xl border border-dashed border-slate-300 text-slate-500 text-[13px] font-medium">
-              ＋ 枠を追加
-            </button>
+          </div>
+          <div className="pt-3">
+            <FrameAddControls
+              poseDisabled={(slot) => photos.some((p) => p.slot === slot)}
+              onAddNumber={addNumber}
+              onAddPose={addPose}
+              onAddFree={addFree}
+            />
           </div>
         </Field>
 
@@ -238,6 +245,74 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
       <label className="block text-[13px] font-bold text-slate-500 pb-1.5">{label}</label>
       {children}
       {hint && <p className="pt-1 text-[11px] text-slate-400">{hint}</p>}
+    </div>
+  )
+}
+
+/**
+ * その他セットに枠を足すUI（番号／定番ポーズ／自由入力）。取込の枠選択シートと編集シートで共用。
+ * 追加のされ方（即保存して割当 or ローカル編集）は呼び出し側のコールバックが決める。
+ */
+export function FrameAddControls({
+  poseDisabled,
+  onAddNumber,
+  onAddPose,
+  onAddFree,
+}: {
+  poseDisabled: (slot: string) => boolean
+  onAddNumber: () => void
+  onAddPose: (pose: UserSetPhoto) => void
+  onAddFree: (label: string) => void
+}) {
+  const [free, setFree] = useState('')
+  const submitFree = () => {
+    const t = free.trim()
+    if (!t) return
+    onAddFree(t)
+    setFree('')
+  }
+  return (
+    <div className="space-y-2">
+      <p className="text-[12px] font-bold text-slate-500">枠を追加</p>
+      <button
+        onClick={onAddNumber}
+        className="w-full h-10 rounded-xl border border-dashed border-slate-300 bg-white text-slate-600 text-[13px] font-medium active:bg-slate-50"
+      >
+        ＋ 番号
+      </button>
+      <div className="flex flex-wrap gap-1.5">
+        {POSE_FRAMES.map((pose) => {
+          const taken = poseDisabled(pose.slot)
+          return (
+            <button
+              key={pose.slot}
+              disabled={taken}
+              onClick={() => onAddPose(pose)}
+              className={`h-9 px-3 rounded-full border text-[12px] font-medium ${
+                taken ? 'border-slate-200 bg-slate-100 text-slate-300' : 'border-slate-200 bg-white text-slate-600 active:bg-violet-50'
+              }`}
+            >
+              ＋ {pose.label}
+            </button>
+          )
+        })}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <input
+          className={`${inputCls} flex-1`}
+          value={free}
+          onChange={(e) => setFree(e.target.value)}
+          placeholder="自由入力（例: 制服カット）"
+          onKeyDown={(e) => e.key === 'Enter' && submitFree()}
+        />
+        <button
+          onClick={submitFree}
+          disabled={!free.trim()}
+          className="shrink-0 h-11 px-4 rounded-xl bg-violet-600 text-white text-[13px] font-bold disabled:opacity-40 active:scale-[0.98] transition"
+        >
+          追加
+        </button>
+      </div>
     </div>
   )
 }
