@@ -25,19 +25,44 @@ const TOUR_KEY = 'nogi_tour_v1'
 // スポットライト式の使い方ツアーの案内順。実際のボタンを1つずつ光らせて画面を回る。
 // nav ステップ = 光ったボタンを押すと次の画面へ進む（ヘッダー📷🔁とフッターのタブで巡る）。
 const TOUR_STEPS: TourStep[] = [
-  { route: '#/', target: 'home-gauge', title: 'いまの集め具合', body: '全体の集め具合。円が総コンプ率です。' },
-  { route: '#/', target: 'home-import', title: 'まとめて登録', body: '写真からまとめて登録。ここが主役です。', nav: true },
-  { route: '#/import', target: 'import-camera', title: 'カメラで撮る', body: 'カメラで連続撮影→撮った端から自動で判定します。' },
-  { route: '#/import', target: 'import-select', title: '写真から選ぶ', body: '保存済みの写真もまとめて取り込めます。' },
-  { route: '#/import', target: 'nav-home', title: 'ホームへ戻る', body: '下の「コレクション」でいつでもホームに戻れます。', nav: true },
-  { route: '#/', target: 'home-trade', title: 'トレード', body: 'ダブりと欲しいの交換に使います。', nav: true },
-  { route: '#/trade', target: 'trade-list', title: 'トレードの準備', body: '求/譲リストや、相手との突き合わせができます。' },
+  { route: '#/', target: 'home-gauge', title: 'いまの集め具合', body: '全体の集め具合が一目で分かります。円が総コンプ率、下のバーは所有の進み具合です。' },
+  { route: '#/', target: 'home-import', title: 'まとめて登録', body: '写真からまとめて登録できる、いちばんよく使う機能です。押して中を見てみましょう。', nav: true },
+  {
+    route: '#/import',
+    target: 'import-camera',
+    title: 'カメラで撮る',
+    body: 'カメラで連続撮影すると、撮った端からAIが自動でセットと枠に振り分けます。1枚の画像に最大6枚まで並べて撮ってもOK。AI判定は1日30回まで（オーナーはパスワードで無制限）。',
+  },
+  {
+    route: '#/import',
+    target: 'import-select',
+    title: '写真から選ぶ',
+    body: '保存済みの写真は一度に最大30枚まで選べます。うまく判定できないものは、手動でセットと枠を選んで保存できます。',
+  },
+  { route: '#/import', target: 'nav-home', title: 'ホームへ戻る', body: '下の「コレクション」でいつでもホームに戻れます。押してみましょう。', nav: true },
+  { route: '#/', target: 'home-trade', title: 'トレード', body: 'ダブりと欲しいものの交換に使います。押して中を見てみましょう。', nav: true },
+  {
+    route: '#/trade',
+    target: 'trade-list',
+    title: 'トレードの準備',
+    body: '2枚以上持っている写真（ダブり）が「譲」、♡を付けた写真が「求」になります。X貼り付け用のリストや、共有ファイルの交換で相手との過不足の突き合わせができます。',
+  },
   { route: '#/trade', target: 'nav-stats', title: '統計へ', body: '下の「統計」を押してみましょう。', nav: true },
-  { route: '#/stats', target: 'stats-main', title: '統計', body: 'コンプ率やレア別の集め具合が見られます。' },
+  {
+    route: '#/stats',
+    target: 'stats-main',
+    title: '統計',
+    body: '総コンプ率に加え、レア別・年別の集め具合、譲れるダブり枚数や特に欲しい件数も見られます。',
+  },
   { route: '#/stats', target: 'nav-settings', title: '設定へ', body: '下の「設定」を押してみましょう。', nav: true },
-  { route: '#/settings', target: 'settings-backup', title: 'バックアップ', body: 'データは端末内だけ。ときどき書き出しを。' },
-  { route: '#/settings', target: 'nav-home', title: 'ホームへ', body: '「コレクション」でホームに戻ります。', nav: true },
-  { route: '#/', target: '', title: '準備OK', body: '以上です。設定からいつでも見返せます。' },
+  {
+    route: '#/settings',
+    target: 'settings-backup',
+    title: 'バックアップ',
+    body: 'データは端末の中だけに保存されます。所有(○×)は軽いJSON、添付画像は別のZIPで書き出せます。最後の書き出しから14日で催促が出ます。復元はJSON→画像の順で読み込みます。',
+  },
+  { route: '#/settings', target: 'nav-home', title: 'ホームへ', body: '「コレクション」でホームに戻ります。押してみましょう。', nav: true },
+  { route: '#/', target: '', title: '準備OK', body: 'これで一通りです。各画面の説明は、設定→「使い方ツアーをもう一度見る」でいつでも見返せます。' },
 ]
 
 function Shell() {

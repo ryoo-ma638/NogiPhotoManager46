@@ -23,6 +23,23 @@ export function safeName(name: string): string {
   return s || 'me'
 }
 
+// トレードの連絡先リンク（X/DM/フォーム等）。求/譲リストに載せる。端末に覚えておく。
+const TRADE_LINK_KEY = 'nogi_trade_link'
+export function getTradeLink(): string {
+  try {
+    return (localStorage.getItem(TRADE_LINK_KEY) ?? '').trim()
+  } catch {
+    return ''
+  }
+}
+export function setTradeLink(v: string): void {
+  try {
+    localStorage.setItem(TRADE_LINK_KEY, v.trim())
+  } catch {
+    /* localStorage不可でも続行 */
+  }
+}
+
 // 検索画面の絞り込み・並び替えを覚えておく（画面を離れても保持）。
 const SEARCH_KEY = 'nogi_search_prefs'
 export type SortBy = 'catalog' | 'owned' | 'name' | 'year'

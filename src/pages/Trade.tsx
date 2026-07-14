@@ -5,7 +5,7 @@ import { SheetShell } from '../components/UserSetSheets'
 import { buildTradeExport, computeOverlap, parseTradeExport, type Overlap } from '../lib/trade'
 import { downloadJSON, jsonBlob } from '../lib/backup'
 import { canShareFile, canShareText, shareFile, shareText } from '../lib/share'
-import { getNickname, safeName } from '../lib/prefs'
+import { getNickname, safeName, getTradeLink, setTradeLink } from '../lib/prefs'
 
 interface TradeItem {
   photoId: string
@@ -25,12 +25,12 @@ function group(items: TradeItem[]): [string, TradeItem[]][] {
 }
 
 /** X等に貼り付けるための求/譲テキストを作る。求は「特に欲しい」だけ（全所有はさらけ出さない） */
-function buildTradeText(member: string, give: TradeItem[], want: TradeItem[]): string {
+function buildTradeText(member: string, give: TradeItem[], want: TradeItem[], link = ''): string {
   const fmt = (items: TradeItem[]) =>
     group(items)
       .map(([set, arr]) => `・${set}: ${arr.map((it) => (it.qty > 1 ? `${it.label}×${it.qty}` : it.label)).join('、')}`)
       .join('\n')
-  return [
+  const lines = [
     `${member} 生写真 【譲/求】`,
     '',
     '▼譲（お譲りできます）',
@@ -38,7 +38,9 @@ function buildTradeText(member: string, give: TradeItem[], want: TradeItem[]): s
     '',
     '▼求（探しています）',
     want.length ? fmt(want) : '（なし）',
-  ].join('\n')
+  ]
+  if (link.trim()) lines.push('', '▼連絡・DMはこちら', link.trim())
+  return lines.join('\n')
 }
 
 export default function TradePage() {
@@ -46,6 +48,7 @@ export default function TradePage() {
   const [sheet, setSheet] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [match, setMatch] = useState<{ name: string; overlap: Overlap } | null>(null)
+  const [link, setLink] = useState(() => getTradeLink()) // 連絡先リンク（リストに載せる・端末に記憶）
   const fileRef = useRef<HTMLInputElement>(null)
 
   const { give, want, info, giveSet } = useMemo(() => {
@@ -64,7 +67,7 @@ export default function TradePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSets, photosOf, countOf, wanted])
 
-  const text = buildTradeText(catalog.member.name, give, want)
+  const text = buildTradeText(catalog.member.name, give, want, link)
   const showToast = (m: string) => {
     setToast(m)
     window.setTimeout(() => setToast(null), 2600)
@@ -218,6 +221,15 @@ export default function TradePage() {
             <p className="text-[12px] text-slate-400 leading-relaxed">
               このままXに貼り付けOK。求は「特に欲しい」だけ載せます。
             </p>
+            <input
+              value={link}
+              onChange={(e) => {
+                setLink(e.target.value)
+                setTradeLink(e.target.value)
+              }}
+              placeholder="連絡先リンク（任意・X/DM/フォーム等）"
+              className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3 text-[14px] outline-none focus:border-violet-400"
+            />
             <textarea
               readOnly
               value={text}
