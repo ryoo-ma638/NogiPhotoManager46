@@ -68,12 +68,23 @@ export function CameraCapture({
   const capture = () => {
     const video = videoRef.current
     if (!video || !video.videoWidth || shots.length >= MAX_SHOTS) return
+    // プレビューは object-cover（画面いっぱい・はみ出しは切り取り表示）。撮影も「画面に見えている範囲」だけを
+    // 切り出す。全フレームを撮ると、縦持ちのとき映像が横長のまま入って余白だらけになるため（見た通りに撮る）。
+    const vw = video.videoWidth
+    const vh = video.videoHeight
+    const cw = video.clientWidth || window.innerWidth
+    const ch = video.clientHeight || window.innerHeight
+    const scale = Math.max(cw / vw, ch / vh) // object-cover の拡大率
+    const sw = Math.min(vw, cw / scale) // 見えているソース幅
+    const sh = Math.min(vh, ch / scale) // 見えているソース高
+    const sx = (vw - sw) / 2
+    const sy = (vh - sh) / 2
     const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
+    canvas.width = Math.round(sw)
+    canvas.height = Math.round(sh)
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    ctx.drawImage(video, 0, 0)
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
     canvas.toBlob(
       (b) => {
         if (!b) return
@@ -123,7 +134,7 @@ export function CameraCapture({
         <span className="text-[13px] tabular-nums text-white/80 w-10 text-right">{shots.length}/{MAX_SHOTS}</span>
       </div>
 
-      {/* 撮影サムネ: 縦持ち=下（操作の上）／横持ち=左端の縦並び。全体が見えるようcontainで表示 */}
+      {/* 撮影サムネ: 縦持ち=下（操作の上）／横持ち=左端の縦並び。生写真比率の縦箱で余白なく表示 */}
       {shots.length > 0 && (
         <div
           className="absolute z-10 flex gap-2 [-webkit-overflow-scrolling:touch]
@@ -131,7 +142,7 @@ export function CameraCapture({
             landscape:inset-y-0 landscape:left-0 landscape:w-32 landscape:flex-col landscape:items-center landscape:justify-center landscape:overflow-y-auto landscape:py-4 landscape:pl-[calc(0.5rem+env(safe-area-inset-left))]"
         >
           {shots.map((s) => (
-            <img key={s.id} src={s.url} alt="" className="h-20 w-28 shrink-0 rounded-md object-contain bg-black/40 border border-white/25" />
+            <img key={s.id} src={s.url} alt="" className="h-24 w-[70px] shrink-0 rounded-md object-cover border border-white/25" />
           ))}
         </div>
       )}
