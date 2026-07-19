@@ -21,7 +21,7 @@ export function OtherRegisterSheet({
     <SheetShell title="「その他」として登録" onClose={onClose}>
       <div className="space-y-4 pb-2">
         <p className="text-[12px] text-slate-400 leading-relaxed">
-          年度別・封入以外（ミニ生写真、スタ誕など）はここへ。連番①②③…で登録します。
+          年度別・封入以外（ミニ生写真、スタ誕など）はここへ。既存のセットに足すか、新しく作って枠を選べます。
         </p>
 
         {otherSets.length > 0 && (
